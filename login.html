@@ -70,6 +70,14 @@
     return mapa[erro.code] || erro.message;
   }
 
+
+  function redirecionarDepoisLogin() {
+    const params = new URLSearchParams(location.search);
+    const destino = params.get('redirect') || localStorage.getItem('rpgNexusRedirectAfterLogin') || 'campanhas.html';
+    localStorage.removeItem('rpgNexusRedirectAfterLogin');
+    location.href = destino;
+  }
+
   async function entrarComEmail() {
     const email = document.getElementById('email').value.trim();
     const senha = document.getElementById('password').value;
@@ -77,7 +85,7 @@
     try {
       await auth.signInWithEmailAndPassword(email, senha);
       mostrarStatus('Login realizado com sucesso. Redirecionando...', 'ok');
-      setTimeout(() => location.href = 'campanhas.html', 700);
+      setTimeout(redirecionarDepoisLogin, 700);
     } catch (erro) {
       mostrarStatus(traduzirErro(erro), 'error');
     }
@@ -90,7 +98,7 @@
     try {
       await auth.createUserWithEmailAndPassword(email, senha);
       mostrarStatus('Conta criada e login realizado. Redirecionando...', 'ok');
-      setTimeout(() => location.href = 'campanhas.html', 700);
+      setTimeout(redirecionarDepoisLogin, 700);
     } catch (erro) {
       mostrarStatus(traduzirErro(erro), 'error');
     }
@@ -102,7 +110,7 @@
     try {
       await auth.signInWithPopup(provider);
       mostrarStatus('Login com Google realizado. Redirecionando...', 'ok');
-      setTimeout(() => location.href = 'campanhas.html', 700);
+      setTimeout(redirecionarDepoisLogin, 700);
     } catch (erro) {
       if (erro.code === 'auth/popup-blocked') {
         mostrarStatus(traduzirErro(erro), 'error');
