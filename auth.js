@@ -3,48 +3,25 @@ function toggleMenu() {
   if (menu) menu.classList.toggle("active");
 }
 
-window.rpgAuth = {
-  ready: false,
-  currentUser: null
-};
-
 function marcarPaginaAtiva() {
-  const arquivo = (location.pathname.split("/").pop() || "index.html").replace(".html", "") || "index";
+  const arquivo = (location.pathname.split("/").pop() || "index.html").replace(".html", "");
   document.querySelectorAll(".site-nav a[data-page]").forEach(link => {
     link.classList.toggle("active", link.dataset.page === arquivo || (arquivo === "" && link.dataset.page === "index"));
   });
-}
-
-function destinoAtual() {
-  return location.pathname.split('/').pop() + location.search + location.hash;
-}
-
-function requireLogin() {
-  if (window.rpgAuth && window.rpgAuth.currentUser) return true;
-
-  localStorage.setItem('rpgNexusRedirectAfterLogin', destinoAtual() || 'campanhas.html');
-  alert('Você precisa fazer login antes de criar, editar ou adicionar conteúdo.');
-  location.href = 'login.html?redirect=' + encodeURIComponent(destinoAtual() || 'campanhas.html');
-  return false;
 }
 
 function configurarCabecalhoAuth() {
   const loginLink = document.getElementById("loginLink");
   const logoutBtn = document.getElementById("logoutBtn");
 
-  marcarPaginaAtiva();
-
   if (!window.firebase || !firebase.apps.length || !firebase.auth) {
-    window.rpgAuth.ready = true;
+    marcarPaginaAtiva();
     return;
   }
 
   const auth = firebase.auth();
 
   auth.onAuthStateChanged(user => {
-    window.rpgAuth.ready = true;
-    window.rpgAuth.currentUser = user || null;
-
     if (!loginLink || !logoutBtn) return;
 
     if (user) {
@@ -74,14 +51,7 @@ function configurarCabecalhoAuth() {
     });
   }
 
-  document.addEventListener('click', event => {
-    const alvoProtegido = event.target.closest('[data-auth-required="true"]');
-    if (!alvoProtegido) return;
-    if (!requireLogin()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  }, true);
+  marcarPaginaAtiva();
 }
 
 document.addEventListener("DOMContentLoaded", configurarCabecalhoAuth);
