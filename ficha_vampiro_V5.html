@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RPG Nexus | Criar Ficha Vampiro V5</title>
+  <link rel="stylesheet" href="header.css" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial, Helvetica, sans-serif; }
+    :root{
+      --bg1:#151b35; --bg2:#090b14; --bg3:#04050a;
+      --card:rgba(255,255,255,.07); --card2:rgba(255,255,255,.10);
+      --gold:#f5c76b; --gold2:#d8a943; --text:#fff; --muted:#ddd;
+      --red:#9d1421; --red2:#e02b3d; --purple:#8d5cf6; --line:rgba(245,199,107,.28); --line2:rgba(245,199,107,.55);
+      --shadow:0 24px 80px rgba(0,0,0,.45); --radius:22px;
+    }
+    html { scroll-behavior:smooth; }
+    body { min-height:100vh; background:radial-gradient(circle at top,#151b35 0%,#090b14 45%,#04050a 100%); color:#fff; }
+    .site-header { min-height:80px; display:flex; align-items:center; justify-content:space-between; gap:18px; padding:18px 8%; background:rgba(0,0,0,.42); border-bottom:1px solid rgba(245,199,107,.18); position:sticky; top:0; z-index:50; backdrop-filter:blur(12px); }
+    .site-logo { color:var(--gold); font-size:1.35rem; font-weight:900; text-decoration:none; letter-spacing:.04em; }
+    .site-menu-btn { display:none; background:rgba(245,199,107,.12); color:var(--gold); border:1px solid var(--line); border-radius:10px; padding:9px 12px; font-weight:900; cursor:pointer; }
+    .site-nav { display:flex; align-items:center; justify-content:flex-end; gap:10px; flex-wrap:wrap; }
+    .site-nav a, .site-nav button { text-decoration:none; color:#fff; background:rgba(255,255,255,.06); border:1px solid rgba(245,199,107,.20); border-radius:10px; padding:10px 13px; font-weight:800; cursor:pointer; transition:.25s; }
+    .site-nav a:hover, .site-nav button:hover, .site-nav a.active { color:#161616; background:var(--gold); transform:translateY(-2px); }
+    main { min-height:calc(100vh - 80px); padding:34px 8% 110px; }
+    .page-shell { max-width:1250px; width:100%; margin:0 auto; display:grid; gap:20px; }
+    .hero { width:100%; display:grid; grid-template-columns:1.1fr .9fr; gap:34px; align-items:stretch; background:rgba(255,255,255,.07); border:1px solid rgba(245,199,107,.28); border-radius:22px; padding:32px; box-shadow:0 24px 80px rgba(0,0,0,.45); }
+    .hero-text { display:flex; flex-direction:column; justify-content:center; }
+    .hero-text h1 { font-size:clamp(2rem,5vw,4.2rem); line-height:1.1; margin-bottom:18px; color:#fff; }
+    .hero-text h1 span { color:#f5c76b; }
+    .hero-text p { font-size:1.08rem; line-height:1.6; color:#ddd; margin-bottom:16px; }
+    .hero-actions { display:flex; gap:15px; flex-wrap:wrap; }
+    .primary-btn, .secondary-btn, .btn { text-decoration:none; padding:13px 18px; border-radius:10px; font-weight:800; transition:.3s; border:0; cursor:pointer; font-size:.95rem; }
+    .primary-btn, .btn { background:#f5c76b; color:#161616; }
+    .primary-btn:hover, .btn:hover { background:#fff; transform:translateY(-3px); }
+    .secondary-btn, .btn.secondary { border:1px solid rgba(245,199,107,.65); color:#f5c76b; background:rgba(245,199,107,.06); }
+    .secondary-btn:hover, .btn.secondary:hover { background:#f5c76b; color:#161616; transform:translateY(-3px); }
+    .btn.danger { background:rgba(157,20,33,.95); color:#fff; }
+    .btn.small { padding:8px 10px; font-size:.82rem; }
+    .card { background:rgba(255,255,255,.07); border:1px solid rgba(245,199,107,.28); border-radius:18px; padding:20px; transition:.3s; color:inherit; box-shadow:0 12px 36px rgba(0,0,0,.18); }
+    .card:hover { background:rgba(255,255,255,.09); border-color:rgba(245,199,107,.45); }
+    .card h2, .card h3 { color:#f5c76b; margin-bottom:12px; }
+    .card p, .hint { color:#ddd; line-height:1.45; font-size:.95rem; }
+    .warning { border:1px solid rgba(157,20,33,.55); background:rgba(157,20,33,.16); border-radius:16px; padding:14px; color:#f7d9dd; line-height:1.45; }
+    .grid { display:grid; gap:16px; }
+    .two { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .four { grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .span-2 { grid-column:span 2; }
+    label, .mini-label { display:block; color:#f5c76b; font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; margin-bottom:7px; font-weight:900; }
+    input, select, textarea { width:100%; background:rgba(0,0,0,.35); color:#fff; border:1px solid rgba(245,199,107,.24); border-radius:10px; padding:11px 12px; outline:none; font-size:1rem; }
+    textarea { min-height:92px; resize:vertical; }
+    input:focus, select:focus, textarea:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(245,199,107,.10); }
+    .progress-card { position:sticky; top:88px; z-index:35; background:linear-gradient(180deg,rgba(9,11,20,.96),rgba(9,11,20,.86)); }
+    .progress-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
+    .progress-bar { height:12px; background:rgba(0,0,0,.40); border:1px solid rgba(245,199,107,.22); border-radius:999px; overflow:hidden; }
+    .progress-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--red),var(--gold)); transition:.3s; }
+    .steps-nav { display:flex; gap:8px; overflow:auto; padding-top:12px; }
+    .steps-nav button { white-space:nowrap; border:1px solid var(--line); color:#ddd; background:rgba(255,255,255,.06); padding:8px 10px; border-radius:999px; cursor:pointer; font-weight:800; }
+    .steps-nav button.active { background:var(--gold); color:#161616; }
+    .step { display:none; }
+    .step.active { display:grid; gap:18px; }
+    .choice-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .choice { border:1px solid rgba(245,199,107,.25); background:rgba(0,0,0,.18); border-radius:16px; padding:15px; cursor:pointer; transition:.25s; }
+    .choice:hover, .choice.selected { transform:translateY(-3px); border-color:var(--gold); background:rgba(245,199,107,.10); }
+    .choice h3 { color:var(--gold); margin-bottom:6px; }
+    .pill { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:7px 10px; border-radius:999px; background:rgba(0,0,0,.25); border:1px solid rgba(245,199,107,.22); color:#ddd; font-size:.85rem; margin:3px 4px 3px 0; }
+    .counter { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .counter .pill.bad { border-color:rgba(224,43,61,.75); color:#ffd9dd; background:rgba(157,20,33,.18); }
+    .trait { display:grid; grid-template-columns:1fr auto; align-items:center; gap:12px; border-bottom:1px solid rgba(245,199,107,.12); padding:10px 0; }
+    .trait:last-child { border-bottom:0; }
+    .trait strong { color:#fff; }
+    .dots { display:flex; gap:5px; flex-wrap:wrap; justify-content:flex-end; }
+    .dot { width:24px; height:24px; border-radius:50%; border:1px solid rgba(255,255,255,.34); background:rgba(0,0,0,.35); cursor:pointer; }
+    .dot.on { background:radial-gradient(circle at 35% 35%,#fff 0%,#f2b6bd 15%,var(--red2) 38%,var(--red) 70%); border-color:var(--gold); }
+    .review-box { background:rgba(0,0,0,.22); border:1px solid rgba(245,199,107,.18); border-radius:16px; padding:14px; }
+    .review-box h3 { color:var(--gold); margin-bottom:8px; }
+    .review-list { display:grid; gap:7px; color:#ddd; line-height:1.45; }
+    .sticky-actions { position:fixed; left:50%; transform:translateX(-50%); bottom:16px; z-index:60; width:min(1100px,90vw); display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px; border:1px solid var(--line); border-radius:18px; background:rgba(4,5,10,.92); box-shadow:0 18px 60px rgba(0,0,0,.5); backdrop-filter:blur(12px); }
+    .sticky-actions .right { display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+    .photo-box { min-height:240px; border:1px dashed rgba(245,199,107,.55); border-radius:18px; background:rgba(0,0,0,.30); display:grid; place-items:center; overflow:hidden; position:relative; }
+    .photo-box img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+    .photo-box span { color:#ddd; text-align:center; padding:18px; z-index:1; }
+    .hidden { display:none!important; }
+    footer { text-align:center; padding:20px; color:#aaa; background:rgba(0,0,0,.4); font-size:.9rem; }
+    @media(max-width:1050px){ .hero,.two,.three,.four,.choice-grid { grid-template-columns:1fr; } .span-2 { grid-column:auto; } }
+    @media(max-width:760px){
+      .site-header { padding:14px 5%; align-items:flex-start; flex-wrap:wrap; }
+      .site-menu-btn { display:block; margin-left:auto; }
+      .site-nav { display:none; width:100%; flex-direction:column; align-items:stretch; }
+      .site-nav.open { display:flex; }
+      .site-nav a, .site-nav button { width:100%; text-align:center; }
+      main { padding:30px 5% 140px; }
+      .hero { padding:24px; text-align:center; }
+      .hero-actions { justify-content:center; }
+      .hero-actions button, .hero-actions a { width:100%; text-align:center; }
+      .progress-card { top:76px; }
+      .trait { grid-template-columns:1fr; }
+      .dots { justify-content:flex-start; }
+      .sticky-actions { flex-direction:column; align-items:stretch; bottom:8px; }
+      .sticky-actions .right { justify-content:stretch; }
+      .sticky-actions button, .sticky-actions a { flex:1; text-align:center; }
+    }
+    @media(max-width:480px){ .hero-text p { font-size:1rem; } .card { padding:16px; } .dot { width:22px; height:22px; } }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <a href="index.html" class="site-logo">RPG Nexus</a>
+  <button class="site-menu-btn" type="button" onclick="toggleMenu()" aria-label="Abrir menu">☰</button>
+  <nav id="menu" class="site-nav">
+    <a href="index.html" data-page="index">Início</a>
+    <a href="personagens.html" data-page="personagens" class="active">Personagens</a>
+    <a href="campanhas.html" data-page="campanhas">Campanhas</a>
+    <a href="ameacas.html" data-page="ameacas">Ameaças</a>
+    <a href="homebrew.html" data-page="homebrew">Homebrew</a>
+    <a href="login.html" id="loginLink" class="login-btn" data-page="login">Login</a>
+    <button id="logoutBtn" class="logout-btn" type="button" hidden>Sair</button>
+  </nav>
+</header>
+
+<main>
+  <div class="page-shell">
+    <section class="hero">
+      <div class="hero-text">
+        <h1>Criar ficha <span>Vampiro V5</span></h1>
+        <p>Um assistente guiado para o jogador preencher a ficha por etapas. O site valida a distribuição, salva rascunhos e, no final, monta a ficha completa para usar na página de Vampiro V5.</p>
+        <div class="warning">Vampiro V5 é horror pessoal. Antes de começar, combine limites, temas sensíveis e tom da campanha com o mestre e a mesa.</div>
+      </div>
+      <div class="card">
+        <h2>Como funciona</h2>
+        <p>Você vai avançar por conceito, clã, predador, atributos, perícias, disciplinas, vantagens, vínculos e revisão. O progresso fica salvo automaticamente neste navegador.</p>
+        <div class="counter" id="heroBadges"></div>
+      </div>
+    </section>
+
+    <section class="card progress-card">
+      <div class="progress-head">
+        <strong id="stepTitle">Etapa</strong>
+        <span class="pill" id="stepCount">Etapa 1</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="steps-nav" id="stepsNav"></div>
+    </section>
+
+    <form id="wizard" onsubmit="event.preventDefault()">
+      <section class="step active" data-title="Boas-vindas">
+        <div class="card">
+          <h2>1. Dados iniciais</h2>
+          <p class="hint">Comece com as informações do jogador e da campanha.</p>
+          <div class="grid four" style="margin-top:14px">
+            <div><label>Nome do jogador</label><input data-field="jogador"></div>
+            <div><label>Nome do personagem</label><input data-field="nome"></div>
+            <div><label>Crônica</label><input data-field="cronica"></div>
+            <div><label>Campanha</label><input data-field="campanha"></div>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Foto do personagem</h2>
+          <div id="photoBox" class="photo-box"><span>Adicionar foto do personagem</span></div>
+          <input id="photoInput" type="file" accept="image/*" style="margin-top:12px">
+        </div>
+      </section>
+
+      <section class="step" data-title="Conceito">
+        <div class="card">
+          <h2>2. Conceito do personagem</h2>
+          <p class="hint">Defina quem ele era antes do Abraço e o que ainda resta da humanidade dele.</p>
+          <div class="grid two" style="margin-top:14px">
+            <div><label>Conceito</label><input data-field="conceito" placeholder="Ex.: artista decadente, padre em crise, policial corrupto..."></div>
+            <div><label>Ocupação em vida</label><input data-field="ocupacao"></div>
+            <div><label>Idade aparente</label><input data-field="idadeAparente"></div>
+            <div><label>Idade real</label><input data-field="idadeReal"></div>
+            <div><label>Aparência</label><textarea data-field="aparencia"></textarea></div>
+            <div><label>Personalidade</label><textarea data-field="personalidade"></textarea></div>
+            <div><label>O que ele perdeu?</label><textarea data-field="perda"></textarea></div>
+            <div><label>O que ele ainda deseja manter?</label><textarea data-field="humanidadeTexto"></textarea></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="step" data-title="Clã">
+        <div class="card">
+          <h2>3. Escolha o clã</h2>
+          <p class="hint">O clã define parte da identidade vampírica, disciplinas sugeridas e fraqueza.</p>
+          <div id="clanChoices" class="choice-grid" style="margin-top:14px"></div>
+        </div>
+      </section>
+
+      <section class="step" data-title="Predador">
+        <div class="card">
+          <h2>4. Tipo de predador</h2>
+          <p class="hint">Escolha como seu vampiro normalmente se alimenta. O site registra sugestões de especialidade, disciplina e consequências.</p>
+          <div id="predatorChoices" class="choice-grid" style="margin-top:14px"></div>
+        </div>
+      </section>
+
+      <section class="step" data-title="Atributos">
+        <div class="card">
+          <h2>5. Atributos</h2>
+          <p class="hint">Distribuição inicial: 1 atributo com 4 pontos, 3 atributos com 3 pontos, 4 atributos com 2 pontos e 1 atributo com 1 ponto.</p>
+          <div id="attrCounter" class="counter"></div>
+          <div id="attributes" class="grid three" style="margin-top:14px"></div>
+        </div>
+      </section>
+
+      <section class="step" data-title="Perícias">
+        <div class="card">
+          <h2>6. Perícias</h2>
+          <p class="hint">Escolha um modelo de distribuição. O contador avisa se a distribuição está correta.</p>
+          <div class="grid three" style="margin-top:14px">
+            <div><label>Modelo</label><select id="skillMode"><option value="balanced">Equilibrado: 3×3, 5×2, 7×1</option><option value="jack">Versátil: 1×3, 8×2, 10×1</option><option value="specialist">Especialista: 1×4, 3×3, 3×2, 3×1</option></select></div>
+            <div class="span-2"><label>Ajuda</label><input disabled value="Use os círculos e acompanhe o contador abaixo."></div>
+          </div>
+          <div id="skillCounter" class="counter"></div>
+          <div id="skills" class="grid three" style="margin-top:14px"></div>
+        </div>
+      </section>
+
+      <section class="step" data-title="Especialidades">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap"><h2>7. Especialidades</h2><button class="btn small secondary" type="button" onclick="addSpecialty()">Adicionar especialidade</button></div>
+          <p class="hint">Especialidades detalham áreas específicas. O predador escolhido também sugere uma opção.</p>
+          <div id="specialtyHint" class="warning" style="margin-top:12px"></div>
+          <div id="specialties" class="grid" style="margin-top:14px"></div>
+        </div>
+      </section>
+
+      <section class="step" data-title="Disciplinas">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap"><h2>8. Disciplinas</h2><button class="btn small secondary" type="button" onclick="addDiscipline()">Adicionar disciplina</button></div>
+          <p class="hint">O site mostra as disciplinas sugeridas pelo clã e pelo predador. Confirme escolhas fora da lista com o mestre.</p>
+          <div id="disciplineHint" class="warning" style="margin-top:12px"></div>
+          <div id="disciplines" class="grid" style="margin-top:14px"></div>
+        </div>
+      </section>
+
+      <section class="step" data-title="Vantagens">
+        <div class="card">
+          <h2>9. Vantagens, defeitos e antecedentes</h2>
+          <p class="hint">Preencha os elementos que o personagem possui na sociedade mortal e vampírica.</p>
+          <div class="grid two" style="margin-top:14px">
+            <div><label>Máscara</label><input data-field="mascara"></div>
+            <div><label>Refúgio</label><input data-field="refugio"></div>
+            <div><label>Vantagens</label><textarea data-field="vantagens"></textarea></div>
+            <div><label>Defeitos</label><textarea data-field="defeitos"></textarea></div>
+            <div><label>Contatos, aliados e influência</label><textarea data-field="contatos"></textarea></div>
+            <div><label>Recursos, fama, rebanho e lacaios</label><textarea data-field="recursosTexto"></textarea></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="step" data-title="Crenças">
+        <div class="card">
+          <h2>10. Convicções, Toques, Ambição e Desejo</h2>
+          <p class="hint">Convicções são regras morais pessoais. Toques são pessoas humanas que ainda ligam o vampiro à humanidade.</p>
+          <div class="grid two" style="margin-top:14px">
+            <div><label>Convicções</label><textarea data-field="conviccoes" placeholder="Uma por linha"></textarea></div>
+            <div><label>Toques / Touchstones</label><textarea data-field="touchstones" placeholder="Uma pessoa por linha"></textarea></div>
+            <div><label>Ambição</label><input data-field="ambicao"></div>
+            <div><label>Desejo atual</label><input data-field="desejo"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="step" data-title="Relações">
+        <div class="card">
+          <h2>11. Relações, equipamento e detalhes finais</h2>
+          <p class="hint">Adicione vínculos para facilitar a entrada do personagem na crônica.</p>
+          <div class="grid two" style="margin-top:14px">
+            <div><label>Sire</label><input data-field="sire"></div>
+            <div><label>Relação com o sire</label><input data-field="relacaoSire"></div>
+            <div><label>Relações importantes</label><textarea data-field="relacoes" placeholder="Aliados, rivais, família, coterie..."></textarea></div>
+            <div><label>Equipamentos</label><textarea data-field="inventario" placeholder="Documentos, celular, armas, veículo, objetos..."></textarea></div>
+            <div><label>História</label><textarea data-field="historia" style="min-height:150px"></textarea></div>
+            <div><label>Anotações do mestre/jogador</label><textarea data-field="notas" style="min-height:150px"></textarea></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="step" data-title="Revisão">
+        <div class="card">
+          <h2>12. Revisão automática</h2>
+          <p class="hint">Confira os alertas antes de finalizar. Ao finalizar, o site salva os dados em formato compatível com a ficha Vampiro V5 integrada.</p>
+          <div id="alerts" class="warning" style="margin-top:12px"></div>
+          <div id="review" class="grid two" style="margin-top:14px"></div>
+          <div class="hero-actions" style="margin-top:18px">
+            <button class="primary-btn" type="button" onclick="finishSheet()">Finalizar e salvar ficha</button>
+            <button class="secondary-btn" type="button" onclick="exportWizardJSON()">Exportar criação JSON</button>
+            <a class="secondary-btn" href="ficha_vampiro_v5_site_integrada.html">Abrir ficha Vampiro V5</a>
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+</main>
+
+<div class="sticky-actions">
+  <button class="btn secondary" type="button" onclick="prevStep()">Voltar</button>
+  <span class="pill" id="autosaveText">Rascunho salvo automaticamente</span>
+  <div class="right">
+    <button class="btn secondary" type="button" onclick="saveDraft(true)">Salvar rascunho</button>
+    <button class="btn" type="button" onclick="nextStep()">Próximo</button>
+  </div>
+</div>
+
+<footer>RPG Nexus © 2026 — Sistema de campanhas em desenvolvimento</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="auth.js"></script>
+<script>
+const DRAFT_KEY='rpg-nexus-criador-vampiro-v5';
+const SHEET_KEY='rpg-nexus-vampiro-v5-site';
+const MAX_DOTS=5;
+const ATTR_GROUPS={
+  'Físicos':[['forca','Força'],['destreza','Destreza'],['vigor','Vigor']],
+  'Sociais':[['carisma','Carisma'],['manipulacao','Manipulação'],['autocontrole','Autocontrole']],
+  'Mentais':[['inteligencia','Inteligência'],['raciocinio','Raciocínio'],['determinacao','Determinação']]
+};
+const SKILL_GROUPS={
+  'Físicas':[['atletismo','Atletismo','destreza'],['briga','Briga','forca'],['conducao','Condução','destreza'],['armas_fogo','Armas de Fogo','destreza'],['furto','Furto','destreza'],['furtividade','Furtividade','destreza'],['sobrevivencia','Sobrevivência','raciocinio'],['armas_brancas','Armas Brancas','forca']],
+  'Sociais':[['empatia_animais','Empatia com Animais','carisma'],['etiqueta','Etiqueta','autocontrole'],['performance','Performance','carisma'],['intimidacao','Intimidação','manipulacao'],['lideranca','Liderança','carisma'],['manha','Manha','manipulacao'],['persuasao','Persuasão','manipulacao'],['subterfugio','Subterfúgio','manipulacao']],
+  'Mentais':[['academicos','Acadêmicos','inteligencia'],['consciencia','Consciência','raciocinio'],['financas','Finanças','inteligencia'],['investigacao','Investigação','raciocinio'],['medicina','Medicina','inteligencia'],['ocultismo','Ocultismo','inteligencia'],['politica','Política','inteligencia'],['ciencia','Ciência','inteligencia'],['tecnologia','Tecnologia','inteligencia']]
+};
+const CLANS={
+  Brujah:{disc:['Rapidez','Potência','Presença'],bane:'Penalidade igual à Severidade da Fraqueza para resistir ao frenesi de fúria.',desc:'Rebeldes, intensos, idealistas, provocadores e perigosos.'},
+  Gangrel:{disc:['Animalismo','Fortitude','Metamorfose'],bane:'Em frenesi, manifesta traços animais que podem reduzir atributos temporariamente.',desc:'Predadores, sobreviventes, andarilhos e criaturas da fronteira.'},
+  Malkaviano:{disc:['Auspícios','Dominação','Ofuscação'],bane:'Quando a maldição vem à tona, sofre penalidade em uma categoria de testes pela cena.',desc:'Visionários, quebrados, oráculos, lunáticos e analistas do impossível.'},
+  Nosferatu:{disc:['Animalismo','Ofuscação','Potência'],bane:'Repulsivo; sofre penalidades para se disfarçar como humano.',desc:'Informantes, sobreviventes, monstros visíveis e mestres dos subterrâneos.'},
+  Toreador:{disc:['Auspícios','Rapidez','Presença'],bane:'Pode ficar fascinado por beleza ou estímulos estéticos intensos.',desc:'Artistas, divas, hedonistas, criadores e manipuladores do desejo.'},
+  Tremere:{disc:['Auspícios','Dominação','Feitiçaria do Sangue'],bane:'O sangue Tremere tem limitações específicas em laços de sangue e estrutura mística.',desc:'Feiticeiros, acadêmicos, ocultistas e sobreviventes da queda da Pirâmide.'},
+  Ventrue:{disc:['Dominação','Fortitude','Presença'],bane:'Tem restrição alimentar específica: só consegue se alimentar de um tipo de presa.',desc:'Líderes, aristocratas, executivos, governantes e predadores de elite.'},
+  Caitiff:{disc:['Livre escolha'],bane:'Sem fraqueza de clã definida, mas com estigma social entre muitos vampiros.',desc:'Sem clã reconhecido, rejeitados ou livres da linhagem tradicional.'},
+  'Sangue-Fraco':{disc:['Alquimia de Sangue-Fraco'],bane:'Características próprias de sangue-fraco; confirme detalhes com o mestre.',desc:'Vampiros limítrofes, próximos demais da humanidade e da fragilidade.'}
+};
+const PREDATORS={
+  Alleycat:{desc:'Alimenta-se pela força, emboscada ou violência direta.',spec:'Intimidação (Assalto) ou Briga (Agarrões)',disc:'Potência ou Rapidez',effects:'Estilo agressivo; pode envolver defeitos sociais ou inimigos.'},
+  Bagger:{desc:'Consegue sangue por bolsas, hospitais, mercado cinza ou bancos de sangue.',spec:'Furto (Arrombamento) ou Manha (Mercado negro)',disc:'Feitiçaria do Sangue ou Ofuscação',effects:'Acesso menos direto à caça humana; depende de logística.'},
+  'Blood Leech':{desc:'Alimenta-se de outros vampiros.',spec:'Briga (Vampiros) ou Furtividade (contra vampiros)',disc:'Rapidez ou Metamorfose',effects:'Extremamente perigoso e socialmente condenável.'},
+  Cleaver:{desc:'Alimenta-se de família, amigos ou círculo próximo.',spec:'Persuasão (Gaslighting) ou Subterfúgio (Acobertar)',disc:'Dominação ou Animalismo',effects:'Gera vínculos fortes, segredos e risco constante à Máscara.'},
+  Consensualist:{desc:'Só se alimenta com consentimento da vítima.',spec:'Medicina (Flebotomia) ou Persuasão (Vítimas)',disc:'Auspícios ou Fortitude',effects:'Pode ganhar humanidade, mas corre risco de quebra da Máscara.'},
+  Farmer:{desc:'Alimenta-se apenas de animais.',spec:'Empatia com Animais (animal específico) ou Sobrevivência (Caça)',disc:'Animalismo ou Metamorfose',effects:'Mais moralmente seguro, mas difícil para saciar a Fome.'},
+  Osiris:{desc:'Alimenta-se de seguidores, fãs, culto, igreja ou círculo de admiradores.',spec:'Ocultismo (tradição específica) ou Performance (campo específico)',disc:'Presença',effects:'Pode envolver Fama, Rebanho e Inimigos.'},
+  Sandman:{desc:'Alimenta-se de vítimas dormindo ou inconscientes.',spec:'Medicina (Anestesia) ou Furtividade (Invasão)',disc:'Auspícios ou Ofuscação',effects:'Discreto, invasivo e dependente de acesso a locais privados.'},
+  'Scene Queen':{desc:'Caça dentro de uma subcultura ou cena social específica.',spec:'Etiqueta (cena escolhida) ou Manha (cena escolhida)',disc:'Dominação ou Potência',effects:'Boa integração social, mas presa a uma bolha reconhecível.'},
+  Siren:{desc:'Alimenta-se por sedução, desejo ou intimidade.',spec:'Persuasão (Sedução) ou Subterfúgio (Sedução)',disc:'Fortitude ou Presença',effects:'Funciona bem com charme, risco emocional e relações complicadas.'}
+};
+const SKILL_MODES={ balanced:{3:3,2:5,1:7}, jack:{3:1,2:8,1:10}, specialist:{4:1,3:3,2:3,1:3} };
+let state={step:0, fields:{}, photo:'', clan:'', predator:'', attrs:{}, skills:{}, specialties:[], disciplines:[], finalized:false};
+const q=s=>document.querySelector(s); const qa=s=>Array.from(document.querySelectorAll(s));
+function toggleMenu(){ document.getElementById('menu')?.classList.toggle('open'); }
+function init(){ renderStepsNav(); renderChoices(); renderTraits(); bindFields(); loadDraft(); updateAll(); }
+function steps(){ return qa('.step'); }
+function stepTitles(){ return steps().map(s=>s.dataset.title); }
+function renderStepsNav(){ q('#stepsNav').innerHTML=stepTitles().map((t,i)=>`<button type="button" onclick="goStep(${i})">${i+1}. ${t}</button>`).join(''); }
+function bindFields(){
+  qa('[data-field]').forEach(el=>{ el.addEventListener('input',()=>{ state.fields[el.dataset.field]=el.value; saveDraft(false); updateAll(); }); });
+  q('#photoInput').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=()=>{ state.photo=r.result; renderPhoto(); saveDraft(false); }; r.readAsDataURL(f); });
+  q('#skillMode').addEventListener('change',()=>{ saveDraft(false); updateAll(); });
+}
+function renderChoices(){
+  q('#clanChoices').innerHTML=Object.entries(CLANS).map(([name,c])=>`<div class="choice" data-clan="${name}" onclick="chooseClan('${name}')"><h3>${name}</h3><p>${c.desc}</p><div class="counter">${c.disc.map(d=>`<span class="pill">${d}</span>`).join('')}</div><p class="hint" style="margin-top:8px"><b>Fraqueza:</b> ${c.bane}</p></div>`).join('');
+  q('#predatorChoices').innerHTML=Object.entries(PREDATORS).map(([name,p])=>`<div class="choice" data-predator="${name}" onclick="choosePredator('${name}')"><h3>${name}</h3><p>${p.desc}</p><p class="hint" style="margin-top:8px"><b>Especialidade:</b> ${p.spec}</p><p class="hint"><b>Disciplina:</b> ${p.disc}</p></div>`).join('');
+}
+function renderTraits(){
+  q('#attributes').innerHTML=Object.entries(ATTR_GROUPS).map(([g,items])=>`<div class="card"><h3>${g}</h3>${items.map(([k,n])=>traitHTML(k,n,'attr')).join('')}</div>`).join('');
+  q('#skills').innerHTML=Object.entries(SKILL_GROUPS).map(([g,items])=>`<div class="card"><h3>${g}</h3>${items.map(([k,n,base])=>traitHTML(k,n,'skill',base)).join('')}</div>`).join('');
+}
+function traitHTML(k,n,type,base=''){ return `<div class="trait"><div><strong>${n}</strong>${base?`<small>Atributo sugerido: ${labelOf(base)}</small>`:''}</div><div class="dots" data-kind="${type}" data-key="${k}">${[1,2,3,4,5].map(v=>`<span class="dot" onclick="setDot('${type}','${k}',${v})"></span>`).join('')}</div></div>`; }
+function setDot(type,k,v){ const bucket=type==='attr'?state.attrs:state.skills; bucket[k]=bucket[k]===v?0:v; saveDraft(false); updateAll(); }
+function paintDots(){ qa('.dots').forEach(d=>{ const type=d.dataset.kind, k=d.dataset.key, v=(type==='attr'?state.attrs:state.skills)[k]||0; Array.from(d.children).forEach((dot,i)=>dot.classList.toggle('on',i<v)); }); }
+function chooseClan(name){ state.clan=name; state.fields.cla=name; if(!state.disciplines.length){ CLANS[name].disc.slice(0,2).forEach(d=>state.disciplines.push({name:d,level:1,powers:''})); } saveDraft(false); updateAll(); }
+function choosePredator(name){ state.predator=name; state.fields.predador=name; const p=PREDATORS[name]; if(!state.specialties.length) state.specialties.push({skill:p.spec.split(' ou ')[0].split(' (')[0],text:p.spec}); if(state.disciplines.length<3 && p.disc) state.disciplines.push({name:p.disc.split(' ou ')[0],level:1,powers:'Sugestão do predador'}); saveDraft(false); updateAll(); }
+function addSpecialty(obj={skill:'',text:''}){ state.specialties.push(obj); renderSpecialties(); saveDraft(false); }
+function renderSpecialties(){ q('#specialties').innerHTML=state.specialties.map((s,i)=>`<div class="grid three"><div><label>Perícia</label><input value="${esc(s.skill)}" onchange="state.specialties[${i}].skill=this.value;saveDraft(false)"></div><div class="span-2"><label>Especialidade</label><div style="display:grid;grid-template-columns:1fr auto;gap:10px"><input value="${esc(s.text)}" onchange="state.specialties[${i}].text=this.value;saveDraft(false)"><button class="btn small danger" type="button" onclick="state.specialties.splice(${i},1);renderSpecialties();saveDraft(false)">Excluir</button></div></div></div>`).join('') || '<p class="hint">Nenhuma especialidade adicionada ainda.</p>'; }
+function addDiscipline(obj={name:'',level:1,powers:''}){ state.disciplines.push(obj); renderDisciplines(); saveDraft(false); }
+function renderDisciplines(){ q('#disciplines').innerHTML=state.disciplines.map((d,i)=>`<div class="grid four"><div><label>Disciplina</label><input value="${esc(d.name)}" onchange="state.disciplines[${i}].name=this.value;saveDraft(false)"></div><div><label>Nível</label><input type="number" min="0" max="5" value="${esc(d.level)}" onchange="state.disciplines[${i}].level=this.value;saveDraft(false)"></div><div class="span-2"><label>Poderes</label><div style="display:grid;grid-template-columns:1fr auto;gap:10px"><input value="${esc(d.powers)}" onchange="state.disciplines[${i}].powers=this.value;saveDraft(false)"><button class="btn small danger" type="button" onclick="state.disciplines.splice(${i},1);renderDisciplines();saveDraft(false)">Excluir</button></div></div></div>`).join('') || '<p class="hint">Nenhuma disciplina adicionada ainda.</p>'; }
+function updateAll(){ updateStepUI(); paintDots(); updateCounters(); renderSpecialties(); renderDisciplines(); updateHints(); renderReview(); renderPhoto(); qa('[data-field]').forEach(el=>{ if(document.activeElement!==el) el.value=state.fields[el.dataset.field]||''; }); q('#heroBadges').innerHTML=`<span class="pill">Clã: ${state.clan||'não escolhido'}</span><span class="pill">Predador: ${state.predator||'não escolhido'}</span><span class="pill">Ficha ${state.finalized?'finalizada':'em rascunho'}</span>`; }
+function updateStepUI(){ const s=steps(); s.forEach((el,i)=>el.classList.toggle('active',i===state.step)); q('#stepTitle').textContent=`Etapa ${state.step+1} — ${s[state.step].dataset.title}`; q('#stepCount').textContent=`${state.step+1} de ${s.length}`; q('#progressFill').style.width=`${((state.step+1)/s.length)*100}%`; qa('#stepsNav button').forEach((b,i)=>b.classList.toggle('active',i===state.step)); }
+function updateCounters(){
+  const counts={1:0,2:0,3:0,4:0,5:0}; Object.values(state.attrs).forEach(v=>counts[v]=(counts[v]||0)+1); const need={4:1,3:3,2:4,1:1}; q('#attrCounter').innerHTML=[4,3,2,1].map(v=>`<span class="pill ${counts[v]===need[v]?'':'bad'}">${v} ponto(s): ${counts[v]||0}/${need[v]}</span>`).join('');
+  const mode=q('#skillMode')?.value||'balanced'; const req=SKILL_MODES[mode]; const sc={1:0,2:0,3:0,4:0,5:0}; Object.values(state.skills).forEach(v=>sc[v]=(sc[v]||0)+1); q('#skillCounter').innerHTML=Object.keys(req).sort((a,b)=>b-a).map(v=>`<span class="pill ${sc[v]===req[v]?'':'bad'}">${v} ponto(s): ${sc[v]||0}/${req[v]}</span>`).join('');
+}
+function updateHints(){ const p=state.predator?PREDATORS[state.predator]:null; q('#specialtyHint').innerHTML=p?`Predador escolhido: <b>${state.predator}</b><br>Especialidade sugerida: ${p.spec}`:'Escolha um predador para receber uma sugestão automática de especialidade.'; const c=state.clan?CLANS[state.clan]:null; q('#disciplineHint').innerHTML=`${c?`Clã escolhido: <b>${state.clan}</b><br>Disciplinas sugeridas: ${c.disc.join(', ')}`:'Escolha um clã para ver disciplinas sugeridas.'}${p?`<br>Predador sugere: ${p.disc}`:''}`; }
+function attrValid(){ const counts={1:0,2:0,3:0,4:0,5:0}; Object.values(state.attrs).forEach(v=>counts[v]=(counts[v]||0)+1); return counts[4]===1&&counts[3]===3&&counts[2]===4&&counts[1]===1; }
+function skillsValid(){ const mode=q('#skillMode')?.value||'balanced'; const req=SKILL_MODES[mode]; const sc={1:0,2:0,3:0,4:0,5:0}; Object.values(state.skills).forEach(v=>sc[v]=(sc[v]||0)+1); return Object.entries(req).every(([v,n])=>sc[v]===n); }
+function alerts(){ const a=[]; if(!state.fields.nome)a.push('Nome do personagem não preenchido.'); if(!state.fields.conceito)a.push('Conceito não preenchido.'); if(!state.clan)a.push('Clã não escolhido.'); if(!state.predator)a.push('Predador não escolhido.'); if(!attrValid())a.push('Distribuição de atributos ainda não está correta.'); if(!skillsValid())a.push('Distribuição de perícias ainda não está correta.'); if(!state.specialties.length)a.push('Nenhuma especialidade adicionada.'); if(!state.disciplines.length)a.push('Nenhuma disciplina adicionada.'); if(!state.fields.conviccoes)a.push('Convicções não preenchidas.'); if(!state.fields.touchstones)a.push('Toques/Touchstones não preenchidos.'); return a; }
+function renderReview(){ const al=alerts(); q('#alerts').innerHTML=al.length?al.map(x=>`• ${x}`).join('<br>'):'Nenhum alerta obrigatório encontrado. Revise com o mestre antes da primeira sessão.'; const health=(Number(state.attrs.vigor)||0)+3, will=(Number(state.attrs.determinacao)||0)+(Number(state.attrs.autocontrole)||0); const blocks=[['Identidade',`Nome: ${state.fields.nome||'-'}<br>Jogador: ${state.fields.jogador||'-'}<br>Conceito: ${state.fields.conceito||'-'}<br>Clã: ${state.clan||'-'}<br>Predador: ${state.predator||'-'}`],['Recursos derivados',`Vitalidade: ${health||'-'}<br>Força de Vontade: ${will||'-'}<br>Humanidade inicial sugerida: 7<br>Fome inicial sugerida: 1`],['Disciplinas',state.disciplines.map(d=>`${d.name} ${d.level}${d.powers?' — '+d.powers:''}`).join('<br>')||'-'],['Especialidades',state.specialties.map(s=>`${s.skill}: ${s.text}`).join('<br>')||'-']]; q('#review').innerHTML=blocks.map(([h,b])=>`<div class="review-box"><h3>${h}</h3><div class="review-list">${b}</div></div>`).join(''); }
+function goStep(i){ state.step=Math.max(0,Math.min(steps().length-1,i)); saveDraft(false); updateAll(); scrollTo({top:0,behavior:'smooth'}); }
+function nextStep(){ goStep(state.step+1); }
+function prevStep(){ goStep(state.step-1); }
+function saveDraft(show=true){ state.fields={...state.fields}; qa('[data-field]').forEach(el=>state.fields[el.dataset.field]=el.value); localStorage.setItem(DRAFT_KEY,JSON.stringify(state)); q('#autosaveText').textContent='Rascunho salvo'; if(show) toast('Rascunho salvo neste navegador.'); setTimeout(()=>q('#autosaveText').textContent='Rascunho salvo automaticamente',1200); }
+function loadDraft(){ const raw=localStorage.getItem(DRAFT_KEY); if(!raw) return; try{ state={...state,...JSON.parse(raw)}; }catch(e){} }
+function renderPhoto(){ q('#photoBox').innerHTML=state.photo?`<img src="${state.photo}" alt="Foto do personagem">`:'<span>Adicionar foto do personagem</span>'; }
+function buildSheetData(){ const health=(Number(state.attrs.vigor)||0)+3, will=(Number(state.attrs.determinacao)||0)+(Number(state.attrs.autocontrole)||0); const fields={...state.fields, cla:state.clan, predador:state.predator, geracao:state.fields.geracao||'13', potencia:state.fields.potencia||'1', vantagens:[state.fields.vantagens,state.fields.defeitos,state.fields.contatos,state.fields.recursosTexto].filter(Boolean).join('\n\n'), inventario:state.fields.inventario||'', historia:state.fields.historia||'', notas:state.fields.notas||'', conviccoes:state.fields.conviccoes||'', touchstones:state.fields.touchstones||'', mascara:state.fields.mascara||'', refugio:state.fields.refugio||'', ambicao:state.fields.ambicao||'', desejo:state.fields.desejo||''}; const dots={...state.attrs,...state.skills}; const sheetState={ photo:state.photo, resources:{ fome:{current:1,max:5}, humanidade:{current:7,max:10}, vitalidade:{current:health,max:health}, vontade:{current:will,max:will} }, damage:{health:Array(health).fill(0),will:Array(will).fill(0)}, disciplines:state.disciplines, blocks:[{type:'texto',title:'Especialidades',value:state.specialties.map(s=>`${s.skill}: ${s.text}`).join('\n'),max:5},{type:'texto',title:'Relações',value:[`Sire: ${state.fields.sire||''}`,`Relação com o sire: ${state.fields.relacaoSire||''}`,state.fields.relacoes||''].filter(Boolean).join('\n'),max:5}], lastRoll:null }; return {state:sheetState,fields,dots}; }
+function finishSheet(){ saveDraft(false); const data=buildSheetData(); localStorage.setItem(SHEET_KEY,JSON.stringify(data)); Object.keys(data.dots).forEach(k=>localStorage.setItem(SHEET_KEY+'_dot_'+k,data.dots[k]||0)); state.finalized=true; saveDraft(false); updateAll(); toast('Ficha finalizada e salva. Agora você pode abrir a ficha Vampiro V5.'); }
+function exportWizardJSON(){ saveDraft(false); downloadJSON(state,'criacao-vampiro-v5-rpg-nexus.json'); }
+function downloadJSON(obj,name){ const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); }
+function labelOf(k){ const all=[...Object.values(ATTR_GROUPS).flat(),...Object.values(SKILL_GROUPS).flat()]; return (all.find(x=>x[0]===k)||[k,k])[1]; }
+function toast(text){ const el=document.createElement('div'); el.textContent=text; el.style.cssText='position:fixed;right:18px;top:96px;background:#090b14;color:#fff;border:1px solid #f5c76b;border-radius:12px;padding:12px 14px;box-shadow:0 24px 80px rgba(0,0,0,.45);z-index:999'; document.body.appendChild(el); setTimeout(()=>el.remove(),1900); }
+function esc(s){ return String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m])); }
+init();
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 RPG Nexus - arquivos atualizados
 
 Alterações principais:
-1. Todas as páginas usam o mesmo cabeçalho: Início, Agentes, Campanhas, Ameaças, Homebrew e Login.
+1. Todas as páginas usam o mesmo cabeçalho: Início, Personagens, Campanhas, Ameaças, Homebrew e Login.
 2. O botão Login abre login.html.
 3. login.html permite login com e-mail/senha e login com Google via Firebase Authentication.
 4. O cabeçalho detecta usuário logado e mostra o nome/e-mail e o botão Sair.
