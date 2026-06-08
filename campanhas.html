@@ -456,6 +456,58 @@
       font-size: 0.9rem;
     }
 
+
+    .auth-panel {
+      margin-bottom: 25px;
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(245, 199, 107, 0.24);
+      backdrop-filter: blur(8px);
+    }
+
+    .auth-panel h2 {
+      color: #f5c76b;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+
+    .auth-panel p {
+      color: #ddd;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .auth-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1.2fr 1fr auto auto auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .auth-grid button {
+      border: none;
+      border-radius: 10px;
+      padding: 13px 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .auth-primary {
+      background: #f5c76b;
+      color: #161616;
+    }
+
+    .auth-secondary {
+      background: rgba(255,255,255,.12);
+      color: #fff;
+    }
+
+    .auth-danger {
+      background: #8b1e3f;
+      color: #fff;
+    }
+
     @media (max-width: 850px) {
       header {
         padding: 18px 6%;
@@ -500,7 +552,8 @@
         width: 100%;
       }
 
-      .form-grid {
+      .form-grid,
+      .auth-grid {
         grid-template-columns: 1fr;
       }
 
@@ -537,6 +590,70 @@
       }
     }
   </style>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updateProfile
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    onSnapshot,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  import {
+    getStorage,
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBk0zsp2lxPaNZcbsbmvFYcopUXiJdhaHI",
+    authDomain: "rpg-novomundo.firebaseapp.com",
+    projectId: "rpg-novomundo",
+    storageBucket: "rpg-novomundo.firebasestorage.app",
+    messagingSenderId: "969625547513",
+    appId: "1:969625547513:web:9e9df5aabfb32c7ce7a828",
+    measurementId: "G-E0LP4EFKSY"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const firestore = getFirestore(app);
+  const storage = getStorage(app);
+
+  window.RPGFirebase = {
+    app,
+    auth,
+    firestore,
+    storage,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updateProfile,
+    doc,
+    getDoc,
+    setDoc,
+    onSnapshot,
+    serverTimestamp,
+    storageRef,
+    uploadBytes,
+    getDownloadURL
+  };
+
+  window.dispatchEvent(new Event("rpg-firebase-ready"));
+</script>
+
 </head>
 
 <body>
@@ -558,6 +675,19 @@
   </header>
 
   <main>
+
+    <section class="auth-panel">
+      <h2>Conexão Firebase</h2>
+      <p id="authStatus">Entre ou cadastre-se para salvar suas campanhas no Firebase.</p>
+      <div class="auth-grid">
+        <input id="authName" placeholder="Nome, apenas para cadastro">
+        <input id="authEmail" type="email" placeholder="E-mail">
+        <input id="authPassword" type="password" placeholder="Senha">
+        <button class="auth-primary" onclick="firebaseSignup()">Cadastrar</button>
+        <button class="auth-secondary" onclick="firebaseLogin()">Entrar</button>
+        <button class="auth-danger" onclick="firebaseLogout()">Sair</button>
+      </div>
+    </section>
     <section class="page-header">
       <div class="page-title">
         <h1>Área de <span>Campanhas</span></h1>
@@ -743,14 +873,11 @@
       return crypto.randomUUID ? crypto.randomUUID() : "id-" + Math.random().toString(36).slice(2);
     }
 
-    function carregarBanco() {
-      try {
-        const salvo = localStorage.getItem(STORAGE_KEY);
-        if (salvo) db = JSON.parse(salvo);
-      } catch (e) {
-        db = { campaigns: [], sheets: [] };
-      }
+    let firebaseUser = null;
+    let firebaseUnsubscribe = null;
+    let syncingFromFirebase = false;
 
+    function normalizarBanco() {
       db.campaigns = Array.isArray(db.campaigns) ? db.campaigns : [];
       db.sheets = Array.isArray(db.sheets) ? db.sheets : [];
 
@@ -764,8 +891,31 @@
       });
     }
 
+    function carregarBanco() {
+      try {
+        const salvo = localStorage.getItem(STORAGE_KEY);
+        if (salvo) db = JSON.parse(salvo);
+      } catch (e) {
+        db = { campaigns: [], sheets: [] };
+      }
+
+      normalizarBanco();
+    }
+
     function salvarBanco() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+
+      if (firebaseUser && window.RPGFirebase && !syncingFromFirebase) {
+        const { firestore, doc, setDoc, serverTimestamp } = window.RPGFirebase;
+
+        setDoc(doc(firestore, "rpgUserData", firebaseUser.uid), {
+          data: db,
+          updatedAt: serverTimestamp()
+        }, { merge: true }).catch(error => {
+          console.error("Erro ao salvar no Firebase:", error);
+          alert("Não foi possível salvar no Firebase. Verifique as regras do Firestore e sua conexão.");
+        });
+      }
     }
 
     function textoSeguro(valor) {
@@ -944,6 +1094,126 @@
         campaignGrid.appendChild(card);
       });
     }
+
+
+    function atualizarStatusAuth() {
+      const status = document.getElementById("authStatus");
+      if (!status) return;
+
+      if (firebaseUser) {
+        status.innerHTML = `Conectado como <strong>${textoSeguro(firebaseUser.displayName || firebaseUser.email)}</strong>. As campanhas serão sincronizadas no Firebase.`;
+      } else {
+        status.textContent = "Entre ou cadastre-se para salvar suas campanhas no Firebase.";
+      }
+    }
+
+    async function firebaseSignup() {
+      if (!window.RPGFirebase) {
+        alert("Firebase ainda está carregando.");
+        return;
+      }
+
+      const nome = document.getElementById("authName").value.trim();
+      const email = document.getElementById("authEmail").value.trim();
+      const senha = document.getElementById("authPassword").value;
+
+      if (!email || !senha) {
+        alert("Informe e-mail e senha.");
+        return;
+      }
+
+      try {
+        const { auth, createUserWithEmailAndPassword, updateProfile } = window.RPGFirebase;
+        const credencial = await createUserWithEmailAndPassword(auth, email, senha);
+        if (nome) await updateProfile(credencial.user, { displayName: nome });
+        alert("Cadastro realizado.");
+      } catch (error) {
+        alert("Erro no cadastro: " + error.message);
+      }
+    }
+
+    async function firebaseLogin() {
+      if (!window.RPGFirebase) {
+        alert("Firebase ainda está carregando.");
+        return;
+      }
+
+      const email = document.getElementById("authEmail").value.trim();
+      const senha = document.getElementById("authPassword").value;
+
+      if (!email || !senha) {
+        alert("Informe e-mail e senha.");
+        return;
+      }
+
+      try {
+        const { auth, signInWithEmailAndPassword } = window.RPGFirebase;
+        await signInWithEmailAndPassword(auth, email, senha);
+      } catch (error) {
+        alert("Erro no login: " + error.message);
+      }
+    }
+
+    async function firebaseLogout() {
+      if (!window.RPGFirebase) return;
+
+      try {
+        await window.RPGFirebase.signOut(window.RPGFirebase.auth);
+      } catch (error) {
+        alert("Erro ao sair: " + error.message);
+      }
+    }
+
+    function iniciarSincronizacaoFirebase() {
+      const { auth, onAuthStateChanged, firestore, doc, setDoc, onSnapshot, serverTimestamp } = window.RPGFirebase;
+
+      onAuthStateChanged(auth, async user => {
+        firebaseUser = user;
+        atualizarStatusAuth();
+
+        if (firebaseUnsubscribe) {
+          firebaseUnsubscribe();
+          firebaseUnsubscribe = null;
+        }
+
+        if (!user) {
+          carregarBanco();
+          renderizarCampanhas();
+          return;
+        }
+
+        const ref = doc(firestore, "rpgUserData", user.uid);
+
+        firebaseUnsubscribe = onSnapshot(ref, async snap => {
+          if (snap.exists()) {
+            syncingFromFirebase = true;
+            const nuvem = snap.data();
+
+            if (nuvem && nuvem.data) {
+              db = nuvem.data;
+              normalizarBanco();
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+              renderizarCampanhas();
+            }
+
+            syncingFromFirebase = false;
+          } else {
+            await setDoc(ref, {
+              data: db,
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp()
+            }, { merge: true });
+          }
+        }, error => {
+          console.error("Erro ao sincronizar Firebase:", error);
+          alert("Erro ao sincronizar com Firebase. Confira se Firestore foi criado e se as regras permitem acesso.");
+        });
+      });
+    }
+
+    window.addEventListener("rpg-firebase-ready", iniciarSincronizacaoFirebase);
+    if (window.RPGFirebase) iniciarSincronizacaoFirebase();
+
 
     window.addEventListener("click", function(event) {
       const modal = document.getElementById("campaignModal");

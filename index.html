@@ -285,6 +285,70 @@
       }
     }
   </style>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updateProfile
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    onSnapshot,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  import {
+    getStorage,
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBk0zsp2lxPaNZcbsbmvFYcopUXiJdhaHI",
+    authDomain: "rpg-novomundo.firebaseapp.com",
+    projectId: "rpg-novomundo",
+    storageBucket: "rpg-novomundo.firebasestorage.app",
+    messagingSenderId: "969625547513",
+    appId: "1:969625547513:web:9e9df5aabfb32c7ce7a828",
+    measurementId: "G-E0LP4EFKSY"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const firestore = getFirestore(app);
+  const storage = getStorage(app);
+
+  window.RPGFirebase = {
+    app,
+    auth,
+    firestore,
+    storage,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updateProfile,
+    doc,
+    getDoc,
+    setDoc,
+    onSnapshot,
+    serverTimestamp,
+    storageRef,
+    uploadBytes,
+    getDownloadURL
+  };
+
+  window.dispatchEvent(new Event("rpg-firebase-ready"));
+</script>
+
 </head>
 
 <body>
@@ -301,7 +365,7 @@
       <a href="ameacas.html">Ameaças</a>
       <a href="homebrew.html">Homebrew</a>
       <a href="mestre.html" class="master-btn">Mestre</a>
-      <a href="login.html" class="login-btn">Login</a>
+      <a href="mestre.html" class="login-btn" id="loginStatusLink">Login</a>
     </nav>
   </header>
 
@@ -361,6 +425,26 @@
       const menu = document.getElementById("menu");
       menu.classList.toggle("active");
     }
+  </script>
+
+
+  <script>
+    window.addEventListener("rpg-firebase-ready", function () {
+      const { auth, onAuthStateChanged } = window.RPGFirebase;
+      const link = document.getElementById("loginStatusLink");
+
+      onAuthStateChanged(auth, function (user) {
+        if (!link) return;
+
+        if (user) {
+          link.textContent = user.displayName || user.email || "Minha conta";
+          link.href = "mestre.html";
+        } else {
+          link.textContent = "Login";
+          link.href = "mestre.html";
+        }
+      });
+    });
   </script>
 
 </body>

@@ -7,11 +7,93 @@
 <style>
 :root{--bg:#07080d;--panel:#0c1230;--card:#151a33;--field:#2a2d3f;--text:#f4f5fb;--muted:#c3c5d3;--accent:#ffcf68;--border:#4b506d;--danger:#8d3348;--danger-border:#c85b76;--ok:#4f9b73;--shadow:0 24px 80px rgba(0,0,0,.45)}
 *{box-sizing:border-box}html,body{min-height:100%}body{margin:0;background:radial-gradient(circle at top,#151b35 0%,#090b14 45%,#04050a 100%);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}input,textarea,select{width:100%;background:rgba(54,58,79,.72);color:var(--text);border:1px solid var(--border);border-radius:12px;padding:11px 14px;outline:none}textarea{min-height:96px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--accent)}label{color:var(--accent);font-weight:800;font-size:13px}.app{width:min(1180px,100%);margin:0 auto;padding:18px}.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}.title h1{margin:0;color:var(--accent);font-size:28px}.title p{margin:6px 0 0;color:var(--muted);font-size:14px}.counter{background:rgba(255,207,104,.11);border:1px solid rgba(255,207,104,.38);border-radius:16px;padding:12px 15px;font-weight:900;color:var(--accent);white-space:nowrap}.tabs{display:flex;gap:10px;margin-bottom:14px}.tab{border:1px solid var(--border);background:#222740;color:var(--text);border-radius:14px;padding:11px 16px;font-weight:900}.tab.active{background:var(--accent);color:#18110a;border-color:var(--accent)}.panel{background:linear-gradient(180deg,rgba(12,18,48,.98),rgba(10,14,33,.98));border:1px solid rgba(255,207,104,.28);border-radius:22px;box-shadow:var(--shadow);padding:18px}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}.btn{border:1px solid var(--border);background:#3a3d51;color:var(--text);padding:10px 14px;border-radius:12px;font-weight:900}.btn:hover{filter:brightness(1.08)}.btn-primary{background:var(--accent);border-color:var(--accent);color:#17110a}.btn-danger{background:rgba(141,51,72,.34);border-color:var(--danger-border)}.btn-ok{background:rgba(79,155,115,.34);border-color:#79c59b}.btn-small{padding:8px 10px;font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}.card{background:linear-gradient(180deg,rgba(26,31,54,.96),rgba(20,25,47,.96));border:1px solid rgba(140,146,176,.3);border-radius:18px;overflow:hidden}.campaign-card{cursor:pointer;transition:.16s transform,.16s border-color}.campaign-card:hover{transform:translateY(-2px);border-color:rgba(255,207,104,.55)}.card-body{padding:14px}.card h3{margin:0 0 6px;color:var(--accent);font-size:18px}.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}.cover{height:150px;background:#0b0f20;position:relative;overflow:hidden;border-bottom:1px solid rgba(140,146,176,.25);touch-action:none}.cover img{position:absolute;left:50%;top:50%;width:100%;height:100%;object-fit:cover;transform:translate(calc(-50% + var(--x,0px)),calc(-50% + var(--y,0px))) scale(var(--s,1));transform-origin:center;user-select:none;pointer-events:none}.cover-empty{height:100%;display:flex;align-items:center;justify-content:center;color:#8f95ad;font-weight:800;background:linear-gradient(135deg,#10162b,#1f2441)}.cover-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.field{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.muted{color:var(--muted);font-size:13px}.empty{border:1px dashed rgba(140,146,176,.4);border-radius:16px;padding:22px;text-align:center;color:var(--muted);background:rgba(255,255,255,.03)}.chipline{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.chip{border:1px solid rgba(255,207,104,.28);background:rgba(255,207,104,.09);color:var(--accent);border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800}.overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:flex-start;justify-content:center;padding:18px;overflow:auto;z-index:1000}.overlay.show{display:flex}.modal{width:min(880px,100%);background:linear-gradient(180deg,rgba(12,18,48,.99),rgba(10,14,33,.99));border:1px solid rgba(255,207,104,.38);border-radius:22px;box-shadow:var(--shadow);padding:20px}.modal-header{display:flex;justify-content:space-between;gap:14px;margin-bottom:16px}.modal-header h2{margin:0;color:var(--accent);font-size:22px}.close{border:0;background:transparent;color:#fff;font-size:26px;font-weight:900}.confirm{width:min(430px,100%)}.confirm p{color:var(--muted);line-height:1.45}.crop-area{position:relative;height:min(58vh,460px);background:#05060b;border:1px solid var(--border);border-radius:16px;overflow:hidden;touch-action:none}.crop-area img{position:absolute;left:50%;top:50%;max-width:none;transform:translate(-50%,-50%) translate(var(--x,0px),var(--y,0px)) scale(var(--zoom,1));transform-origin:center;user-select:none}.crop-box{position:absolute;border:2px solid var(--accent);box-shadow:0 0 0 9999px rgba(0,0,0,.48);border-radius:10px;min-width:90px;min-height:60px;cursor:move}.crop-handle{position:absolute;right:-8px;bottom:-8px;width:18px;height:18px;border-radius:50%;background:var(--accent);border:2px solid #1b1203;cursor:nwse-resize}.range-row{display:grid;grid-template-columns:100px 1fr;gap:10px;align-items:center;margin:12px 0}.sheet-shell{width:min(940px,100%)}.add-panel,.block-card,.detail-box{background:linear-gradient(180deg,rgba(26,31,54,.96),rgba(20,25,47,.96));border:1px solid rgba(140,146,176,.3);border-radius:18px;padding:14px}.add-panel{margin:4px 0 14px}.add-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.add-row select{flex:1;min-width:220px}.blocks{display:grid;gap:12px}.block-header{display:flex;gap:12px;align-items:center;margin-bottom:12px}.block-title{flex:1}.block-actions{display:flex;gap:10px;flex-wrap:wrap}.drag-handle{width:42px;min-width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:12px;background:rgba(54,58,79,.72);color:var(--muted);cursor:grab;user-select:none;font-size:18px;font-weight:900}.drag-placeholder{height:70px;border:2px dashed var(--accent);border-radius:18px;background:rgba(255,207,104,.08)}.block-card.is-moving{position:fixed;z-index:2000;pointer-events:none;width:var(--drag-width);opacity:.96;box-shadow:0 28px 90px rgba(0,0,0,.65);transform:rotate(.4deg)}body.dragging-block{user-select:none;cursor:grabbing}.rows{display:grid;gap:8px}.row-2,.row-3,.row-4,.row-attributes,.row-skills,.row-5{display:grid;gap:8px;align-items:center}.row-2{grid-template-columns:1fr 1fr auto}.row-attributes{grid-template-columns:1.15fr .7fr .8fr auto}.row-3{grid-template-columns:1.2fr .85fr .85fr auto}.row-4{grid-template-columns:1fr 1.2fr auto}.row-skills{grid-template-columns:1.2fr 1fr .7fr auto}.row-5{grid-template-columns:1.2fr .6fr .6fr 1fr auto}.remove-x{width:42px;min-width:42px;padding:10px 0;text-align:center}.block-footer{margin-top:10px}.hidden{display:none!important}.detail-hero{display:grid;grid-template-columns:280px 1fr;gap:16px;align-items:stretch;margin-bottom:16px}.detail-cover{height:100%;min-height:220px;border-radius:18px;overflow:hidden;border:1px solid rgba(140,146,176,.28);background:#0b0f20}.detail-cover img{width:100%;height:100%;object-fit:cover}.detail-title h2{font-size:28px;color:var(--accent);margin:0 0 8px}.detail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.list{display:grid;gap:10px}.list-item{background:rgba(255,255,255,.035);border:1px solid rgba(140,146,176,.22);border-radius:14px;padding:12px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.list-item strong{color:var(--accent)}.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.invite-box{display:flex;gap:10px;align-items:center}.invite-box input{font-size:13px}.virtual-table{height:430px;border-radius:18px;border:1px dashed rgba(255,207,104,.35);background:radial-gradient(circle at center,rgba(255,207,104,.09),rgba(255,255,255,.025));display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);padding:20px}.shield-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.dice-result{font-size:34px;color:var(--accent);font-weight:900;margin:10px 0}
+
+.auth-card{background:linear-gradient(180deg,rgba(26,31,54,.96),rgba(20,25,47,.96));border:1px solid rgba(255,207,104,.28);border-radius:18px;padding:14px;margin-bottom:14px;display:grid;gap:12px}.auth-card h2{margin:0;color:var(--accent);font-size:18px}.auth-grid{display:grid;grid-template-columns:1.2fr 1.2fr 1fr auto auto auto;gap:8px;align-items:end}.auth-status{color:var(--muted);font-size:13px;line-height:1.4}.auth-status strong{color:var(--accent)}@media(max-width:900px){.auth-grid{grid-template-columns:1fr}.auth-grid .btn{width:100%}}
+
 @media(max-width:760px){.app{padding:10px}.topbar{flex-direction:column}.counter{width:100%;text-align:center}.panel,.modal{padding:14px;border-radius:18px}.grid-2,.grid-3,.split,.detail-hero,.shield-grid{grid-template-columns:1fr}.toolbar{align-items:stretch}.toolbar .btn{width:100%}.tabs .tab{flex:1}.row-2,.row-attributes,.row-3,.row-4,.row-skills,.row-5{grid-template-columns:1fr}.block-header{flex-direction:column;align-items:stretch}.block-actions,.actions,.cover-tools,.detail-actions{width:100%}.block-actions .btn,.actions .btn,.cover-tools .btn,.detail-actions .btn{flex:1}.add-row{flex-direction:column;align-items:stretch}.add-row .btn{width:100%}.crop-area{height:380px}}
 </style>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updateProfile
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    onSnapshot,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  import {
+    getStorage,
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBk0zsp2lxPaNZcbsbmvFYcopUXiJdhaHI",
+    authDomain: "rpg-novomundo.firebaseapp.com",
+    projectId: "rpg-novomundo",
+    storageBucket: "rpg-novomundo.firebasestorage.app",
+    messagingSenderId: "969625547513",
+    appId: "1:969625547513:web:9e9df5aabfb32c7ce7a828",
+    measurementId: "G-E0LP4EFKSY"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const firestore = getFirestore(app);
+  const storage = getStorage(app);
+
+  window.RPGFirebase = {
+    app,
+    auth,
+    firestore,
+    storage,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updateProfile,
+    doc,
+    getDoc,
+    setDoc,
+    onSnapshot,
+    serverTimestamp,
+    storageRef,
+    uploadBytes,
+    getDownloadURL
+  };
+
+  window.dispatchEvent(new Event("rpg-firebase-ready"));
+</script>
+
 </head>
 <body>
 <div class="app">
+
+  <section class="auth-card" id="authCard">
+    <div>
+      <h2>Conexão Firebase</h2>
+      <div class="auth-status" id="authStatus">Entre ou cadastre-se para salvar campanhas e fichas no Firebase.</div>
+    </div>
+    <div class="auth-grid">
+      <input id="authName" placeholder="Nome, apenas para cadastro">
+      <input id="authEmail" type="email" placeholder="E-mail">
+      <input id="authPassword" type="password" placeholder="Senha">
+      <button class="btn btn-primary" onclick="firebaseSignup()">Cadastrar</button>
+      <button class="btn" onclick="firebaseLogin()">Entrar</button>
+      <button class="btn btn-danger" onclick="firebaseLogout()">Sair</button>
+    </div>
+  </section>
   <header class="topbar">
     <div class="title"><h1 id="appTitle">Página do Mestre</h1><p id="appSubtitle">Crie campanhas, edite fichas universais e gerencie suas mesas.</p></div>
     <div class="counter" id="campaignCounter">0/15 campanhas</div>
@@ -61,8 +143,44 @@ let db={campaigns:[],sheets:[]};
 let editingCampaignId=null,editingSheetId=null,currentCampaignId=null,cropTargetId=null,cropData={src:'',x:0,y:0,zoom:1},pendingCover='';
 function uid(){return crypto.randomUUID?crypto.randomUUID():'id-'+Math.random().toString(36).slice(2)}
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
-function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(db))}
-function load(){try{const saved=localStorage.getItem(STORAGE_KEY);if(saved)db=JSON.parse(saved)}catch(e){}db.campaigns=Array.isArray(db.campaigns)?db.campaigns:[];db.sheets=Array.isArray(db.sheets)?db.sheets:[];db.campaigns.forEach(c=>{c.players=Array.isArray(c.players)?c.players:[];c.characters=Array.isArray(c.characters)?c.characters:[];c.sheetIds=Array.isArray(c.sheetIds)?c.sheetIds:[];c.combats=Array.isArray(c.combats)?c.combats:[];c.masterNotes=c.masterNotes||'';c.coverPos=c.coverPos||{x:0,y:0,s:1}});renderAll()}
+let firebaseUser=null;
+let firebaseUnsubscribe=null;
+let syncingFromFirebase=false;
+
+function save(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(db));
+  if(firebaseUser && window.RPGFirebase && !syncingFromFirebase){
+    const {firestore,doc,setDoc,serverTimestamp}=window.RPGFirebase;
+    setDoc(doc(firestore,'rpgUserData',firebaseUser.uid),{
+      data:db,
+      updatedAt:serverTimestamp()
+    },{merge:true}).catch(error=>{
+      console.error('Erro ao salvar no Firebase:',error);
+      alert('Não foi possível salvar no Firebase. Verifique as regras do Firestore e sua conexão.');
+    });
+  }
+}
+function normalizeDB(){
+  db.campaigns=Array.isArray(db.campaigns)?db.campaigns:[];
+  db.sheets=Array.isArray(db.sheets)?db.sheets:[];
+  db.campaigns.forEach(c=>{
+    c.players=Array.isArray(c.players)?c.players:[];
+    c.characters=Array.isArray(c.characters)?c.characters:[];
+    c.sheetIds=Array.isArray(c.sheetIds)?c.sheetIds:[];
+    c.combats=Array.isArray(c.combats)?c.combats:[];
+    c.masterNotes=c.masterNotes||'';
+    c.coverPos=c.coverPos||{x:0,y:0,s:1};
+  });
+}
+
+function load(){
+  try{
+    const saved=localStorage.getItem(STORAGE_KEY);
+    if(saved)db=JSON.parse(saved);
+  }catch(e){}
+  normalizeDB();
+  renderAll();
+}
 function openOverlay(id){document.getElementById(id).classList.add('show')}
 function closeOverlay(id){document.getElementById(id).classList.remove('show')}
 function switchTab(tab){document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));document.getElementById('campaignsTab').classList.toggle('hidden',tab!=='campaigns');document.getElementById('sheetsTab').classList.toggle('hidden',tab!=='sheets')}
@@ -123,6 +241,94 @@ function openTable(){openOverlay('tableModal')}
 function openShield(){const c=currentCampaign();document.getElementById('masterNotes').value=c.masterNotes||'';document.getElementById('diceResult').textContent='—';openOverlay('shieldModal')}
 function saveMasterNotes(){const c=currentCampaign();if(c){c.masterNotes=document.getElementById('masterNotes').value;save()}}
 function rollDie(sides){document.getElementById('diceResult').textContent=`d${sides}: ${Math.floor(Math.random()*sides)+1}`}
+
+function updateAuthStatus(){
+  const status=document.getElementById('authStatus');
+  if(!status)return;
+  if(firebaseUser){
+    status.innerHTML=`Conectado como <strong>${esc(firebaseUser.displayName||firebaseUser.email)}</strong>. Seus dados serão salvos no Firebase.`;
+  }else{
+    status.textContent='Entre ou cadastre-se para salvar campanhas e fichas no Firebase.';
+  }
+}
+
+async function firebaseSignup(){
+  if(!window.RPGFirebase){alert('Firebase ainda está carregando.');return}
+  const name=document.getElementById('authName').value.trim();
+  const email=document.getElementById('authEmail').value.trim();
+  const password=document.getElementById('authPassword').value;
+  if(!email||!password){alert('Informe e-mail e senha.');return}
+  try{
+    const {auth,createUserWithEmailAndPassword,updateProfile}=window.RPGFirebase;
+    const cred=await createUserWithEmailAndPassword(auth,email,password);
+    if(name)await updateProfile(cred.user,{displayName:name});
+    alert('Cadastro realizado.');
+  }catch(error){
+    alert('Erro no cadastro: '+error.message);
+  }
+}
+
+async function firebaseLogin(){
+  if(!window.RPGFirebase){alert('Firebase ainda está carregando.');return}
+  const email=document.getElementById('authEmail').value.trim();
+  const password=document.getElementById('authPassword').value;
+  if(!email||!password){alert('Informe e-mail e senha.');return}
+  try{
+    const {auth,signInWithEmailAndPassword}=window.RPGFirebase;
+    await signInWithEmailAndPassword(auth,email,password);
+  }catch(error){
+    alert('Erro no login: '+error.message);
+  }
+}
+
+async function firebaseLogout(){
+  if(!window.RPGFirebase)return;
+  try{
+    await window.RPGFirebase.signOut(window.RPGFirebase.auth);
+  }catch(error){
+    alert('Erro ao sair: '+error.message);
+  }
+}
+
+function startFirebaseSync(){
+  const {auth,onAuthStateChanged,firestore,doc,setDoc,onSnapshot,serverTimestamp}=window.RPGFirebase;
+  onAuthStateChanged(auth,async user=>{
+    firebaseUser=user;
+    updateAuthStatus();
+    if(firebaseUnsubscribe){
+      firebaseUnsubscribe();
+      firebaseUnsubscribe=null;
+    }
+    if(!user){
+      load();
+      return;
+    }
+    const ref=doc(firestore,'rpgUserData',user.uid);
+    firebaseUnsubscribe=onSnapshot(ref,async snap=>{
+      if(snap.exists()){
+        syncingFromFirebase=true;
+        const cloud=snap.data();
+        if(cloud && cloud.data){
+          db=cloud.data;
+          normalizeDB();
+          localStorage.setItem(STORAGE_KEY,JSON.stringify(db));
+          renderAll();
+        }
+        syncingFromFirebase=false;
+      }else{
+        await setDoc(ref,{data:db,createdAt:serverTimestamp(),updatedAt:serverTimestamp()},{merge:true});
+      }
+    },error=>{
+      console.error('Erro ao sincronizar Firebase:',error);
+      alert('Erro ao sincronizar com Firebase. Confira se Firestore foi criado e se as regras permitem acesso.');
+    });
+  });
+}
+
+window.addEventListener('rpg-firebase-ready',startFirebaseSync);
+if(window.RPGFirebase)startFirebaseSync();
+
+
 load();
 if(location.hash.startsWith('#campanha-')){const id=location.hash.replace('#campanha-','');setTimeout(()=>openCampaignPage(id),0)}
 </script>
