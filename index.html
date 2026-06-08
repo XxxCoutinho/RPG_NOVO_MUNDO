@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plataforma RPG</title>
+
+  <title>RPG Nexus | Página Inicial</title>
 
   <style>
     * {
@@ -41,24 +42,27 @@
       font-weight: bold;
       letter-spacing: 1px;
       color: #f5c76b;
+      text-decoration: none;
     }
 
     nav {
       display: flex;
-      gap: 15px;
+      gap: 12px;
       align-items: center;
     }
 
     nav a {
       text-decoration: none;
       color: #fff;
-      padding: 10px 16px;
+      padding: 10px 14px;
       border-radius: 8px;
       transition: 0.3s;
       font-weight: 600;
+      font-size: 0.95rem;
     }
 
-    nav a:hover {
+    nav a:hover,
+    nav a.active {
       background: #f5c76b;
       color: #161616;
     }
@@ -69,6 +73,16 @@
     }
 
     .login-btn:hover {
+      background: #f5c76b;
+      color: #161616;
+    }
+
+    .master-btn {
+      border: 1px solid #f5c76b;
+      color: #f5c76b;
+    }
+
+    .master-btn:hover {
       background: #f5c76b;
       color: #161616;
     }
@@ -91,7 +105,7 @@
     }
 
     .hero {
-      max-width: 1100px;
+      max-width: 1150px;
       width: 100%;
       display: grid;
       grid-template-columns: 1.2fr 1fr;
@@ -151,6 +165,17 @@
       transform: translateY(-3px);
     }
 
+    .danger-btn {
+      background: #8b1e3f;
+      color: #fff;
+    }
+
+    .danger-btn:hover {
+      background: #f5c76b;
+      color: #161616;
+      transform: translateY(-3px);
+    }
+
     .cards {
       display: grid;
       grid-template-columns: 1fr;
@@ -164,11 +189,15 @@
       padding: 22px;
       backdrop-filter: blur(10px);
       transition: 0.3s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
 
     .card:hover {
       transform: translateY(-5px);
       background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(245, 199, 107, 0.45);
     }
 
     .card h3 {
@@ -191,7 +220,7 @@
       font-size: 0.9rem;
     }
 
-    @media (max-width: 850px) {
+    @media (max-width: 950px) {
       header {
         padding: 18px 6%;
       }
@@ -204,7 +233,7 @@
         position: absolute;
         top: 70px;
         right: 6%;
-        width: 220px;
+        width: 240px;
         flex-direction: column;
         background: rgba(10, 10, 18, 0.98);
         border: 1px solid rgba(255, 255, 255, 0.15);
@@ -261,16 +290,18 @@
 <body>
 
   <header>
-    <div class="logo">RPG Nexus</div>
+    <a href="index.html" class="logo">RPG Nexus</a>
 
     <button class="menu-btn" onclick="toggleMenu()">☰</button>
 
     <nav id="menu">
-      <a href="#">Agentes</a>
-      <a href="#">Campanhas</a>
-      <a href="#">Ameaças</a>
-      <a href="#">Homebrew</a>
-      <a href="#" class="login-btn">Login</a>
+      <a href="index.html" class="active">Início</a>
+      <a href="agentes.html">Agentes</a>
+      <a href="campanhas.html">Campanhas</a>
+      <a href="ameacas.html">Ameaças</a>
+      <a href="homebrew.html">Homebrew</a>
+      <a href="mestre.html" class="master-btn">Mestre</a>
+      <a href="login.html" class="login-btn">Login</a>
     </nav>
   </header>
 
@@ -281,41 +312,48 @@
 
         <p>
           Uma plataforma para mestres e jogadores criarem agentes, campanhas,
-          ameaças, regras próprias e conteúdos homebrew em um único lugar.
+          ameaças, regras próprias, conteúdos homebrew e ferramentas de mestre
+          em um único lugar.
         </p>
 
         <div class="hero-actions">
-          <a href="#" class="primary-btn">Criar Campanha</a>
-          <a href="#" class="secondary-btn">Ver Agentes</a>
+          <a href="campanhas.html" class="primary-btn">Criar Campanha</a>
+          <a href="agentes.html" class="secondary-btn">Ver Agentes</a>
+          <a href="mestre.html" class="danger-btn">Área do Mestre</a>
         </div>
       </div>
 
       <div class="cards">
-        <div class="card">
+        <a href="agentes.html" class="card">
           <h3>Agentes</h3>
           <p>Crie fichas personalizadas para personagens, NPCs e aliados.</p>
-        </div>
+        </a>
 
-        <div class="card">
+        <a href="campanhas.html" class="card">
           <h3>Campanhas</h3>
           <p>Organize sessões, anotações, regras, jogadores e progresso.</p>
-        </div>
+        </a>
 
-        <div class="card">
+        <a href="ameacas.html" class="card">
           <h3>Ameaças</h3>
           <p>Cadastre monstros, vilões, criaturas e desafios da campanha.</p>
-        </div>
+        </a>
 
-        <div class="card">
+        <a href="homebrew.html" class="card">
           <h3>Homebrew</h3>
           <p>Crie regras próprias, itens, poderes, classes e sistemas únicos.</p>
-        </div>
+        </a>
+
+        <a href="mestre.html" class="card">
+          <h3>Mestre</h3>
+          <p>Acesse o escudo do mestre, rolagens privadas, notas secretas e controle da sessão.</p>
+        </a>
       </div>
     </section>
   </main>
 
   <footer>
-    Plataforma RPG Nexus © 2026 — Sistema inicial em desenvolvimento
+    RPG Nexus © 2026 — Sistema inicial em desenvolvimento
   </footer>
 
   <script>
