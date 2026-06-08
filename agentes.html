@@ -69,13 +69,12 @@
     <div class="panel-header">
       <div>
         <h1>Agentes</h1>
-        <p>Crie e organize personagens, NPCs, aliados, inimigos e figuras neutras da campanha.</p>
+        <p>Crie personagens e NPCs escolhendo o modelo de ficha que será usado.</p>
       </div>
       <button class="btn" id="openCreateCharacter" type="button">+ Criar personagem</button>
     </div>
 
     <div class="actions">
-      <a class="btn-secondary" href="campanhas.html">Ir para Campanhas</a>
     </div>
 
     <div class="hint" id="loginHint" hidden>
@@ -97,49 +96,47 @@
       </div>
       <div class="modal-body">
         <div class="field">
-          <label for="characterName">Nome</label>
+          <label for="characterName">Nome do personagem</label>
           <input id="characterName" name="characterName" type="text" placeholder="Ex.: Arthur, Agente Lima, Cultista..." required />
         </div>
 
         <div class="field">
-          <label for="sheetModel">Modelo de ficha</label>
+          <label for="sheetModel">Modelo da ficha</label>
           <select id="sheetModel" name="sheetModel" required>
             <option value="" selected disabled>Selecione um modelo</option>
-            <option value="Ordem Paranormal">Ordem Paranormal</option>
-            <option value="D&D">D&D</option>
-            <option value="Mundo das Trevas">Mundo das Trevas</option>
-            <option value="Ciberpunk">Ciberpunk</option>
+            <option value="ordem-paranormal">Ordem Paranormal</option>
+            <option value="dnd">D&amp;D</option>
+            <option value="mundo-das-trevas">Mundo das Trevas</option>
+            <option value="ciberpunk">Ciberpunk</option>
           </select>
         </div>
 
         <div class="field">
           <label>Tipo</label>
-          <div class="type-grid">
+          <div class="type-grid" role="radiogroup" aria-label="Tipo do agente">
             <label class="choice">
-              <input type="radio" name="agentType" value="Personagem" checked />
+              <input type="radio" name="agentType" value="personagem" checked />
               <span>Personagem</span>
             </label>
             <label class="choice">
-              <input type="radio" name="agentType" value="NPC" />
+              <input type="radio" name="agentType" value="npc" />
               <span>NPC</span>
             </label>
           </div>
         </div>
 
-        <div class="npc-fields" id="npcFields">
-          <div class="field" style="margin-bottom:0">
-            <label for="npcRole">Relação do NPC</label>
-            <select id="npcRole" name="npcRole">
-              <option value="Aliado">Aliado</option>
-              <option value="Inimigo">Inimigo</option>
-              <option value="Neutro">Neutro</option>
-            </select>
-          </div>
+        <div class="field npc-fields" id="npcFields">
+          <label for="npcRelation">Relação do NPC</label>
+          <select id="npcRelation" name="npcRelation">
+            <option value="aliado">Aliado</option>
+            <option value="inimigo">Inimigo</option>
+            <option value="neutro">Neutro</option>
+          </select>
         </div>
 
         <div class="modal-actions">
           <button class="btn-secondary" type="button" id="cancelCharacter">Cancelar</button>
-          <button class="btn" type="submit">Salvar</button>
+          <button class="btn" type="submit">Criar personagem</button>
         </div>
       </div>
     </form>
@@ -170,10 +167,11 @@
     const closeBtn = document.getElementById('closeCharacterModal');
     const cancelBtn = document.getElementById('cancelCharacter');
     const form = document.getElementById('characterForm');
-    const npcFields = document.getElementById('npcFields');
     const agentList = document.getElementById('agentList');
     const loginHint = document.getElementById('loginHint');
     const nameInput = document.getElementById('characterName');
+    const npcFields = document.getElementById('npcFields');
+    const typeRadios = document.querySelectorAll('input[name="agentType"]');
 
     if(!modal || !openBtn || !form || !agentList){
       console.error('Elementos da página Agentes não encontrados. Verifique os IDs do HTML.');
@@ -193,12 +191,7 @@
       modal.classList.remove('active');
       modal.setAttribute('aria-hidden','true');
       form.reset();
-      toggleNpcFields();
-    }
-
-    function toggleNpcFields(){
-      const selectedType = form.querySelector('input[name="agentType"]:checked')?.value;
-      npcFields?.classList.toggle('active', selectedType === 'NPC');
+      updateNpcFields();
     }
 
     function getCurrentUser(){
@@ -255,13 +248,25 @@
         return `
           <article class="agent-card">
             <h3>${escapeHtml(agent.name)}</h3>
-            <span>${escapeHtml(agent.model)}</span>
-            <span>${escapeHtml(agent.type)}</span>
-            ${agent.type === 'NPC' ? `<span>${escapeHtml(agent.role)}</span>` : ''}
+            <span>${escapeHtml(agent.modelLabel || agent.model)}</span>
+            <span>${escapeHtml(agent.typeLabel || agent.type)}</span>
           </article>
         `;
       }).join('');
     }
+
+    function updateNpcFields(){
+      const selectedType = document.querySelector('input[name="agentType"]:checked')?.value || 'personagem';
+      if(npcFields){
+        npcFields.classList.toggle('active', selectedType === 'npc');
+      }
+    }
+
+    typeRadios.forEach(function(radio){
+      radio.addEventListener('change', updateNpcFields);
+    });
+
+    updateNpcFields();
 
     openBtn.addEventListener('click', openModal);
     closeBtn?.addEventListener('click', closeModal);
@@ -275,46 +280,73 @@
       if(event.key === 'Escape' && modal.classList.contains('active')) closeModal();
     });
 
-    form.querySelectorAll('input[name="agentType"]').forEach(function(input){
-      input.addEventListener('change', toggleNpcFields);
-    });
-
     form.addEventListener('submit', function(event){
       event.preventDefault();
 
-      // Se o Firebase estiver ativo, exige login para salvar.
-      // Se estiver testando apenas o HTML localmente, permite salvar para não travar o desenvolvimento.
+      // Se o Firebase estiver ativo, exige login para criar.
+      // Se estiver testando apenas o HTML localmente, permite seguir para não travar o desenvolvimento.
       if(isAuthAvailable() && !getCurrentUser()){
         if(loginHint) loginHint.hidden = false;
-        alert('Faça login antes de salvar o personagem.');
+        alert('Faça login antes de criar o personagem.');
         window.location.href = 'login.html';
         return;
       }
 
       const formData = new FormData(form);
-      const type = formData.get('agentType');
       const name = String(formData.get('characterName') || '').trim();
-      const model = formData.get('sheetModel');
+      const model = String(formData.get('sheetModel') || '');
+      const baseType = String(formData.get('agentType') || 'personagem');
+      const npcRelation = String(formData.get('npcRelation') || 'aliado');
+      const type = baseType === 'npc' ? 'npc-' + npcRelation : 'personagem';
 
-      if(!name || !model){
-        alert('Informe o nome e selecione um modelo de ficha.');
+      if(!name || !model || !baseType){
+        alert('Informe o nome, o modelo da ficha e o tipo.');
         return;
       }
+
+      const modelLabels = {
+        'ordem-paranormal': 'Ordem Paranormal',
+        'dnd': 'D&D',
+        'mundo-das-trevas': 'Mundo das Trevas',
+        'ciberpunk': 'Ciberpunk'
+      };
+
+      const typeLabels = {
+        'personagem': 'Personagem',
+        'npc-aliado': 'NPC aliado',
+        'npc-inimigo': 'NPC inimigo',
+        'npc-neutro': 'NPC neutro'
+      };
 
       const newAgent = {
         id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
         name: name,
         model: model,
+        modelLabel: modelLabels[model] || model,
         type: type,
-        role: type === 'NPC' ? formData.get('npcRole') : '',
+        baseType: baseType,
+        npcRelation: baseType === 'npc' ? npcRelation : '',
+        typeLabel: typeLabels[type] || type,
         createdAt: new Date().toISOString()
       };
 
       const agents = loadAgents();
       agents.unshift(newAgent);
       saveAgents(agents);
-      renderAgents();
-      closeModal();
+
+      localStorage.setItem('rpgNexusPersonagemEmCriacao', JSON.stringify(newAgent));
+
+      const params = new URLSearchParams({
+        nome: name,
+        modelo: model,
+        tipo: type,
+        categoria: baseType,
+        relacaoNpc: baseType === 'npc' ? npcRelation : '',
+        agenteId: newAgent.id
+      });
+
+      // A página ficha.html deve ler esses parâmetros e carregar o modelo escolhido.
+      window.location.href = 'ficha.html?' + params.toString();
     });
 
     try{
@@ -328,7 +360,6 @@
     }
 
     renderAgents();
-    toggleNpcFields();
   });
 })();
 </script>
