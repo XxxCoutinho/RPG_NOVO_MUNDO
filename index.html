@@ -3,358 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>RPG Nexus | Página Inicial</title>
-
+  <link rel="stylesheet" href="header.css" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      background:
-        linear-gradient(rgba(10, 10, 18, 0.85), rgba(10, 10, 18, 0.95)),
-        url("https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=1600&q=80");
-      background-size: cover;
-      background-position: center;
-      color: #fff;
-    }
-
-    header {
-      width: 100%;
-      padding: 20px 8%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(8px);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      letter-spacing: 1px;
-      color: #f5c76b;
-      text-decoration: none;
-    }
-
-    nav {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 8px;
-      transition: 0.3s;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    nav a:hover,
-    nav a.active {
-      background: #f5c76b;
-      color: #161616;
-    }
-
-    .login-btn {
-      background: #8b1e3f;
-      color: #fff;
-    }
-
-    .login-btn:hover {
-      background: #f5c76b;
-      color: #161616;
-    }
-
-    .master-btn {
-      border: 1px solid #f5c76b;
-      color: #f5c76b;
-    }
-
-    .master-btn:hover {
-      background: #f5c76b;
-      color: #161616;
-    }
-
-    .menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 2rem;
-      cursor: pointer;
-    }
-
-    main {
-      min-height: calc(100vh - 80px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 8%;
-    }
-
-    .hero {
-      max-width: 1150px;
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 40px;
-      align-items: center;
-    }
-
-    .hero-text h1 {
-      font-size: clamp(2.2rem, 5vw, 4.5rem);
-      line-height: 1.1;
-      margin-bottom: 20px;
-    }
-
-    .hero-text h1 span {
-      color: #f5c76b;
-    }
-
-    .hero-text p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #ddd;
-      margin-bottom: 30px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .hero-actions a {
-      text-decoration: none;
-      padding: 14px 22px;
-      border-radius: 10px;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .primary-btn {
-      background: #f5c76b;
-      color: #161616;
-    }
-
-    .primary-btn:hover {
-      background: #fff;
-      transform: translateY(-3px);
-    }
-
-    .secondary-btn {
-      border: 2px solid #f5c76b;
-      color: #f5c76b;
-    }
-
-    .secondary-btn:hover {
-      background: #f5c76b;
-      color: #161616;
-      transform: translateY(-3px);
-    }
-
-    .danger-btn {
-      background: #8b1e3f;
-      color: #fff;
-    }
-
-    .danger-btn:hover {
-      background: #f5c76b;
-      color: #161616;
-      transform: translateY(-3px);
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 18px;
-      padding: 22px;
-      backdrop-filter: blur(10px);
-      transition: 0.3s;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      background: rgba(255, 255, 255, 0.14);
-      border-color: rgba(245, 199, 107, 0.45);
-    }
-
-    .card h3 {
-      color: #f5c76b;
-      margin-bottom: 8px;
-      font-size: 1.25rem;
-    }
-
-    .card p {
-      color: #ddd;
-      line-height: 1.4;
-      font-size: 0.95rem;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #aaa;
-      background: rgba(0, 0, 0, 0.4);
-      font-size: 0.9rem;
-    }
-
-    @media (max-width: 950px) {
-      header {
-        padding: 18px 6%;
-      }
-
-      .menu-btn {
-        display: block;
-      }
-
-      nav {
-        position: absolute;
-        top: 70px;
-        right: 6%;
-        width: 240px;
-        flex-direction: column;
-        background: rgba(10, 10, 18, 0.98);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 14px;
-        padding: 15px;
-        display: none;
-      }
-
-      nav.active {
-        display: flex;
-      }
-
-      nav a {
-        width: 100%;
-        text-align: center;
-      }
-
-      .hero {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-
-      .hero-actions {
-        justify-content: center;
-      }
-
-      .cards {
-        margin-top: 10px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      main {
-        padding: 30px 5%;
-      }
-
-      .hero-text p {
-        font-size: 1rem;
-      }
-
-      .hero-actions a {
-        width: 100%;
-        text-align: center;
-      }
-
-      nav {
-        right: 5%;
-        width: 90%;
-      }
-    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial, Helvetica, sans-serif; }
+    body { min-height:100vh; background:linear-gradient(rgba(10,10,18,.85), rgba(10,10,18,.95)), url("https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=1600&q=80"); background-size:cover; background-position:center; color:#fff; }
+    main { min-height:calc(100vh - 80px); display:flex; align-items:center; justify-content:center; padding:40px 8%; }
+    .hero { max-width:1150px; width:100%; display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:center; }
+    .hero-text h1 { font-size:clamp(2.2rem,5vw,4.5rem); line-height:1.1; margin-bottom:20px; }
+    .hero-text h1 span { color:#f5c76b; }
+    .hero-text p { font-size:1.1rem; line-height:1.6; color:#ddd; margin-bottom:30px; }
+    .hero-actions { display:flex; gap:15px; flex-wrap:wrap; }
+    .hero-actions a { text-decoration:none; padding:14px 22px; border-radius:10px; font-weight:bold; transition:.3s; }
+    .primary-btn { background:#f5c76b; color:#161616; }
+    .primary-btn:hover { background:#fff; transform:translateY(-3px); }
+    .secondary-btn { border:2px solid #f5c76b; color:#f5c76b; }
+    .secondary-btn:hover { background:#f5c76b; color:#161616; transform:translateY(-3px); }
+    .cards { display:grid; grid-template-columns:1fr; gap:18px; }
+    .card { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); border-radius:18px; padding:22px; backdrop-filter:blur(10px); transition:.3s; text-decoration:none; color:inherit; display:block; }
+    .card:hover { transform:translateY(-5px); background:rgba(255,255,255,.14); border-color:rgba(245,199,107,.45); }
+    .card h3 { color:#f5c76b; margin-bottom:8px; font-size:1.25rem; }
+    .card p { color:#ddd; line-height:1.4; font-size:.95rem; }
+    footer { text-align:center; padding:20px; color:#aaa; background:rgba(0,0,0,.4); font-size:.9rem; }
+    @media(max-width:950px) { .hero { grid-template-columns:1fr; text-align:center; } .hero-actions { justify-content:center; } .cards { margin-top:10px; } }
+    @media(max-width:480px) { main { padding:30px 5%; } .hero-text p { font-size:1rem; } .hero-actions a { width:100%; text-align:center; } }
   </style>
 </head>
-
 <body>
-
-  <header>
-    <a href="index.html" class="logo">RPG Nexus</a>
-
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
-
-    <nav id="menu">
-      <a href="index.html" class="active">Início</a>
-      <a href="agentes.html">Agentes</a>
-      <a href="campanhas.html">Campanhas</a>
-      <a href="ameacas.html">Ameaças</a>
-      <a href="homebrew.html">Homebrew</a>
-      <a href="login.html" class="login-btn">Login</a>
-    </nav>
-  </header>
-
+<header class="site-header">
+  <a href="index.html" class="site-logo">RPG Nexus</a>
+  <button class="site-menu-btn" type="button" onclick="toggleMenu()" aria-label="Abrir menu">☰</button>
+  <nav id="menu" class="site-nav">
+    <a href="index.html" data-page="index">Início</a>
+    <a href="agentes.html" data-page="agentes">Agentes</a>
+    <a href="campanhas.html" data-page="campanhas">Campanhas</a>
+    <a href="ameacas.html" data-page="ameacas">Ameaças</a>
+    <a href="homebrew.html" data-page="homebrew">Homebrew</a>
+    <a href="login.html" id="loginLink" class="login-btn" data-page="login">Login</a>
+    <button id="logoutBtn" class="logout-btn" type="button" hidden>Sair</button>
+  </nav>
+</header>
   <main>
     <section class="hero">
       <div class="hero-text">
         <h1>Crie, organize e jogue suas <span>campanhas de RPG</span></h1>
-
-        <p>
-          Uma plataforma para mestres e jogadores criarem agentes, campanhas,
-          ameaças, regras próprias, conteúdos homebrew e campanhas
-          em um único lugar.
-        </p>
-
+        <p>Uma plataforma para criadores e jogadores criarem agentes, campanhas, ameaças, regras próprias e conteúdos homebrew em um único lugar.</p>
         <div class="hero-actions">
           <a href="campanhas.html" class="primary-btn">Criar Campanha</a>
           <a href="agentes.html" class="secondary-btn">Ver Agentes</a>
         </div>
       </div>
-
       <div class="cards">
-        <a href="agentes.html" class="card">
-          <h3>Agentes</h3>
-          <p>Crie fichas personalizadas para personagens, NPCs e aliados.</p>
-        </a>
-
-        <a href="campanhas.html" class="card">
-          <h3>Campanhas</h3>
-          <p>Organize sessões, anotações, regras, jogadores e progresso.</p>
-        </a>
-
-        <a href="ameacas.html" class="card">
-          <h3>Ameaças</h3>
-          <p>Cadastre monstros, vilões, criaturas e desafios da campanha.</p>
-        </a>
-
-        <a href="homebrew.html" class="card">
-          <h3>Homebrew</h3>
-          <p>Crie regras próprias, itens, poderes, classes e sistemas únicos.</p>
-        </a>
+        <a href="agentes.html" class="card"><h3>Agentes</h3><p>Crie fichas personalizadas para personagens, NPCs e aliados.</p></a>
+        <a href="campanhas.html" class="card"><h3>Campanhas</h3><p>Organize sessões, anotações, regras, jogadores e progresso.</p></a>
+        <a href="ameacas.html" class="card"><h3>Ameaças</h3><p>Cadastre monstros, vilões, criaturas e desafios da campanha.</p></a>
+        <a href="homebrew.html" class="card"><h3>Homebrew</h3><p>Crie regras próprias, itens, poderes, classes e sistemas únicos.</p></a>
       </div>
     </section>
   </main>
+  <footer>RPG Nexus © 2026 — Sistema de campanhas em desenvolvimento</footer>
 
-  <footer>
-    RPG Nexus © 2026 — Sistema de campanhas em desenvolvimento
-  </footer>
-
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.classList.toggle("active");
-    }
-  </script>
-
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="auth.js"></script>
 </body>
 </html>

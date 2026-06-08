@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | RPG Nexus</title>
+  <link rel="stylesheet" href="header.css" />
+  <style>
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;background:linear-gradient(rgba(10,10,18,.88), rgba(10,10,18,.96)), url("https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=1600&q=80");background-size:cover;background-position:center;color:#fff;font-family:Arial,Helvetica,sans-serif} main{min-height:calc(100vh - 80px);display:flex;align-items:center;justify-content:center;padding:40px 8%} .login-card{width:min(520px,100%);background:rgba(17,17,28,.94);border:1px solid rgba(245,199,107,.35);border-radius:22px;padding:28px;box-shadow:0 24px 80px rgba(0,0,0,.52)} h1{margin:0 0 10px;color:#f5c76b;font-size:2rem} p{color:#ddd;line-height:1.5} .field{display:flex;flex-direction:column;gap:8px;margin:16px 0} label{color:#f5c76b;font-weight:800} input{width:100%;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;padding:13px 14px;border-radius:10px;outline:none;font-size:1rem} input:focus{border-color:#f5c76b} .actions{display:grid;gap:10px;margin-top:16px} button{border:0;padding:13px 16px;border-radius:10px;font-weight:800;cursor:pointer;font-size:1rem} .primary{background:#f5c76b;color:#161616} .secondary{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.18)} .google{background:#fff;color:#161616} .danger{background:#8b1e3f;color:#fff} .status{margin-top:16px;padding:12px;border-radius:10px;background:rgba(255,255,255,.07);color:#ddd;display:none} .status.show{display:block} .status.ok{border:1px solid rgba(79,155,115,.7)} .status.error{border:1px solid rgba(200,91,118,.8)} .user-box{margin-top:16px;padding:14px;border:1px solid rgba(245,199,107,.28);border-radius:14px;background:rgba(245,199,107,.08);display:none} .user-box.show{display:block} footer{text-align:center;padding:20px;color:#aaa;background:rgba(0,0,0,.4);font-size:.9rem}
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <a href="index.html" class="site-logo">RPG Nexus</a>
+  <button class="site-menu-btn" type="button" onclick="toggleMenu()" aria-label="Abrir menu">☰</button>
+  <nav id="menu" class="site-nav">
+    <a href="index.html" data-page="index">Início</a>
+    <a href="agentes.html" data-page="agentes">Agentes</a>
+    <a href="campanhas.html" data-page="campanhas">Campanhas</a>
+    <a href="ameacas.html" data-page="ameacas">Ameaças</a>
+    <a href="homebrew.html" data-page="homebrew">Homebrew</a>
+    <a href="login.html" id="loginLink" class="login-btn" data-page="login">Login</a>
+    <button id="logoutBtn" class="logout-btn" type="button" hidden>Sair</button>
+  </nav>
+</header>
+<main>
+  <section class="login-card">
+    <h1>Login</h1>
+    <p>Entre com e-mail e senha ou use sua conta Google para acessar suas campanhas.</p>
+    <div id="userBox" class="user-box"></div>
+    <div class="field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="email" placeholder="seu@email.com"></div>
+    <div class="field"><label for="password">Senha</label><input id="password" type="password" autocomplete="current-password" placeholder="Digite sua senha"></div>
+    <div class="actions">
+      <button class="primary" type="button" onclick="entrarComEmail()">Entrar</button>
+      <button class="secondary" type="button" onclick="criarContaEmail()">Criar conta com e-mail</button>
+      <button class="google" type="button" onclick="entrarComGoogle()">Entrar com Google</button>
+      <button id="logoutPageBtn" class="danger" type="button" onclick="sairDaConta()" hidden>Sair da conta</button>
+    </div>
+    <div id="status" class="status"></div>
+  </section>
+</main>
+<footer>RPG Nexus © 2026 — Login</footer>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="auth.js"></script>
+<script>
+  const auth = firebase.auth();
+  const statusBox = document.getElementById('status');
+  const userBox = document.getElementById('userBox');
+  const logoutPageBtn = document.getElementById('logoutPageBtn');
+
+  function mostrarStatus(mensagem, tipo='ok') {
+    statusBox.textContent = mensagem;
+    statusBox.className = 'status show ' + tipo;
+  }
+
+  function traduzirErro(erro) {
+    const mapa = {
+      'auth/invalid-email': 'E-mail inválido.',
+      'auth/user-disabled': 'Esta conta foi desativada.',
+      'auth/user-not-found': 'Usuário não encontrado.',
+      'auth/wrong-password': 'Senha incorreta.',
+      'auth/invalid-credential': 'E-mail ou senha incorretos.',
+      'auth/email-already-in-use': 'Este e-mail já está em uso.',
+      'auth/weak-password': 'A senha precisa ter pelo menos 6 caracteres.',
+      'auth/popup-closed-by-user': 'A janela do Google foi fechada antes de concluir o login.',
+      'auth/popup-blocked': 'O navegador bloqueou o pop-up. Vou tentar redirecionar para o Google.'
+    };
+    return mapa[erro.code] || erro.message;
+  }
+
+  async function entrarComEmail() {
+    const email = document.getElementById('email').value.trim();
+    const senha = document.getElementById('password').value;
+    if (!email || !senha) return mostrarStatus('Preencha o e-mail e a senha.', 'error');
+    try {
+      await auth.signInWithEmailAndPassword(email, senha);
+      mostrarStatus('Login realizado com sucesso. Redirecionando...', 'ok');
+      setTimeout(() => location.href = 'campanhas.html', 700);
+    } catch (erro) {
+      mostrarStatus(traduzirErro(erro), 'error');
+    }
+  }
+
+  async function criarContaEmail() {
+    const email = document.getElementById('email').value.trim();
+    const senha = document.getElementById('password').value;
+    if (!email || !senha) return mostrarStatus('Preencha o e-mail e a senha para criar a conta.', 'error');
+    try {
+      await auth.createUserWithEmailAndPassword(email, senha);
+      mostrarStatus('Conta criada e login realizado. Redirecionando...', 'ok');
+      setTimeout(() => location.href = 'campanhas.html', 700);
+    } catch (erro) {
+      mostrarStatus(traduzirErro(erro), 'error');
+    }
+  }
+
+  async function entrarComGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    try {
+      await auth.signInWithPopup(provider);
+      mostrarStatus('Login com Google realizado. Redirecionando...', 'ok');
+      setTimeout(() => location.href = 'campanhas.html', 700);
+    } catch (erro) {
+      if (erro.code === 'auth/popup-blocked') {
+        mostrarStatus(traduzirErro(erro), 'error');
+        await auth.signInWithRedirect(provider);
+        return;
+      }
+      mostrarStatus(traduzirErro(erro), 'error');
+    }
+  }
+
+  async function sairDaConta() {
+    try {
+      await auth.signOut();
+      mostrarStatus('Você saiu da conta.', 'ok');
+    } catch (erro) {
+      mostrarStatus('Não foi possível sair: ' + erro.message, 'error');
+    }
+  }
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      const nome = user.displayName || user.email || 'usuário';
+      userBox.innerHTML = '<strong>Conta conectada:</strong><br>' + nome;
+      userBox.classList.add('show');
+      logoutPageBtn.hidden = false;
+    } else {
+      userBox.innerHTML = '';
+      userBox.classList.remove('show');
+      logoutPageBtn.hidden = true;
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+RPG Nexus - arquivos atualizados
+
+Alterações principais:
+1. Todas as páginas usam o mesmo cabeçalho: Início, Agentes, Campanhas, Ameaças, Homebrew e Login.
+2. O botão Login abre login.html.
+3. login.html permite login com e-mail/senha e login com Google via Firebase Authentication.
+4. O cabeçalho detecta usuário logado e mostra o nome/e-mail e o botão Sair.
+
+Arquivos importantes:
+- header.css: estilo compartilhado do cabeçalho.
+- firebase-config.js: configuração Firebase do projeto.
+- auth.js: controle do cabeçalho, estado de login e logout.
+- login.html: tela de login.
+
+Para testar login com Google:
+- Não abra os arquivos diretamente com file://. Use um servidor local, por exemplo:
+  python -m http.server 8000
+  Depois acesse: http://localhost:8000
+- No Firebase Console, em Authentication > Sign-in method, deixe Google ativado.
+- Em Authentication > Settings > Authorized domains, adicione localhost e o domínio final onde o site será publicado.
