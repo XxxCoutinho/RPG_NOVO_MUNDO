@@ -3,814 +3,110 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ficha Vampiro V5 Guiada</title>
+  <title>Vampiro: A Máscara | RPG Nexus</title>
+  <link rel="stylesheet" href="header.css" />
   <style>
-    :root {
-      --bg: #0f0d12;
-      --bg-2: #17131d;
-      --card: rgba(30, 24, 37, .94);
-      --card-2: rgba(42, 34, 52, .94);
-      --line: rgba(224, 191, 118, .22);
-      --line-2: rgba(255,255,255,.09);
-      --text: #f3efe6;
-      --muted: #b8ad9d;
-      --gold: #d7b46a;
-      --gold-2: #f1d38b;
-      --red: #8f2632;
-      --red-2: #be3749;
-      --green: #6fbf88;
-      --shadow: 0 18px 45px rgba(0,0,0,.35);
-      --radius: 18px;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--text);
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(143, 38, 50, .28), transparent 34rem),
-        radial-gradient(circle at 80% 10%, rgba(215, 180, 106, .14), transparent 26rem),
-        linear-gradient(135deg, #09080b 0%, var(--bg) 42%, #170d12 100%);
-    }
-
-    a { color: inherit; text-decoration: none; }
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(16px);
-      background: rgba(12, 10, 15, .86);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .header-wrap {
-      max-width: 1220px;
-      margin: 0 auto;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: fit-content;
-    }
-
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      font-weight: 900;
-      color: #130b0d;
-      background: linear-gradient(135deg, var(--gold), var(--gold-2));
-      box-shadow: 0 10px 24px rgba(215, 180, 106, .18);
-    }
-
-    .brand small { color: var(--muted); display:block; margin-top: 2px; }
-    .brand strong { letter-spacing: .04em; }
-
-    .nav {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .nav a, .ghost-btn, .primary-btn, .danger-btn {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-size: .92rem;
-      cursor: pointer;
-      transition: .18s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .nav a:hover, .ghost-btn:hover { border-color: rgba(215,180,106,.65); transform: translateY(-1px); }
-    .nav a.active { background: rgba(215, 180, 106, .16); border-color: rgba(215,180,106,.75); color: var(--gold-2); }
-
-    .primary-btn {
-      background: linear-gradient(135deg, var(--red), var(--red-2));
-      border-color: rgba(255,255,255,.12);
-      font-weight: 800;
-    }
-
-    .danger-btn {
-      background: rgba(143, 38, 50, .16);
-      border-color: rgba(190, 55, 73, .52);
-      color: #ffd6dc;
-    }
-
-    .page {
-      max-width: 1220px;
-      margin: 0 auto;
-      padding: 28px 18px 56px;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr);
-      gap: 18px;
-      align-items: stretch;
-      margin-bottom: 18px;
-    }
-
-    .panel, .sheet-card {
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(38,30,46,.94), rgba(23,19,29,.94));
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .hero-main { padding: 28px; position: relative; }
-    .hero-main::after {
-      content: "";
-      position: absolute;
-      inset: auto 24px 0 auto;
-      width: 170px;
-      height: 170px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(215,180,106,.15), transparent 68%);
-      pointer-events: none;
-    }
-
-    .eyebrow {
-      color: var(--gold-2);
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      font-size: .74rem;
-      font-weight: 900;
-      margin: 0 0 8px;
-    }
-
-    h1, h2, h3 { margin: 0; }
-    h1 { font-size: clamp(2rem, 4vw, 3.35rem); line-height: .98; letter-spacing: -.04em; }
-    .hero-main p { color: var(--muted); max-width: 800px; line-height: 1.6; margin: 14px 0 0; }
-
-    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
-
-    .hero-side { padding: 18px; display: grid; gap: 12px; }
-    .stat-pill {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 14px;
-      border-radius: 16px;
-      border: 1px solid var(--line-2);
-      background: rgba(255,255,255,.035);
-    }
-    .stat-pill span { color: var(--muted); font-size: .85rem; }
-    .stat-pill strong { color: var(--gold-2); font-size: 1.05rem; }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 290px minmax(0, 1fr);
-      gap: 18px;
-      align-items: start;
-    }
-
-    .sidebar {
-      position: sticky;
-      top: 86px;
-      padding: 14px;
-    }
-
-    .steps { display: grid; gap: 8px; }
-    .step-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-align: left;
-      border: 1px solid transparent;
-      background: rgba(255,255,255,.035);
-      color: var(--text);
-      padding: 11px;
-      border-radius: 14px;
-      cursor: pointer;
-      transition: .18s ease;
-    }
-
-    .step-btn:hover { border-color: var(--line); }
-    .step-btn.active { background: rgba(215,180,106,.14); border-color: rgba(215,180,106,.55); }
-    .step-number {
-      width: 28px;
-      height: 28px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-      background: rgba(215,180,106,.16);
-      color: var(--gold-2);
-      font-weight: 900;
-      flex: 0 0 auto;
-    }
-    .step-label strong { display:block; font-size: .93rem; }
-    .step-label small { color: var(--muted); }
-
-    .progress-wrap { margin-top: 14px; }
-    .progress-line { height: 10px; background: rgba(255,255,255,.08); border-radius: 999px; overflow: hidden; }
-    .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--red-2), var(--gold)); transition: .18s ease; }
-    .progress-text { color: var(--muted); font-size: .82rem; margin-top: 8px; }
-
-    .content { min-width: 0; }
-    .step-panel { display: none; padding: 20px; }
-    .step-panel.active { display: block; }
-    .step-head { display: flex; justify-content: space-between; gap: 16px; align-items: start; margin-bottom: 18px; }
-    .step-head p { margin: 7px 0 0; color: var(--muted); line-height: 1.5; }
-
-    .grid { display: grid; gap: 12px; }
-    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-
-    label.field { display: grid; gap: 7px; }
-    .field span, .field-title { color: var(--muted); font-size: .82rem; font-weight: 700; }
-
-    input, select, textarea {
-      width: 100%;
-      border: 1px solid var(--line-2);
-      border-radius: 13px;
-      background: rgba(8, 7, 10, .54);
-      color: var(--text);
-      padding: 12px;
-      outline: none;
-      font: inherit;
-    }
-
-    textarea { resize: vertical; min-height: 96px; }
-    input:focus, select:focus, textarea:focus { border-color: rgba(215,180,106,.72); box-shadow: 0 0 0 3px rgba(215,180,106,.08); }
-    select option { background: #18131d; color: var(--text); }
-
-    .choice-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-    .choice {
-      border: 1px solid var(--line-2);
-      background: rgba(255,255,255,.035);
-      border-radius: 16px;
-      padding: 13px;
-      cursor: pointer;
-      min-height: 106px;
-      transition: .18s ease;
-    }
-    .choice:hover { border-color: rgba(215,180,106,.55); transform: translateY(-1px); }
-    .choice.selected { border-color: rgba(215,180,106,.86); background: rgba(215,180,106,.13); }
-    .choice strong { display:block; margin-bottom: 6px; color: var(--gold-2); }
-    .choice small { color: var(--muted); line-height: 1.35; display:block; }
-
-    .section-title { margin: 18px 0 10px; color: var(--gold-2); font-size: 1rem; }
-    .hint { color: var(--muted); font-size: .88rem; line-height: 1.45; }
-    .warning { border: 1px solid rgba(215,180,106,.28); color: #ffe5a8; background: rgba(215,180,106,.08); padding: 11px 12px; border-radius: 14px; font-size: .88rem; line-height: 1.45; }
-
-    .ability-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
-    .ability-card {
-      border: 1px solid var(--line-2);
-      border-radius: 18px;
-      background: rgba(255,255,255,.035);
-      padding: 12px;
-      text-align: center;
-    }
-    .ability-card .abbr { color: var(--gold-2); font-weight: 900; letter-spacing: .08em; }
-    .ability-card input { text-align: center; font-size: 1.15rem; font-weight: 900; margin: 8px 0; padding: 9px; }
-    .mod-badge { display: inline-flex; min-width: 42px; justify-content: center; padding: 6px 9px; border-radius: 999px; background: rgba(215,180,106,.13); color: var(--gold-2); font-weight: 900; }
-
-    .table-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid var(--line-2); }
-    table { width: 100%; border-collapse: collapse; min-width: 650px; }
-    th, td { padding: 10px; border-bottom: 1px solid var(--line-2); text-align: left; vertical-align: middle; }
-    th { color: var(--gold-2); font-size: .82rem; background: rgba(255,255,255,.04); }
-    td { color: var(--text); }
-    tr:last-child td { border-bottom: 0; }
-    .check-cell { width: 70px; text-align: center; }
-    input[type="checkbox"] { width: 18px; height: 18px; accent-color: #d7b46a; }
-
-    .mini-input { max-width: 80px; text-align: center; padding: 8px; }
-    .toolbar { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line-2); }
-
-    .sheet-preview { padding: 20px; }
-    .sheet-top {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    .sheet-name {
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255,255,255,.035);
-    }
-    .sheet-name h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); letter-spacing: -.03em; }
-    .sheet-name p { margin: 8px 0 0; color: var(--muted); }
-    .sheet-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-    .sheet-stat { padding: 12px; border: 1px solid var(--line-2); border-radius: 16px; background: rgba(255,255,255,.035); text-align:center; }
-    .sheet-stat small { color: var(--muted); display:block; font-size: .75rem; }
-    .sheet-stat strong { color: var(--gold-2); font-size: 1.32rem; }
-
-    .sheet-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-    .sheet-block { border: 1px solid var(--line-2); border-radius: 18px; background: rgba(255,255,255,.03); padding: 14px; min-height: 100px; }
-    .sheet-block h3 { font-size: .95rem; color: var(--gold-2); margin-bottom: 10px; }
-    .sheet-list { display: grid; gap: 7px; color: var(--muted); font-size: .9rem; }
-    .sheet-list b { color: var(--text); }
-
-    .chips { display: flex; flex-wrap: wrap; gap: 7px; }
-    .chip { padding: 7px 9px; border-radius: 999px; background: rgba(215,180,106,.1); border: 1px solid rgba(215,180,106,.18); color: var(--gold-2); font-size: .82rem; }
-
-    .attack-card, .spell-card, .equip-card {
-      display: grid;
-      grid-template-columns: 1.15fr .55fr .8fr .8fr auto;
-      gap: 8px;
-      align-items: end;
-      padding: 10px;
-      border: 1px solid var(--line-2);
-      background: rgba(255,255,255,.025);
-      border-radius: 16px;
-      margin-bottom: 8px;
-    }
-    .spell-card { grid-template-columns: 1fr .5fr .7fr 1fr auto; }
-    .equip-card { grid-template-columns: 1.15fr .4fr .55fr 1fr auto; }
-
-    .compact-note { font-size: .8rem; color: var(--muted); margin-top: 6px; }
-
-    .dice-box {
-      display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .dice-box button { border-radius: 14px; padding: 12px 8px; }
-    .roll-log { max-height: 180px; overflow:auto; margin-top: 10px; display:grid; gap:7px; }
-    .roll-entry { padding: 9px 10px; border-radius: 12px; background: rgba(255,255,255,.04); color: var(--muted); font-size: .88rem; }
-    .roll-entry b { color: var(--gold-2); }
-
-    @media (max-width: 980px) {
-      .hero, .layout, .sheet-top { grid-template-columns: 1fr; }
-      .sidebar { position: static; }
-      .choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .grid.four, .ability-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .sheet-grid { grid-template-columns: 1fr 1fr; }
-      .attack-card, .spell-card, .equip-card { grid-template-columns: 1fr 1fr; }
-      .attack-card button, .spell-card button, .equip-card button { grid-column: 1 / -1; }
-    }
-
-    @media (max-width: 640px) {
-      .header-wrap { align-items: start; flex-direction: column; }
-      .nav { justify-content: flex-start; }
-      .nav a { padding: 8px 10px; font-size: .84rem; }
-      .page { padding: 18px 12px 42px; }
-      .hero-main, .step-panel, .sheet-preview { padding: 16px; }
-      .choice-grid, .grid.two, .grid.three, .grid.four, .ability-grid, .sheet-grid, .sheet-stats, .dice-box { grid-template-columns: 1fr; }
-      .toolbar { display:grid; grid-template-columns:1fr; }
-      .toolbar button { width:100%; }
-      table { min-width: 560px; }
-    }
-
-    @media print {
-      body { background: white; color: #111; }
-      .site-header, .hero, .sidebar, .step-panel:not(#step-review), .toolbar, .no-print { display: none !important; }
-      .page, .layout, .content { max-width: none; padding: 0; display:block; }
-      .panel, .sheet-card, .sheet-block, .sheet-name, .sheet-stat { box-shadow:none; background:white; color:#111; border-color:#999; }
-      .sheet-list, .sheet-name p, .sheet-stat small { color:#333; }
-      .sheet-stat strong, .sheet-block h3, .sheet-name h2 { color:#111; }
-    }
-  
-    .brand-mark { color:#f3efe6; background: linear-gradient(135deg, #5b0b15, #c21d34); box-shadow: 0 10px 24px rgba(194,29,52,.22); }
-    .vamp-dot { width: 28px; height: 28px; border-radius: 50%; border:1px solid var(--line); display:inline-grid; place-items:center; cursor:pointer; background:rgba(255,255,255,.035); }
-    .vamp-dot.filled { background:linear-gradient(135deg,var(--red),var(--red-2)); border-color:rgba(255,255,255,.18); }
-    .dots { display:flex; gap:6px; align-items:center; justify-content:center; }
-    .trait-card { border:1px solid var(--line-2); border-radius:16px; padding:11px; background:rgba(255,255,255,.03); }
-    .trait-card .trait-title { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px; }
-    .trait-card strong { color:var(--gold-2); }
-    .pool-result { font-size:1.05rem; line-height:1.55; }
-    .pool-dice { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
-    .die { min-width:34px; height:34px; display:grid; place-items:center; border-radius:10px; background:rgba(255,255,255,.07); border:1px solid var(--line-2); font-weight:900; }
-    .die.hunger { background:rgba(190,55,73,.22); border-color:rgba(190,55,73,.55); color:#ffdce1; }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#151b35 0%,#090b14 45%,#04050a 100%);color:#fff;font-family:Arial,Helvetica,sans-serif}
+    main{min-height:calc(100vh - 80px);padding:50px 8%;display:flex;align-items:center;justify-content:center}
+    .panel{width:min(980px,100%);background:rgba(255,255,255,.07);border:1px solid rgba(245,199,107,.28);border-radius:22px;padding:32px;box-shadow:0 24px 80px rgba(0,0,0,.45);position:relative;overflow:hidden}
+    .panel::before{content:"";position:absolute;inset:-120px -80px auto auto;width:260px;height:260px;border-radius:50%;background:rgba(245,199,107,.10);filter:blur(8px);pointer-events:none}
+    .panel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;position:relative;z-index:1}
+    h1{margin:0 0 10px;color:#f5c76b;font-size:clamp(2rem,4vw,3.4rem)}
+    h2{margin:0;color:#f5c76b;font-size:1.35rem}
+    p{color:#ddd;line-height:1.6;font-size:1.05rem}
+    .btn,.btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border:0;cursor:pointer;padding:13px 18px;border-radius:10px;font-weight:800;font-size:.98rem;transition:.2s ease}
+    .btn{background:#f5c76b;color:#161616;box-shadow:0 12px 30px rgba(245,199,107,.18)}
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+    .btn-secondary{background:rgba(255,255,255,.08);color:#f5c76b;border:1px solid rgba(245,199,107,.35)}
+    .btn-secondary:hover{background:rgba(245,199,107,.12)}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;position:relative;z-index:1}
+    .hint{margin-top:24px;padding:16px 18px;border-radius:14px;background:rgba(245,199,107,.08);border:1px solid rgba(245,199,107,.18);color:#e9e1cf;position:relative;z-index:1}
+    .construction-card{margin-top:26px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.22);border-radius:18px;padding:26px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;position:relative;z-index:1}
+    .construction-icon{width:76px;height:76px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:rgba(245,199,107,.12);border:1px solid rgba(245,199,107,.28);font-size:2.2rem;box-shadow:0 18px 40px rgba(0,0,0,.22)}
+    .status-tag{display:inline-block;margin:0 0 12px;padding:7px 11px;border-radius:999px;background:rgba(245,199,107,.12);border:1px solid rgba(245,199,107,.22);color:#f5c76b;font-size:.82rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+    .construction-card h2{margin:0 0 8px;color:#fff;font-size:clamp(1.35rem,2.5vw,2rem)}
+    .construction-card p{margin:0;color:#cfcfcf;font-size:1rem;line-height:1.55}
+    .details-grid{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;position:relative;z-index:1}
+    .detail{border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.18);border-radius:14px;padding:14px}
+    .detail strong{display:block;color:#f5c76b;margin-bottom:6px;font-size:.9rem}
+    .detail span{color:#ddd;font-size:.95rem;line-height:1.4}
+    footer{text-align:center;padding:20px;color:#aaa;background:rgba(0,0,0,.4);font-size:.9rem}
+    @media(max-width:620px){main{padding:28px 5%}.panel{padding:24px}.construction-card{grid-template-columns:1fr;text-align:left}.construction-icon{width:64px;height:64px;font-size:1.9rem}}
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-wrap">
-      <a href="index.html" class="brand" aria-label="Início">
-        <div class="brand-mark">V5</div>
-        <div>
-          <strong>Novo Mundo RPG</strong>
-          <small>Ficha Vampiro V5 guiada</small>
-        </div>
-      </a>
-      <nav class="nav" aria-label="Navegação principal">
-        <a href="index.html">Início</a>
-        <a href="personagens.html">Personagens</a>
-        <a href="campanhas.html">Campanhas</a>
-        <a href="ameacas.html">Ameaças</a>
-        <a href="homebrew.html">Homebrew</a>
-        <a href="login.html">Login</a>
-      </nav>
+<header class="site-header">
+  <a href="index.html" class="site-logo">RPG Nexus</a>
+  <button class="site-menu-btn" type="button" onclick="toggleMenu()" aria-label="Abrir menu">☰</button>
+  <nav id="menu" class="site-nav">
+    <a href="index.html" data-page="index">Início</a>
+    <a href="personagens.html" data-page="personagens">Personagens</a>
+    <a href="campanhas.html" data-page="campanhas">Campanhas</a>
+    <a href="ameacas.html" data-page="ameacas">Ameaças</a>
+    <a href="homebrew.html" data-page="homebrew">Homebrew</a>
+    <a href="login.html" id="loginLink" class="login-btn" data-page="login">Login</a>
+    <button id="logoutBtn" class="logout-btn" type="button" hidden>Sair</button>
+  </nav>
+</header>
+
+<main>
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h1>Vampiro: A Máscara</h1>
+        <p>Esta ficha ainda não está disponível para edição no RPG Nexus.</p>
+      </div>
+      <a class="btn" href="personagens.html">Voltar para personagens</a>
     </div>
-  </header>
 
-  <main class="page">
-    <section class="hero">
-      <div class="panel hero-main">
-        <p class="eyebrow">Vampiro: A Máscara V5</p>
-        <h1>Criação guiada de personagem</h1>
-        <p>Preencha etapa por etapa. A página monta uma ficha de Vampiro V5 com atributos, habilidades, clã, disciplinas, fome, humanidade, força de vontade, vantagens, convicções e rolagens de dados com dados de fome.</p>
-        <div class="hero-actions">
-          <button class="primary-btn" onclick="goStep(0)">Começar criação</button>
-          <button class="ghost-btn" onclick="saveCharacter(true)">Salvar na conta</button>
-          <button class="ghost-btn" onclick="window.print()">Imprimir ficha</button>
-        </div>
+    <div class="construction-card" aria-label="Página em construção">
+      <div class="construction-icon" aria-hidden="true">⚒️</div>
+      <div>
+        <span class="status-tag">Em construção</span>
+        <h2>Ficha em desenvolvimento</h2>
+        <p>Estamos preparando a tela guiada de <strong>Vampiro: A Máscara</strong>. Por enquanto, este modelo fica reservado no sistema para manter o fluxo de criação funcionando sem quebrar o layout.</p>
       </div>
-      <aside class="panel hero-side">
-        <div class="stat-pill"><span>Personagem</span><strong id="heroName">Sem nome</strong></div>
-        <div class="stat-pill"><span>Clã</span><strong id="heroClan">—</strong></div>
-        <div class="stat-pill"><span>Predador</span><strong id="heroPredator">—</strong></div>
-        <div class="stat-pill"><span>Progresso</span><strong id="heroProgress">0%</strong></div>
-      </aside>
-    </section>
+    </div>
 
-    <section class="layout">
-      <aside class="panel sidebar">
-        <div class="steps" id="stepsNav"></div>
-        <div class="progress-wrap">
-          <div class="progress-line"><div class="progress-bar" id="progressBar"></div></div>
-          <div class="progress-text" id="progressText">Etapa 1 de 10</div>
-        </div>
-      </aside>
+    <div class="hint">
+      Você pode voltar para a página de personagens e escolher outro modelo de ficha já disponível.
+    </div>
 
-      <div class="panel content">
-        <section class="step-panel active" id="step-concept">
-          <div class="step-head"><div><p class="eyebrow">Etapa 1</p><h2>Conceito mortal</h2><p>Todo vampiro começou como humano. Defina quem a pessoa era antes do Abraço e como ela entrou na noite.</p></div></div>
-          <div class="grid three">
-            <label class="field"><span>Nome</span><input id="charName" data-save placeholder="Nome do personagem" /></label>
-            <label class="field"><span>Jogador</span><input id="playerName" data-save /></label>
-            <label class="field"><span>Campanha</span><input id="campaignName" data-save /></label>
-            <label class="field"><span>Conceito</span><input id="concept" data-save placeholder="Ex.: artista decadente, detetive, herdeira..." /></label>
-            <label class="field"><span>Ambição</span><input id="ambition" data-save placeholder="Objetivo de longo prazo" /></label>
-            <label class="field"><span>Desejo</span><input id="desire" data-save placeholder="Vontade imediata" /></label>
-          </div>
-          <label class="field section-title"><span>Vida humana e Abraço</span><textarea id="humanLife" data-save placeholder="Quem era, quem o Abraçou, o que foi perdido, o que ficou para trás?"></textarea></label>
-          <div class="toolbar"><span></span><button class="primary-btn" onclick="nextStep()">Próxima etapa</button></div>
-        </section>
-
-        <section class="step-panel" id="step-clan">
-          <div class="step-head"><div><p class="eyebrow">Etapa 2</p><h2>Clã e sociedade vampírica</h2><p>Escolha clã, seita, geração e informações do sire. As disciplinas do clã serão sugeridas automaticamente.</p></div></div>
-          <div id="clanChoices" class="choice-grid"></div>
-          <div class="grid three section-title">
-            <label class="field"><span>Seita</span><select id="sect" data-save><option>Camarilla</option><option>Anarquistas</option><option>Autárquico</option><option>Independente</option><option>Sem seita</option></select></label>
-            <label class="field"><span>Geração</span><input id="generation" data-save placeholder="Ex.: 12ª, 13ª, 14ª" /></label>
-            <label class="field"><span>Sire</span><input id="sire" data-save placeholder="Nome, clã e relação" /></label>
-          </div>
-          <div class="warning" id="clanHint">Escolha um clã para ver disciplinas e maldição sugeridas.</div>
-          <label class="field section-title"><span>Maldição / observações do clã</span><textarea id="clanBane" data-save></textarea></label>
-          <div class="toolbar"><button class="ghost-btn" onclick="prevStep()">Voltar</button><button class="primary-btn" onclick="nextStep()">Próxima etapa</button></div>
-        </section>
-
-        <section class="step-panel" id="step-attributes">
-          <div class="step-head"><div><p class="eyebrow">Etapa 3</p><h2>Atributos</h2><p>Distribuição inicial sugerida: um atributo em 4, três em 3, quatro em 2 e um em 1. Saúde e Força de Vontade são calculadas a partir deles.</p></div></div>
-          <div class="warning" id="attrHint">Resumo: melhor 4, três 3, quatro 2, pior 1. Você pode editar livremente se o Narrador permitir.</div>
-          <h3 class="section-title">Físicos</h3><div class="ability-grid" id="physicalAttrs"></div>
-          <h3 class="section-title">Sociais</h3><div class="ability-grid" id="socialAttrs"></div>
-          <h3 class="section-title">Mentais</h3><div class="ability-grid" id="mentalAttrs"></div>
-          <div class="grid four section-title">
-            <label class="field"><span>Saúde Máxima</span><input id="healthMax" data-save readonly /></label>
-            <label class="field"><span>Saúde Atual</span><input id="healthCurrent" data-save type="number" min="0" /></label>
-            <label class="field"><span>Força de Vontade Máx.</span><input id="willMax" data-save readonly /></label>
-            <label class="field"><span>Força de Vontade Atual</span><input id="willCurrent" data-save type="number" min="0" /></label>
-          </div>
-          <div class="toolbar"><button class="ghost-btn" onclick="prevStep()">Voltar</button><button class="primary-btn" onclick="nextStep()">Próxima etapa</button></div>
-        </section>
-
-        <section class="step-panel" id="step-skills">
-          <div class="step-head"><div><p class="eyebrow">Etapa 4</p><h2>Habilidades</h2><p>Marque pontos em habilidades físicas, sociais e mentais. Especializações podem ser anotadas ao lado.</p></div></div>
-          <div class="warning" id="skillHint">Sugestão detalhada: escolha habilidades profissionais, eventos de vida, lazer e extras. O contador ajuda a acompanhar, mas não bloqueia a ficha.</div>
-          <div class="table-wrap"><table><thead><tr><th>Habilidade</th><th>Grupo</th><th>Pontos</th><th>Especialização / nota</th></tr></thead><tbody id="skillsBody"></tbody></table></div>
-          <div class="toolbar"><button class="ghost-btn" onclick="prevStep()">Voltar</button><button class="primary-btn" onclick="nextStep()">Próxima etapa</button></div>
-        </section>
-
-        <section class="step-panel" id="step-disciplines">
-          <div class="step-head"><div><p class="eyebrow">Etapa 5</p><h2>Disciplinas</h2><p>Escolha poderes e pontos. Para um vampiro típico, selecione duas disciplinas do clã: uma com 2 pontos e outra com 1 ponto.</p></div></div>
-          <div class="warning" id="disciplineHint">As disciplinas do clã aparecem em destaque após escolher o clã. Caitiff pode escolher livremente. Sangue-fraco usa regras próprias e pode anotar Alquimia Sangue-Ralo.</div>
-          <div class="table-wrap"><table><thead><tr><th>Disciplina</th><th>Do clã?</th><th>Pontos</th><th>Poderes escolhidos</th></tr></thead><tbody id="disciplinesBody"></tbody></table></div>
-          <div class="toolbar"><button class="ghost-btn" onclick="prevStep()">Voltar</button><button class="primary-btn" onclick="nextStep()">Próxima etapa</button></div>
-        </section>
-
-        <section class="step-panel" id="step-predator">
-          <div class="step-head"><div><p class="eyebrow">Etapa 6</p><h2>Tipo de predador</h2><p>Escolha como o personagem caça. O modelo gera lembretes editáveis de especialidade, vantagens, defeitos e ajustes.</p></div></div>
-          <div id="predatorChoices" class="choice-grid"></div>
-          <label class="field section-title"><span>Notas do predador</span><textarea id="predatorNotes" data-save></textarea></label>
-          <div class="grid four">
-            <label class="field"><span>Fome</span><input id="hunger" data-save type="number" min="0" max="5" value="1" /></label>
-            <label class="field"><span>Humanidade</span><input id="humanity" data-save type="number" min="0" max="10" value="7" /></label>
-            <label class="field"><span>Potência de Sangue</span><input id="bloodPotency" data-save type="number" min="0" max="10" value="1" /></label>
-            <label class="field"><span>Ressonância favorita</span><input id="resonance" data-save placeholder="Opcional" /></label>
-          </div>
-          <div class="toolbar"><button class="ghost-btn" onclick="prevStep()">Voltar</button><button class="primary-btn" onclick="nextStep()">Próxima etapa</button></div>
-        </section>
-
-        <section class="step-panel" id="step-beliefs">
-          <div class="step-head"><div><p class="eyebrow">Etapa 7</p><h2>Convicções, pilares e máscara</h2><p>Defina o que ainda prende o personagem à humanidade e como ele se esconde dos mortais.</p></div></div>
-          <div class="grid two">
-            <label class="field"><span>Convicção 1</span><input id="conviction1" data-save /></label>
-            <label class="field"><span>Pilar 1</span><input id="touchstone1" data-save placeholder="Pessoa mortal ligada à convicção" /></label>
-            <label class="field"><span>Convicção 2</span><input id="conviction2" data-save /></label>
-            <label class="field"><span>Pilar 2</span><input id="touchstone2" data-save /></label>
-            <label class="field"><span>Convicção 3</span><input id="conviction3" data-save /></label>
-            <label class="field"><span>Pilar 3</span><input id="touchstone3" data-save /></label>
-          </div>
-          <label class="field section-title"><span>Máscara mortal / identidade de cobertura</span><textarea id="mask" data-save></textarea></label>
-          <label class="field section-title"><span>Mapa de relações</span><textarea id="relationships" data-save placeholder="Sire, aliados, rivais, coterie, contatos mortais..."></textarea></label>
-          <div class="toolbar"><button class="ghost-btn" onclick="prevStep()">Voltar</button><button class="primary-btn" onclick="nextStep()">Próxima etapa</button></div>
-        </section>
-
-        <section class="step-panel" id="step-advantages">
-          <div class="step-head"><div><p class="eyebrow">Etapa 8</p><h2>Vantagens, defeitos e recursos</h2><p>Use pontos livres para méritos, antecedentes e defeitos. Tudo fica editável para adaptar à crônica.</p></div></div>
-          <div class="grid two">
-            <label class="field"><span>Vantagens / méritos</span><textarea id="advantages" data-save placeholder="Ex.: Recursos ••, Contatos •, Refúgio ••..."></textarea></label>
-            <label class="field"><span>Defeitos</span><textarea id="flaws" data-save placeholder="Ex.: Inimigo •, Máscara comprometida •..."></textarea></label>
-            <label class="field"><span>Refúgio</span><textarea id="haven" data-save></textarea></label>
-            <label class="field"><span>Equipamento</span><textarea id="gear" data-save placeholder="Armas, celular, veículo, documentos, itens especiais..."></textarea></label>
-          </div>
-          <div class="toolbar"><button class="ghost-btn" onclick="prevStep()">Voltar</button><button class="primary-btn" onclick="nextStep()">Próxima etapa</button></div>
-        </section>
-
-        <section class="step-panel" id="step-rolls">
-          <div class="step-head"><div><p class="eyebrow">Etapa 9</p><h2>Rolagens</h2><p>Monte paradas de dados com Atributo + Habilidade + bônus. A Fome troca dados normais por dados de fome.</p></div></div>
-          <div class="grid four">
-            <label class="field"><span>Atributo</span><select id="rollAttr"></select></label>
-            <label class="field"><span>Habilidade</span><select id="rollSkill"></select></label>
-            <label class="field"><span>Bônus / penalidade</span><input id="rollBonus" type="number" value="0" /></label>
-            <label class="field"><span>Dificuldade</span><input id="rollDifficulty" type="number" min="1" value="2" /></label>
-          </div>
-          <div class="hero-actions"><button class="primary-btn" onclick="rollPool()">Rolar parada</button><button class="ghost-btn" onclick="clearRollLog()">Limpar histórico</button></div>
-          <div id="rollResult" class="warning section-title pool-result">Resultado da rolagem aparecerá aqui.</div>
-          <div class="roll-log" id="rollLog"></div>
-          <div class="toolbar"><button class="ghost-btn" onclick="prevStep()">Voltar</button><button class="primary-btn" onclick="nextStep()">Revisar ficha</button></div>
-        </section>
-
-        <section class="step-panel" id="step-review">
-          <div class="step-head"><div><p class="eyebrow">Etapa 10</p><h2>Ficha final</h2><p>Revise, salve, exporte ou imprima. Tudo que aparecer aqui vem dos campos preenchidos.</p></div></div>
-          <div class="sheet-card sheet-preview" id="sheetPreview"></div>
-          <div class="toolbar no-print"><button class="ghost-btn" onclick="prevStep()">Voltar</button><div><button class="ghost-btn" onclick="exportJSON()">Exportar JSON</button><button class="ghost-btn" onclick="saveCharacter(true)">Salvar</button><button class="primary-btn" onclick="window.print()">Imprimir</button></div></div>
-        </section>
+    <div class="details-grid">
+      <div class="detail">
+        <strong>Modelo</strong>
+        <span>Vampiro: A Máscara</span>
       </div>
-    </section>
-  </main>
+      <div class="detail">
+        <strong>Status</strong>
+        <span>Em construção</span>
+      </div>
+      <div class="detail">
+        <strong>Próxima etapa</strong>
+        <span>Adicionar criação guiada, campos da ficha e salvamento do personagem.</span>
+      </div>
+    </div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
-  <script src="auth.js"></script>
+    <div class="actions">
+      <a class="btn-secondary" href="index.html">Ir para início</a>
+      <a class="btn-secondary" href="campanhas.html">Ver campanhas</a>
+    </div>
+  </section>
+</main>
 
-  <script>
-    const sheetParams = new URLSearchParams(window.location.search);
-    const personagemId = sheetParams.get('personagemId') || sheetParams.get('agenteId') || sheetParams.get('id') || 'rascunho';
-    const SHEET_MODEL = sheetParams.get('modelo') || 'vampiro-v5';
-    const storageKey = 'novo-mundo-ficha-vampiro-v5_' + personagemId;
-    let loadingFromCloud = false;
-    function getAuth(){ try { return (window.firebase && firebase.auth) ? firebase.auth() : null; } catch(e){ return null; } }
-    function getDb(){ try { return (window.firebase && firebase.firestore) ? firebase.firestore() : null; } catch(e){ return null; } }
-    function currentUid(){ return getAuth()?.currentUser?.uid || null; }
-    function sheetDocRef(){ const uid=currentUid(), db=getDb(); return (uid && db && personagemId !== 'rascunho') ? db.collection('usuarios').doc(uid).collection('fichas').doc(personagemId) : null; }
-    function personagemDocRef(){ const uid=currentUid(), db=getDb(); return (uid && db && personagemId !== 'rascunho') ? db.collection('usuarios').doc(uid).collection('personagens').doc(personagemId) : null; }
-    async function saveSheetToCloud(data){
-      const ref = sheetDocRef();
-      if(!ref || loadingFromCloud) return;
-      await ref.set({ personagemId, modelo:SHEET_MODEL, sheetFile:'ficha_vampiro_V5.html', sheetData:data, updatedAt:firebase.firestore.FieldValue.serverTimestamp() }, { merge:true });
-      const charRef = personagemDocRef();
-      if(charRef){
-        const clanKey = data.clan || '';
-        const label = (clanKey && clans[clanKey]) ? clans[clanKey].name : 'Vampiro: A Máscara';
-        await charRef.set({ id:personagemId, model:SHEET_MODEL, modelLabel:'Vampiro: A Máscara', sheetFile:'ficha_vampiro_V5.html', name:data.charName || 'Personagem sem nome', clanLabel:label, updatedAt:firebase.firestore.FieldValue.serverTimestamp() }, { merge:true });
-      }
-    }
-    async function loadSheetFromCloud(){
-      const ref = sheetDocRef();
-      if(!ref) return null;
-      const snap = await ref.get();
-      if(!snap.exists) return null;
-      const data = snap.data();
-      return data.sheetData || data;
-    }
-    const steps = [
-      ['Conceito', 'vida mortal'], ['Clã', 'sociedade'], ['Atributos', 'traços centrais'], ['Habilidades', 'vida prática'], ['Disciplinas', 'poderes'], ['Predador', 'caça'], ['Convicções', 'humanidade'], ['Vantagens', 'recursos'], ['Rolagens', 'dados V5'], ['Revisão', 'ficha final']
-    ];
-    let currentStep = 0;
+<footer>RPG Nexus © 2026</footer>
 
-    const clans = {
-      brujah: {name:'Brujah', disciplines:['Celeridade','Potência','Presença'], bane:'Maldição sugerida: temperamento violento e dificuldade para conter fúria quando provocado.'},
-      gangrel: {name:'Gangrel', disciplines:['Animalismo','Fortitude','Metamorfose'], bane:'Maldição sugerida: traços bestiais podem surgir quando a Fera toma o controle.'},
-      malkavian: {name:'Malkaviano', disciplines:['Auspícios','Dominação','Ofuscação'], bane:'Maldição sugerida: percepção fragmentada, perturbação ou visão distorcida da realidade.'},
-      nosferatu: {name:'Nosferatu', disciplines:['Animalismo','Ofuscação','Potência'], bane:'Maldição sugerida: aparência monstruosa ou presença profundamente perturbadora.'},
-      toreador: {name:'Toreador', disciplines:['Auspícios','Celeridade','Presença'], bane:'Maldição sugerida: fascínio perigoso por beleza, arte ou experiências estéticas.'},
-      tremere: {name:'Tremere', disciplines:['Auspícios','Feitiçaria de Sangue','Dominação'], bane:'Maldição sugerida: vínculo de sangue enfraquecido e herança ritualística complexa.'},
-      ventrue: {name:'Ventrue', disciplines:['Dominação','Fortitude','Presença'], bane:'Maldição sugerida: paladar seletivo; só consegue se alimentar de um tipo específico de presa.'},
-      caitiff: {name:'Caitiff', disciplines:['Livre escolha','Livre escolha','Livre escolha'], bane:'Sem clã reconhecido. Escolha disciplinas livremente conforme aprovação do Narrador.'},
-      thinblood: {name:'Sangue-Ralo', disciplines:['Alquimia Sangue-Ralo'], bane:'Condição instável. Use notas próprias para vantagens, defeitos e alquimia de sangue-ralo.'}
-    };
-    const clanDescriptions = {
-      brujah:'Rebeldes, idealistas, punhos e revolução.', gangrel:'Predadores selvagens, sobreviventes e andarilhos.', malkavian:'Videntes quebrados, profetas e enigmas.', nosferatu:'Espiões horrendos, informantes e sombras.', toreador:'Artistas, amantes, celebridades e obsessivos.', tremere:'Feiticeiros do sangue, ocultistas e conspiradores.', ventrue:'Reis, executivos, aristocratas e comandantes.', caitiff:'Sem clã, sem proteção, sem destino fixo.', thinblood:'Quase vivos, quase vampiros, perigosamente instáveis.'
-    };
-    const disciplines = ['Animalismo','Auspícios','Celeridade','Dominação','Fortitude','Ofuscação','Potência','Presença','Metamorfose','Feitiçaria de Sangue','Alquimia Sangue-Ralo'];
-    const attrs = [
-      ['strength','Força','Físico'],['dexterity','Destreza','Físico'],['stamina','Vigor','Físico'],
-      ['charisma','Carisma','Social'],['manipulation','Manipulação','Social'],['composure','Autocontrole','Social'],
-      ['intelligence','Inteligência','Mental'],['wits','Raciocínio','Mental'],['resolve','Determinação','Mental']
-    ];
-    const skills = [
-      ['athletics','Atletismo','Física'],['brawl','Briga','Física'],['craft','Ofícios','Física'],['drive','Condução','Física'],['firearms','Armas de Fogo','Física'],['larceny','Ladinagem','Física'],['melee','Armas Brancas','Física'],['stealth','Furtividade','Física'],['survival','Sobrevivência','Física'],
-      ['animalKen','Empatia com Animais','Social'],['etiquette','Etiqueta','Social'],['insight','Intuição','Social'],['intimidation','Intimidação','Social'],['leadership','Liderança','Social'],['performance','Performance','Social'],['persuasion','Persuasão','Social'],['streetwise','Manha','Social'],['subterfuge','Subterfúgio','Social'],
-      ['academics','Acadêmicos','Mental'],['awareness','Prontidão','Mental'],['finance','Finanças','Mental'],['investigation','Investigação','Mental'],['medicine','Medicina','Mental'],['occult','Ocultismo','Mental'],['politics','Política','Mental'],['science','Ciência','Mental'],['technology','Tecnologia','Mental']
-    ];
-    const predators = {
-      alleycat:['Gato de Rua','Caça violenta e direta. Anote ajustes de Briga/Intimidação, Potência ou Celeridade, contatos de rua e defeitos sociais se fizer sentido.'],
-      bagger:['Saqueador','Sangue ensacado, hospitalar ou roubado. Anote Medicina/Ladinagem, recursos ou contatos médicos.'],
-      bloodleech:['Sanguessuga','Caça outros vampiros. Modelo perigoso; combine com o Narrador antes.'],
-      cleaver:['Cleaver','Mantém família ou vida mortal próxima demais. Anote máscara, pilares e risco de exposição.'],
-      consensualist:['Consensualista','Alimenta-se com consentimento. Anote Persuasão, Máscara e possíveis problemas éticos.'],
-      farmer:['Fazendeiro','Evita humanos e busca animais. Anote Animalismo/Sobrevivência e limitações de alimentação.'],
-      osiris:['Osíris','Culto, fama ou círculo de adoradores. Anote Fama, Rebanho, Presença e exposição pública.'],
-      sandman:['Sandman','Alimenta-se de vítimas adormecidas. Anote Furtividade, Ofuscação e métodos de invasão.'],
-      scenequeen:['Rainha da Cena','Caça em subcultura específica. Anote Etiqueta/Manha, Contatos e território social.'],
-      siren:['Sereia','Sedução e desejo. Anote Persuasão/Subterfúgio, Presença e complicações emocionais.']
-    };
-
-    function dotHTML(id, value=0, max=5) {
-      let out = `<div class="dots" data-dot-for="${id}">`;
-      for(let i=1;i<=max;i++) out += `<span class="vamp-dot ${i<=value?'filled':''}" onclick="setDots('${id}',${i})"></span>`;
-      out += `<button class="ghost-btn" style="padding:6px 8px" onclick="setDots('${id}',0)">0</button></div>`;
-      return out;
-    }
-    function val(id) { const el=document.getElementById(id); return el?el.value:''; }
-    function num(id) { return Number(val(id)||0); }
-    function setVal(id,v) { const el=document.getElementById(id); if(el) el.value=v; }
-    function dots(id) { return Number(localStorage.getItem(storageKey+':dot:'+id)||0); }
-    function setDots(id, value) { localStorage.setItem(storageKey+':dot:'+id, value); renderDots(); updateAll(); }
-
-    function buildSteps() {
-      document.getElementById('stepsNav').innerHTML = steps.map((s,i)=>`<button class="step-btn ${i===currentStep?'active':''}" onclick="goStep(${i})"><span class="step-number">${i+1}</span><span class="step-label"><strong>${s[0]}</strong><small>${s[1]}</small></span></button>`).join('');
-    }
-    function goStep(i) { currentStep=Math.max(0,Math.min(steps.length-1,i)); document.querySelectorAll('.step-panel').forEach((p,idx)=>p.classList.toggle('active',idx===currentStep)); buildSteps(); updateProgress(); updateAll(); window.scrollTo({top:0,behavior:'smooth'}); }
-    function nextStep() { goStep(currentStep+1); }
-    function prevStep() { goStep(currentStep-1); }
-    function updateProgress() { const pct=Math.round(((currentStep+1)/steps.length)*100); document.getElementById('progressBar').style.width=pct+'%'; document.getElementById('progressText').textContent=`Etapa ${currentStep+1} de ${steps.length}`; document.getElementById('heroProgress').textContent=pct+'%'; }
-
-    function initChoices() {
-      document.getElementById('clanChoices').innerHTML = Object.entries(clans).map(([k,c])=>`<div class="choice" data-clan="${k}" onclick="selectClan('${k}')"><strong>${c.name}</strong><small>${clanDescriptions[k]}</small></div>`).join('');
-      document.getElementById('predatorChoices').innerHTML = Object.entries(predators).map(([k,p])=>`<div class="choice" data-predator="${k}" onclick="selectPredator('${k}')"><strong>${p[0]}</strong><small>${p[1]}</small></div>`).join('');
-      const rollAttr = document.getElementById('rollAttr'); rollAttr.innerHTML = attrs.map(a=>`<option value="${a[0]}">${a[1]}</option>`).join('');
-      const rollSkill = document.getElementById('rollSkill'); rollSkill.innerHTML = '<option value="">Nenhuma</option>'+skills.map(s=>`<option value="${s[0]}">${s[1]}</option>`).join('');
-    }
-    function selectClan(k) { setVal('clan', k); localStorage.setItem(storageKey+':clan', k); const c=clans[k]; setVal('clanBane', c.bane); document.getElementById('clanHint').textContent = `${c.name}: disciplinas sugeridas — ${c.disciplines.join(', ')}.`; updateClanChoices(); suggestClanDisciplines(); updateAll(); saveCharacter(false); }
-    function selectedClan() { return localStorage.getItem(storageKey+':clan') || ''; }
-    function updateClanChoices() { const c=selectedClan(); document.querySelectorAll('[data-clan]').forEach(el=>el.classList.toggle('selected',el.dataset.clan===c)); }
-    function selectPredator(k) { localStorage.setItem(storageKey+':predator', k); setVal('predatorNotes', predators[k][1]); document.querySelectorAll('[data-predator]').forEach(el=>el.classList.toggle('selected',el.dataset.predator===k)); updateAll(); saveCharacter(false); }
-    function selectedPredator() { return localStorage.getItem(storageKey+':predator') || ''; }
-
-    function initTraits() {
-      const groups = {physicalAttrs:['strength','dexterity','stamina'], socialAttrs:['charisma','manipulation','composure'], mentalAttrs:['intelligence','wits','resolve']};
-      for(const [container, ids] of Object.entries(groups)) {
-        document.getElementById(container).innerHTML = ids.map(id => { const a=attrs.find(x=>x[0]===id); return `<div class="trait-card"><div class="trait-title"><strong>${a[1]}</strong><span class="hint">${a[2]}</span></div><div id="dots-${id}"></div></div>`; }).join('');
-      }
-      document.getElementById('skillsBody').innerHTML = skills.map(s=>`<tr><td><b>${s[1]}</b></td><td>${s[2]}</td><td><div id="dots-${s[0]}"></div></td><td><input data-save id="spec-${s[0]}" placeholder="Especialização / nota" /></td></tr>`).join('');
-      document.getElementById('disciplinesBody').innerHTML = disciplines.map(d=>{ const id='disc-'+slug(d); return `<tr><td><b>${d}</b></td><td id="clan-${id}">—</td><td><div id="dots-${id}"></div></td><td><input data-save id="power-${id}" placeholder="Poderes escolhidos" /></td></tr>`; }).join('');
-      attrs.forEach((a,i)=>setDotsDefault(a[0], i===0?4:(i<=3?3:(i<=7?2:1))));
-    }
-    function setDotsDefault(id,v) { if(localStorage.getItem(storageKey+':dot:'+id)===null) localStorage.setItem(storageKey+':dot:'+id,v); }
-    function slug(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
-    function renderDots() {
-      [...attrs.map(a=>a[0]), ...skills.map(s=>s[0]), ...disciplines.map(d=>'disc-'+slug(d))].forEach(id=>{ const el=document.getElementById('dots-'+id); if(el) el.innerHTML=dotHTML(id,dots(id)); });
-    }
-    function suggestClanDisciplines() {
-      const k=selectedClan(); if(!k) return;
-      disciplines.forEach(d=>{ const cell=document.getElementById('clan-disc-'+slug(d)); if(cell) cell.textContent = clans[k].disciplines.includes(d) || clans[k].disciplines.includes('Livre escolha') ? 'Sim' : '—'; });
-      if(k && k !== 'caitiff' && k !== 'thinblood') {
-        const ds=clans[k].disciplines;
-        setDots('disc-'+slug(ds[0]), Math.max(dots('disc-'+slug(ds[0])),2));
-        setDots('disc-'+slug(ds[1]), Math.max(dots('disc-'+slug(ds[1])),1));
-      }
-      if(k==='thinblood') setDots('disc-'+slug('Alquimia Sangue-Ralo'), Math.max(dots('disc-'+slug('Alquimia Sangue-Ralo')),1));
-    }
-
-    function updateDerived() {
-      const health = dots('stamina') + 3; const will = dots('resolve') + dots('composure');
-      setVal('healthMax', health); if(!val('healthCurrent')) setVal('healthCurrent', health);
-      setVal('willMax', will); if(!val('willCurrent')) setVal('willCurrent', will);
-    }
-    function updateHero() {
-      document.getElementById('heroName').textContent = val('charName') || 'Sem nome';
-      const c=selectedClan(); document.getElementById('heroClan').textContent = c ? clans[c].name : '—';
-      const p=selectedPredator(); document.getElementById('heroPredator').textContent = p ? predators[p][0] : '—';
-    }
-    function updateDisciplineClanLabels() {
-      const k=selectedClan();
-      disciplines.forEach(d=>{ const cell=document.getElementById('clan-disc-'+slug(d)); if(cell) cell.textContent = k && (clans[k].disciplines.includes(d) || clans[k].disciplines.includes('Livre escolha')) ? 'Sim' : '—'; });
-    }
-    function traitList(ids) { return ids.map(id=>{ const a=attrs.find(x=>x[0]===id); return `<span class="chip">${a[1]} ${'•'.repeat(dots(id)) || '0'}</span>`; }).join(''); }
-    function skillChips() { return skills.filter(s=>dots(s[0])>0).map(s=>`<span class="chip">${s[1]} ${'•'.repeat(dots(s[0]))}</span>`).join('') || '<span class="hint">Nenhuma habilidade marcada.</span>'; }
-    function discChips() { return disciplines.filter(d=>dots('disc-'+slug(d))>0).map(d=>`<span class="chip">${d} ${'•'.repeat(dots('disc-'+slug(d)))}</span>`).join('') || '<span class="hint">Nenhuma disciplina marcada.</span>'; }
-    function updatePreview() {
-      const c=selectedClan(), p=selectedPredator();
-      document.getElementById('sheetPreview').innerHTML = `
-        <div class="sheet-top"><div class="sheet-name"><h2>${val('charName')||'Sem nome'}</h2><p>${val('concept')||'Conceito não definido'} • ${c?clans[c].name:'Sem clã'} • ${val('sect')||'Sem seita'}</p></div>
-        <div class="sheet-stats"><div class="sheet-stat"><small>Saúde</small><strong>${val('healthCurrent')||0}/${val('healthMax')||0}</strong></div><div class="sheet-stat"><small>Vontade</small><strong>${val('willCurrent')||0}/${val('willMax')||0}</strong></div><div class="sheet-stat"><small>Fome</small><strong>${val('hunger')||0}</strong></div><div class="sheet-stat"><small>Humanidade</small><strong>${val('humanity')||7}</strong></div><div class="sheet-stat"><small>Potência</small><strong>${val('bloodPotency')||1}</strong></div><div class="sheet-stat"><small>Predador</small><strong>${p?predators[p][0]:'—'}</strong></div></div></div>
-        <div class="sheet-grid">
-          <div class="sheet-block"><h3>Identidade</h3><div class="sheet-list"><span><b>Jogador:</b> ${val('playerName')||'—'}</span><span><b>Campanha:</b> ${val('campaignName')||'—'}</span><span><b>Geração:</b> ${val('generation')||'—'}</span><span><b>Sire:</b> ${val('sire')||'—'}</span></div></div>
-          <div class="sheet-block"><h3>Ambição e Desejo</h3><div class="sheet-list"><span><b>Ambição:</b> ${val('ambition')||'—'}</span><span><b>Desejo:</b> ${val('desire')||'—'}</span></div></div>
-          <div class="sheet-block"><h3>Clã</h3><div class="sheet-list"><span>${val('clanBane')||'—'}</span></div></div>
-          <div class="sheet-block"><h3>Atributos físicos</h3><div class="chips">${traitList(['strength','dexterity','stamina'])}</div></div>
-          <div class="sheet-block"><h3>Atributos sociais</h3><div class="chips">${traitList(['charisma','manipulation','composure'])}</div></div>
-          <div class="sheet-block"><h3>Atributos mentais</h3><div class="chips">${traitList(['intelligence','wits','resolve'])}</div></div>
-          <div class="sheet-block"><h3>Habilidades</h3><div class="chips">${skillChips()}</div></div>
-          <div class="sheet-block"><h3>Disciplinas</h3><div class="chips">${discChips()}</div></div>
-          <div class="sheet-block"><h3>Convicções e pilares</h3><div class="sheet-list"><span>${val('conviction1')||'—'} / ${val('touchstone1')||'—'}</span><span>${val('conviction2')||'—'} / ${val('touchstone2')||'—'}</span><span>${val('conviction3')||'—'} / ${val('touchstone3')||'—'}</span></div></div>
-          <div class="sheet-block"><h3>Vantagens</h3><div class="sheet-list"><span>${(val('advantages')||'—').replaceAll('\n','<br>')}</span></div></div>
-          <div class="sheet-block"><h3>Defeitos</h3><div class="sheet-list"><span>${(val('flaws')||'—').replaceAll('\n','<br>')}</span></div></div>
-          <div class="sheet-block"><h3>Equipamento / Refúgio</h3><div class="sheet-list"><span>${(val('gear')||'—').replaceAll('\n','<br>')}</span><span>${(val('haven')||'').replaceAll('\n','<br>')}</span></div></div>
-        </div>`;
-    }
-    function updateAll() { updateDerived(); updateHero(); updateDisciplineClanLabels(); updatePreview(); }
-
-    function rollPool() {
-      const attr = val('rollAttr'), skill=val('rollSkill'); let pool = dots(attr) + (skill?dots(skill):0) + num('rollBonus'); pool=Math.max(1,pool);
-      const hunger = Math.min(num('hunger'), pool); const normal = pool - hunger; const diff=num('rollDifficulty')||1;
-      const rolls=[]; for(let i=0;i<normal;i++) rolls.push({v:1+Math.floor(Math.random()*10),h:false}); for(let i=0;i<hunger;i++) rolls.push({v:1+Math.floor(Math.random()*10),h:true});
-      const successes = rolls.filter(r=>r.v>=6).length; const tens=rolls.filter(r=>r.v===10).length; const hungerTens=rolls.filter(r=>r.v===10&&r.h).length; const hungerOnes=rolls.filter(r=>r.v===1&&r.h).length;
-      const critPairs=Math.floor(tens/2); const total=successes + critPairs*2; let status = total>=diff?'Sucesso':'Falha';
-      if(critPairs>0) status = hungerTens>0 ? 'Crítico bagunçado' : 'Crítico';
-      if(total<diff && hungerOnes>0) status = 'Falha bestial';
-      const diceHtml = rolls.map(r=>`<span class="die ${r.h?'hunger':''}">${r.v===10?'0':r.v}</span>`).join('');
-      const result = `<b>${status}</b>: ${total} sucesso(s) contra dificuldade ${diff}.<div class="pool-dice">${diceHtml}</div>`;
-      document.getElementById('rollResult').innerHTML=result;
-      const entry=document.createElement('div'); entry.className='roll-entry'; entry.innerHTML=`<b>${new Date().toLocaleTimeString('pt-BR')}</b> — Parada ${pool}: ${status} (${total}/${diff})`; document.getElementById('rollLog').prepend(entry);
-    }
-    function clearRollLog() { document.getElementById('rollLog').innerHTML=''; document.getElementById('rollResult').textContent='Resultado da rolagem aparecerá aqui.'; }
-
-    function saveCharacter(show=false) {
-      const data={};
-      document.querySelectorAll('[data-save]').forEach(el=>data[el.id]=el.value);
-      data.clan=selectedClan(); data.predator=selectedPredator(); data.dots={};
-      [...attrs.map(a=>a[0]),...skills.map(s=>s[0]),...disciplines.map(d=>'disc-'+slug(d))].forEach(id=>data.dots[id]=dots(id));
-      localStorage.setItem(storageKey, JSON.stringify(data));
-      saveSheetToCloud(data).catch(function(error){ console.warn('Não foi possível salvar no Firestore:', error); });
-      if(show) alert(currentUid() ? 'Ficha de Vampiro V5 salva na sua conta.' : 'Ficha salva no navegador. Faça login para salvar na conta.');
-    }
-    function applyCharacterData(data){
-      if(!data) return;
-      Object.entries(data).forEach(([k,v])=>{
-        if(k==='dots') Object.entries(v).forEach(([id,n])=>localStorage.setItem(storageKey+':dot:'+id,n));
-        else if(k==='clan') localStorage.setItem(storageKey+':clan',v);
-        else if(k==='predator') localStorage.setItem(storageKey+':predator',v);
-        else setVal(k,v);
-      });
-    }
-    function loadCharacter() {
-      loadingFromCloud = true;
-      try { applyCharacterData(JSON.parse(localStorage.getItem(storageKey) || 'null')); } catch(e) { console.warn(e); }
-      loadingFromCloud = false;
-      const auth = getAuth();
-      if(auth){
-        auth.onAuthStateChanged(async function(user){
-          if(!user) return;
-          try{
-            const cloudData = await loadSheetFromCloud();
-            if(cloudData){
-              loadingFromCloud = true;
-              applyCharacterData(cloudData);
-              loadingFromCloud = false;
-              renderDots(); updateClanChoices(); const p=selectedPredator(); if(p) document.querySelectorAll('[data-predator]').forEach(el=>el.classList.toggle('selected',el.dataset.predator===p));
-              updateAll();
-              localStorage.setItem(storageKey, JSON.stringify(cloudData));
-            }else{
-              saveSheetToCloud(JSON.parse(localStorage.getItem(storageKey) || '{}')).catch(console.warn);
-            }
-          }catch(error){
-            loadingFromCloud = false;
-            console.warn('Não foi possível carregar a ficha do Firestore:', error);
-          }
-        });
-      }
-    }
-    function exportJSON() { saveCharacter(false); const blob=new Blob([localStorage.getItem(storageKey)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=(val('charName')||'ficha-vampiro-v5').toLowerCase().replace(/\s+/g,'-')+'.json'; a.click(); URL.revokeObjectURL(a.href); }
-
-    document.addEventListener('input', e=>{ if(e.target.matches('[data-save]')) { saveCharacter(false); updateAll(); } });
-    document.addEventListener('change', e=>{ if(e.target.matches('[data-save]')) { saveCharacter(false); updateAll(); } });
-    function boot() { initChoices(); initTraits(); loadCharacter(); renderDots(); updateClanChoices(); const p=selectedPredator(); if(p) document.querySelectorAll('[data-predator]').forEach(el=>el.classList.toggle('selected',el.dataset.predator===p)); buildSteps(); updateProgress(); updateAll(); }
-    boot();
-  </script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="auth.js"></script>
+<script>
+  function toggleMenu(){
+    const menu = document.getElementById('menu');
+    if(menu) menu.classList.toggle('active');
+  }
+</script>
 </body>
 </html>

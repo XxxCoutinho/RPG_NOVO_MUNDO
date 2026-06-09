@@ -3,370 +3,110 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ficha Ordem Paranormal Guiada</title>
+  <title>Ordem Paranormal | RPG Nexus</title>
+  <link rel="stylesheet" href="header.css" />
   <style>
-    :root{
-      --bg:#0f0d12;--bg-2:#17131d;--card:rgba(30,24,37,.94);--card-2:rgba(42,34,52,.94);
-      --line:rgba(224,191,118,.22);--line-2:rgba(255,255,255,.09);--text:#f3efe6;--muted:#b8ad9d;
-      --gold:#d7b46a;--gold-2:#f1d38b;--red:#8f2632;--red-2:#be3749;--green:#6fbf88;
-      --purple:#7857d8;--shadow:0 18px 45px rgba(0,0,0,.35);--radius:18px;
-    }
-    *{box-sizing:border-box} body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,rgba(143,38,50,.30),transparent 34rem),radial-gradient(circle at 80% 10%,rgba(120,87,216,.16),transparent 28rem),linear-gradient(135deg,#09080b 0%,var(--bg) 42%,#18080d 100%)}
-    a{color:inherit;text-decoration:none}.site-header{position:sticky;top:0;z-index:100;backdrop-filter:blur(16px);background:rgba(12,10,15,.86);border-bottom:1px solid var(--line)}
-    .header-wrap{max-width:1220px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:12px;min-width:fit-content}.brand-mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-weight:900;color:#130b0d;background:linear-gradient(135deg,var(--red-2),var(--gold));box-shadow:0 10px 24px rgba(190,55,73,.20)}.brand small{color:var(--muted);display:block;margin-top:2px}.brand strong{letter-spacing:.04em}.nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.nav a,.ghost-btn,.primary-btn,.danger-btn{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:10px 12px;border-radius:999px;font-size:.92rem;cursor:pointer;transition:.18s ease;display:inline-flex;align-items:center;justify-content:center;gap:8px}.nav a:hover,.ghost-btn:hover{border-color:rgba(215,180,106,.65);transform:translateY(-1px)}.nav a.active{background:rgba(215,180,106,.16);border-color:rgba(215,180,106,.75);color:var(--gold-2)}.primary-btn{background:linear-gradient(135deg,var(--red),var(--red-2));border-color:rgba(255,255,255,.12);font-weight:800}.danger-btn{background:rgba(143,38,50,.16);border-color:rgba(190,55,73,.52);color:#ffd6dc}.page{max-width:1220px;margin:0 auto;padding:28px 18px 56px}.hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(420px,.92fr);gap:18px;align-items:stretch;margin-bottom:18px}.panel,.sheet-card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(38,30,46,.94),rgba(23,19,29,.94));border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.hero-main{padding:28px;position:relative}.hero-main:after{content:"";position:absolute;inset:auto 24px 0 auto;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(190,55,73,.18),transparent 68%);pointer-events:none}.eyebrow{color:var(--gold-2);text-transform:uppercase;letter-spacing:.16em;font-size:.74rem;font-weight:900;margin:0 0 8px}h1,h2,h3{margin:0}h1{font-size:clamp(2rem,4vw,3.35rem);line-height:.98;letter-spacing:-.04em}.hero-main p{color:var(--muted);max-width:660px;line-height:1.6;margin:14px 0 0}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.hero-side{padding:18px;display:grid;grid-template-columns:minmax(180px,220px) minmax(0,1fr);gap:12px;align-items:stretch}.hero-side-stats{display:grid;gap:12px;min-width:0}.stat-pill{display:flex;justify-content:space-between;gap:12px;padding:14px;border-radius:16px;border:1px solid var(--line-2);background:rgba(255,255,255,.035)}.stat-pill span{color:var(--muted);font-size:.85rem}.stat-pill strong{color:var(--gold-2);font-size:1.05rem}.layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:18px;align-items:start}.sidebar{position:sticky;top:86px;padding:14px}.steps{display:grid;gap:8px}.step-btn{width:100%;display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--line-2);background:rgba(255,255,255,.035);color:var(--text);padding:12px;border-radius:14px;cursor:pointer}.step-btn:hover{border-color:rgba(215,180,106,.50)}.step-btn.active{background:rgba(143,38,50,.22);border-color:rgba(215,180,106,.55)}.step-num{width:28px;height:28px;border-radius:10px;display:grid;place-items:center;background:rgba(215,180,106,.14);color:var(--gold-2);font-weight:900}.step-meta{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}.content{min-width:0}.step-panel{display:none;padding:18px}.step-panel.active{display:block}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding-bottom:16px;border-bottom:1px solid var(--line-2);margin-bottom:16px}.section-head p{color:var(--muted);line-height:1.55;margin:6px 0 0}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.field{grid-column:span 6;display:grid;gap:7px}.field.full{grid-column:1/-1}.field.third{grid-column:span 4}.field.quarter{grid-column:span 3}.field.small{grid-column:span 2}label{font-size:.82rem;color:var(--gold-2);font-weight:800;letter-spacing:.03em}input,select,textarea{width:100%;border:1px solid var(--line-2);background:rgba(9,8,11,.55);color:var(--text);border-radius:13px;padding:11px 12px;font:inherit;outline:none}textarea{min-height:92px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:rgba(215,180,106,.65);box-shadow:0 0 0 3px rgba(215,180,106,.08)}.hint{color:var(--muted);font-size:.86rem;line-height:1.45}.mini-card{border:1px solid var(--line-2);background:rgba(255,255,255,.035);border-radius:16px;padding:14px}.mini-card h3{font-size:1rem;color:var(--gold-2);margin-bottom:8px}.attr-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.attr{border:1px solid var(--line-2);background:rgba(255,255,255,.035);border-radius:16px;padding:12px;display:grid;gap:9px;text-align:center}.attr strong{color:var(--gold-2)}.attr input{text-align:center;font-size:1.2rem;font-weight:900;padding:9px}.attr span{font-size:.85rem;color:var(--muted)}.calc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.big-stat{border:1px solid var(--line-2);border-radius:16px;background:rgba(255,255,255,.035);padding:14px;text-align:center}.big-stat span{display:block;color:var(--muted);font-size:.85rem}.big-stat strong{display:block;color:var(--gold-2);font-size:1.5rem;margin-top:4px}.check-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.check-item{display:flex;gap:9px;align-items:center;border:1px solid var(--line-2);background:rgba(255,255,255,.025);border-radius:13px;padding:9px}.check-item input{width:auto}.skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.skill-row{display:grid;grid-template-columns:24px 1fr 90px 70px;gap:8px;align-items:center;border:1px solid var(--line-2);border-radius:14px;padding:8px;background:rgba(255,255,255,.025)}.skill-row input[type=checkbox]{width:auto}.skill-row b{font-size:.92rem}.skill-row small{color:var(--muted)}.skill-row input[type=number]{padding:8px;text-align:center}.table-wrap{overflow:auto;border:1px solid var(--line-2);border-radius:16px}table{width:100%;border-collapse:collapse;min-width:680px}th,td{border-bottom:1px solid var(--line-2);padding:10px;text-align:left}th{color:var(--gold-2);font-size:.82rem;background:rgba(255,255,255,.035)}td input,td select{min-width:100px}.bar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red-2),var(--gold));width:0%}.footer-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--line-2)}.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;background:rgba(215,180,106,.12);color:var(--gold-2);font-size:.8rem;font-weight:800}.roller{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end}.roll-log{display:grid;gap:8px;max-height:260px;overflow:auto}.log-item{border:1px solid var(--line-2);background:rgba(0,0,0,.16);border-radius:14px;padding:10px}.sheet-summary{display:grid;grid-template-columns:1fr 1fr;gap:12px}.summary-box{border:1px solid var(--line-2);border-radius:16px;padding:14px;background:rgba(255,255,255,.025)}.summary-box h3{color:var(--gold-2);font-size:1rem;margin-bottom:8px}.summary-box p{color:var(--muted);margin:4px 0;line-height:1.45}.print-only{display:none}@media(max-width:920px){.hero,.layout{grid-template-columns:1fr}.hero-side{grid-template-columns:1fr}.sidebar{position:static}.attr-grid{grid-template-columns:repeat(2,1fr)}.calc-row,.sheet-summary{grid-template-columns:1fr 1fr}.field,.field.third,.field.quarter,.field.small{grid-column:1/-1}.skills-grid,.check-list{grid-template-columns:1fr}.roller{grid-template-columns:1fr}.nav{justify-content:flex-start}.header-wrap{align-items:flex-start;flex-direction:column}}@media(max-width:520px){.calc-row{grid-template-columns:1fr}.attr-grid{grid-template-columns:1fr}.hero-main{padding:20px}.step-panel{padding:14px}.skill-row{grid-template-columns:24px 1fr 62px 54px}.brand small{display:none}}
-    /* Foto do agente no painel lateral do cabeçalho */
-    .hero-text{min-width:0;position:relative;z-index:1}
-    .agent-photo-card{position:relative;z-index:1;border:1px solid rgba(215,180,106,.36);background:rgba(9,8,11,.42);border-radius:18px;padding:12px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
-    .hero-side .agent-photo-card{margin-bottom:0;height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto}
-    .agent-photo-frame{width:100%;height:100%;min-height:220px;aspect-ratio:auto;border:1px dashed rgba(215,180,106,.58);border-radius:15px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.18));display:grid;place-items:center;overflow:hidden;position:relative;cursor:pointer;text-align:center;color:var(--muted)}
-    .agent-photo-frame:hover{border-color:rgba(241,211,139,.9);background:rgba(255,255,255,.06)}
-    .agent-photo-frame img{width:100%;height:100%;object-fit:cover;display:none}
-    .agent-photo-frame.has-photo img{display:block}
-    .agent-photo-frame.has-photo .agent-photo-placeholder{display:none}
-    .agent-photo-placeholder{padding:16px;display:grid;gap:8px;place-items:center;font-size:.86rem;line-height:1.35}
-    .agent-photo-placeholder strong{color:var(--gold-2);font-size:.95rem}
-    .agent-photo-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}
-    .agent-photo-actions .ghost-btn,.agent-photo-actions .danger-btn{width:100%;min-height:30px;padding:5px 8px;font-size:.76rem;line-height:1;border-radius:999px}
-    .agent-photo-input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
-    @media(max-width:920px){.hero-side .agent-photo-card{height:auto}.hero-side-stats{grid-template-columns:1fr}}@media(max-width:520px){.agent-photo-frame{min-height:220px}}
-
-    /* Correção final: a foto pertence ao painel lateral, nunca ao bloco do título */
-    .hero-main{display:block!important}
-    .hero-main>.agent-photo-card{display:none!important}
-    .hero-side>.agent-photo-card{display:block!important;order:-1}
-
-    /* AJUSTE FINAL REAL - card da foto com botões dentro do layout */
-    .hero-side{
-      grid-template-columns:minmax(145px,175px) minmax(0,1fr)!important;
-      align-items:start!important;
-    }
-    .hero-side>.agent-photo-card{
-      display:grid!important;
-      grid-template-rows:minmax(0,1fr) 24px!important;
-      height:250px!important;
-      min-height:250px!important;
-      max-height:250px!important;
-      padding:8px!important;
-      overflow:hidden!important;
-      align-self:start!important;
-      order:-1!important;
-    }
-    .hero-side>.agent-photo-card .agent-photo-frame{
-      width:100%!important;
-      height:100%!important;
-      min-height:0!important;
-      max-height:none!important;
-      aspect-ratio:auto!important;
-      margin:0!important;
-      border-radius:14px!important;
-    }
-    .hero-side>.agent-photo-card .agent-photo-placeholder{
-      padding:8px!important;
-      gap:4px!important;
-      font-size:.74rem!important;
-      line-height:1.15!important;
-    }
-    .hero-side>.agent-photo-card .agent-photo-placeholder strong{
-      font-size:.84rem!important;
-    }
-    .hero-side>.agent-photo-card .agent-photo-actions{
-      display:grid!important;
-      grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
-      gap:5px!important;
-      margin-top:6px!important;
-      height:24px!important;
-      min-height:24px!important;
-      overflow:hidden!important;
-    }
-    .hero-side>.agent-photo-card .agent-photo-actions .ghost-btn,
-    .hero-side>.agent-photo-card .agent-photo-actions .danger-btn{
-      width:100%!important;
-      min-width:0!important;
-      height:24px!important;
-      min-height:24px!important;
-      max-height:24px!important;
-      padding:0 5px!important;
-      font-size:.68rem!important;
-      line-height:1!important;
-      border-radius:999px!important;
-      white-space:nowrap!important;
-      overflow:hidden!important;
-      text-overflow:ellipsis!important;
-    }
-    @media(max-width:520px){
-      .hero-side>.agent-photo-card{height:230px!important;min-height:230px!important;max-height:230px!important}
-    }
-
-@media print{body{background:white;color:#111}.site-header,.sidebar,.hero,.footer-actions,.no-print{display:none!important}.page{padding:0;max-width:none}.layout{display:block}.step-panel{display:block!important;padding:0}.sheet-card,.panel{box-shadow:none;border:0;background:white}.print-only{display:block}.content .step-panel:not(#step-final){display:none!important}.summary-box{break-inside:avoid;border:1px solid #999;background:white;color:#111}.summary-box p{color:#222}.summary-box h3{color:#111}}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#151b35 0%,#090b14 45%,#04050a 100%);color:#fff;font-family:Arial,Helvetica,sans-serif}
+    main{min-height:calc(100vh - 80px);padding:50px 8%;display:flex;align-items:center;justify-content:center}
+    .panel{width:min(980px,100%);background:rgba(255,255,255,.07);border:1px solid rgba(245,199,107,.28);border-radius:22px;padding:32px;box-shadow:0 24px 80px rgba(0,0,0,.45);position:relative;overflow:hidden}
+    .panel::before{content:"";position:absolute;inset:-120px -80px auto auto;width:260px;height:260px;border-radius:50%;background:rgba(245,199,107,.10);filter:blur(8px);pointer-events:none}
+    .panel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;position:relative;z-index:1}
+    h1{margin:0 0 10px;color:#f5c76b;font-size:clamp(2rem,4vw,3.4rem)}
+    h2{margin:0;color:#f5c76b;font-size:1.35rem}
+    p{color:#ddd;line-height:1.6;font-size:1.05rem}
+    .btn,.btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border:0;cursor:pointer;padding:13px 18px;border-radius:10px;font-weight:800;font-size:.98rem;transition:.2s ease}
+    .btn{background:#f5c76b;color:#161616;box-shadow:0 12px 30px rgba(245,199,107,.18)}
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+    .btn-secondary{background:rgba(255,255,255,.08);color:#f5c76b;border:1px solid rgba(245,199,107,.35)}
+    .btn-secondary:hover{background:rgba(245,199,107,.12)}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;position:relative;z-index:1}
+    .hint{margin-top:24px;padding:16px 18px;border-radius:14px;background:rgba(245,199,107,.08);border:1px solid rgba(245,199,107,.18);color:#e9e1cf;position:relative;z-index:1}
+    .construction-card{margin-top:26px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.22);border-radius:18px;padding:26px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;position:relative;z-index:1}
+    .construction-icon{width:76px;height:76px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:rgba(245,199,107,.12);border:1px solid rgba(245,199,107,.28);font-size:2.2rem;box-shadow:0 18px 40px rgba(0,0,0,.22)}
+    .status-tag{display:inline-block;margin:0 0 12px;padding:7px 11px;border-radius:999px;background:rgba(245,199,107,.12);border:1px solid rgba(245,199,107,.22);color:#f5c76b;font-size:.82rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+    .construction-card h2{margin:0 0 8px;color:#fff;font-size:clamp(1.35rem,2.5vw,2rem)}
+    .construction-card p{margin:0;color:#cfcfcf;font-size:1rem;line-height:1.55}
+    .details-grid{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;position:relative;z-index:1}
+    .detail{border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.18);border-radius:14px;padding:14px}
+    .detail strong{display:block;color:#f5c76b;margin-bottom:6px;font-size:.9rem}
+    .detail span{color:#ddd;font-size:.95rem;line-height:1.4}
+    footer{text-align:center;padding:20px;color:#aaa;background:rgba(0,0,0,.4);font-size:.9rem}
+    @media(max-width:620px){main{padding:28px 5%}.panel{padding:24px}.construction-card{grid-template-columns:1fr;text-align:left}.construction-icon{width:64px;height:64px;font-size:1.9rem}}
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-wrap">
-      <a class="brand" href="index.html"><div class="brand-mark">OP</div><div><strong>NOVO MUNDO RPG</strong><small>Ficha guiada — Ordem Paranormal</small></div></a>
-      <nav class="nav">
-        <a href="index.html">Início</a><a href="personagens.html" class="active">Personagens</a><a href="campanhas.html">Campanhas</a><a href="ameacas.html">Ameaças</a><a href="homebrew.html">Homebrew</a><a href="login.html">Login</a>
-      </nav>
-    </div>
-  </header>
-  <main class="page">
-    <section class="hero">
-      <div class="panel hero-main">
-        <div class="hero-text">
-          <p class="eyebrow">Ordem Paranormal RPG</p>
-          <h1>Ficha de Agente Guiada</h1>
-          <p>Crie um agente passo a passo, mantendo a mesma identidade visual das fichas guiadas do site. A ficha organiza conceito, atributos, origem, classe, perícias, combate, equipamento, rituais e revisão final.</p>
-          <div class="hero-actions"><button class="primary-btn" id="startBtn">Começar criação</button><button class="ghost-btn" id="saveBtnTop">Salvar</button><button class="ghost-btn" id="exportBtnTop">Exportar JSON</button><button class="danger-btn" id="resetBtnTop">Limpar ficha</button></div>
-        </div>
+<header class="site-header">
+  <a href="index.html" class="site-logo">RPG Nexus</a>
+  <button class="site-menu-btn" type="button" onclick="toggleMenu()" aria-label="Abrir menu">☰</button>
+  <nav id="menu" class="site-nav">
+    <a href="index.html" data-page="index">Início</a>
+    <a href="personagens.html" data-page="personagens">Personagens</a>
+    <a href="campanhas.html" data-page="campanhas">Campanhas</a>
+    <a href="ameacas.html" data-page="ameacas">Ameaças</a>
+    <a href="homebrew.html" data-page="homebrew">Homebrew</a>
+    <a href="login.html" id="loginLink" class="login-btn" data-page="login">Login</a>
+    <button id="logoutBtn" class="logout-btn" type="button" hidden>Sair</button>
+  </nav>
+</header>
+
+<main>
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h1>Ordem Paranormal</h1>
+        <p>Esta ficha ainda não está disponível para edição no RPG Nexus.</p>
       </div>
-      <aside class="panel hero-side">
-        <div class="agent-photo-card no-print" aria-label="Foto do agente">
-          <label class="agent-photo-frame" id="agentPhotoFrame" for="agentPhotoInput">
-            <img id="agentPhotoPreview" alt="Foto do agente">
-            <span class="agent-photo-placeholder"><strong>Foto do agente</strong><span>Clique para adicionar imagem</span></span>
-          </label>
-          <input class="agent-photo-input" id="agentPhotoInput" type="file" accept="image/*">
-        </div>
-        <div class="hero-side-stats">
-          <div class="stat-pill"><span>Agente</span><strong id="heroName">Sem nome</strong></div>
-          <div class="stat-pill"><span>Classe</span><strong id="heroClass">—</strong></div>
-          <div class="stat-pill"><span>NEX</span><strong id="heroNex">5%</strong></div>
-          <div class="stat-pill"><span>Defesa / PV / SAN</span><strong id="heroCombat">10 / 0 / 0</strong></div>
-        </div>
-      </aside>
-    </section>
+      <a class="btn" href="personagens.html">Voltar para personagens</a>
+    </div>
 
-    <section class="layout">
-      <aside class="panel sidebar no-print"><div class="steps" id="stepsNav"></div></aside>
-      <section class="sheet-card content">
-        <form id="sheetForm">
-          <div class="step-panel active" id="step-conceito">
-            <div class="section-head"><div><p class="eyebrow">Etapa 1</p><h2>Conceito do agente</h2><p>Defina quem é o personagem, como entrou em contato com o paranormal e qual é seu vínculo com a Ordem.</p></div><span class="pill">Narrativa</span></div>
-            <div class="grid">
-              <div class="field"><label>Nome do agente</label><input name="nome" placeholder="Ex.: Bianca Nascimento"></div>
-              <div class="field"><label>Jogador</label><input name="jogador" placeholder="Nome do jogador"></div>
-              <div class="field third"><label>Campanha</label><input name="campanha" placeholder="Nome da campanha"></div>
-              <div class="field third"><label>NEX</label><select name="nex" id="nexSelect"></select></div>
-              <div class="field third"><label>Patente</label><select name="patente"><option>Recruta</option><option>Operador</option><option>Agente Especial</option><option>Oficial de Operações</option><option>Agente de Elite</option></select></div>
-              <div class="field full"><label>Conceito de personagem</label><textarea name="conceito" placeholder="Quem era antes da Ordem? O que perdeu? O que quer descobrir?"></textarea></div>
-              <div class="field full"><label>Contato com o Outro Lado</label><textarea name="contato" placeholder="Descreva o primeiro evento paranormal, trauma, investigação ou missão marcante."></textarea></div>
-            </div>
-          </div>
+    <div class="construction-card" aria-label="Página em construção">
+      <div class="construction-icon" aria-hidden="true">⚒️</div>
+      <div>
+        <span class="status-tag">Em construção</span>
+        <h2>Ficha em desenvolvimento</h2>
+        <p>Estamos preparando a tela guiada de <strong>Ordem Paranormal</strong>. Por enquanto, este modelo fica reservado no sistema para manter o fluxo de criação funcionando sem quebrar o layout.</p>
+      </div>
+    </div>
 
-          <div class="step-panel" id="step-atributos">
-            <div class="section-head"><div><p class="eyebrow">Etapa 2</p><h2>Atributos</h2><p>Use Agilidade, Força, Intelecto, Presença e Vigor. Todos começam em 1; a criação guiada sugere distribuir 3, 2, 2, 1, 1 ou usar o ajuste do mestre.</p></div><span class="pill">Cálculo automático</span></div>
-            <div class="attr-grid" id="attrGrid"></div>
-            <div class="mini-card" style="margin-top:12px"><h3>Resumo calculado</h3><div class="calc-row"><div class="big-stat"><span>Defesa</span><strong id="defesaCalc">10</strong></div><div class="big-stat"><span>Iniciativa</span><strong id="iniCalc">+1</strong></div><div class="big-stat"><span>PV Máx.</span><strong id="pvCalc">0</strong></div><div class="big-stat"><span>SAN Máx.</span><strong id="sanCalc">0</strong></div></div></div>
-          </div>
+    <div class="hint">
+      Você pode voltar para a página de personagens e escolher outro modelo de ficha já disponível.
+    </div>
 
-          <div class="step-panel" id="step-origem">
-            <div class="section-head"><div><p class="eyebrow">Etapa 3</p><h2>Origem</h2><p>Escolha a vida anterior do agente. A origem ajuda a definir perícias treinadas, identidade e lugar do personagem no mundo.</p></div><span class="pill">Passado</span></div>
-            <div class="grid"><div class="field"><label>Origem</label><select name="origem" id="origemSelect"></select></div><div class="field"><label>Benefício / poder de origem</label><input name="beneficioOrigem" placeholder="Ex.: Magnata, Mão de Ferro, etc."></div><div class="field full"><label>Descrição da origem</label><textarea name="historiaOrigem" placeholder="Como essa origem aparece na história e nas missões?"></textarea></div></div>
-            <div class="mini-card" style="margin-top:12px"><h3>Sugestão</h3><p class="hint" id="origemHint">Escolha uma origem para ver sugestões de perícias e foco narrativo.</p></div>
-          </div>
+    <div class="details-grid">
+      <div class="detail">
+        <strong>Modelo</strong>
+        <span>Ordem Paranormal</span>
+      </div>
+      <div class="detail">
+        <strong>Status</strong>
+        <span>Em construção</span>
+      </div>
+      <div class="detail">
+        <strong>Próxima etapa</strong>
+        <span>Adicionar criação guiada, campos da ficha e salvamento do personagem.</span>
+      </div>
+    </div>
 
-          <div class="step-panel" id="step-classe">
-            <div class="section-head"><div><p class="eyebrow">Etapa 4</p><h2>Classe, trilha e recursos</h2><p>Escolha entre Combatente, Especialista ou Ocultista. Os valores automáticos são uma base editável para agilizar a ficha.</p></div><span class="pill">Função</span></div>
-            <div class="grid">
-              <div class="field third"><label>Classe</label><select name="classe" id="classeSelect"><option value="Combatente">Combatente</option><option value="Especialista">Especialista</option><option value="Ocultista">Ocultista</option></select></div>
-              <div class="field third"><label>Trilha</label><input name="trilha" placeholder="Ex.: Aniquilador, Médico de Campo, Graduado..."></div>
-              <div class="field third"><label>Elemento principal</label><select name="elemento"><option>Nenhum</option><option>Conhecimento</option><option>Energia</option><option>Morte</option><option>Sangue</option><option>Medo</option></select></div>
-              <div class="field full"><label>Habilidades de classe / trilha</label><textarea name="habilidadesClasse" placeholder="Liste habilidades recebidas por classe, trilha, NEX ou poderes paranormais."></textarea></div>
-            </div>
-            <div class="calc-row" style="margin-top:12px"><div class="big-stat"><span>PV</span><strong id="pvClasse">0</strong></div><div class="big-stat"><span>PE</span><strong id="peClasse">0</strong></div><div class="big-stat"><span>SAN</span><strong id="sanClasse">0</strong></div><div class="big-stat"><span>Limite PE/rodada</span><strong id="limitePe">1</strong></div></div>
-          </div>
+    <div class="actions">
+      <a class="btn-secondary" href="index.html">Ir para início</a>
+      <a class="btn-secondary" href="campanhas.html">Ver campanhas</a>
+    </div>
+  </section>
+</main>
 
-          <div class="step-panel" id="step-pericias">
-            <div class="section-head"><div><p class="eyebrow">Etapa 5</p><h2>Perícias</h2><p>Marque as perícias treinadas e ajuste bônus manuais quando a origem, classe, itens ou habilidades concederem modificadores.</p></div><span class="pill">Testes</span></div>
-            <div class="skills-grid" id="skillsGrid"></div>
-          </div>
+<footer>RPG Nexus © 2026</footer>
 
-          <div class="step-panel" id="step-combate">
-            <div class="section-head"><div><p class="eyebrow">Etapa 6</p><h2>Combate e recursos</h2><p>Controle defesa, proteção, resistências, PV, PE e SAN. Os campos manuais permitem ajustar regras de mesa e progressão.</p></div><span class="pill">Sobrevivência</span></div>
-            <div class="grid">
-              <div class="field quarter"><label>Bônus de Defesa</label><input type="number" name="bonusDefesa" value="0"></div><div class="field quarter"><label>Proteção</label><input name="protecao" placeholder="Ex.: Jaqueta, colete..."></div><div class="field quarter"><label>RD / Resistências</label><input name="resistencia" placeholder="Ex.: balístico 2"></div><div class="field quarter"><label>Deslocamento</label><input name="deslocamento" placeholder="9m"></div>
-              <div class="field third"><label>PV atual</label><input type="number" name="pvAtual" value="0"></div><div class="field third"><label>PE atual</label><input type="number" name="peAtual" value="0"></div><div class="field third"><label>SAN atual</label><input type="number" name="sanAtual" value="0"></div>
-              <div class="field full"><label>Condições e efeitos ativos</label><textarea name="condicoes" placeholder="Ferimentos, medo, efeitos paranormais, penalidades, condições..."></textarea></div>
-            </div>
-            <div class="mini-card" style="margin-top:12px"><h3>Barras</h3><p class="hint">PV</p><div class="bar"><i id="pvBar"></i></div><p class="hint">PE</p><div class="bar"><i id="peBar"></i></div><p class="hint">SAN</p><div class="bar"><i id="sanBar"></i></div></div>
-          </div>
-
-          <div class="step-panel" id="step-ataques">
-            <div class="section-head"><div><p class="eyebrow">Etapa 7</p><h2>Armas e ataques</h2><p>Cadastre armas, ataques corpo a corpo, disparos e poderes ofensivos. O rolador usa o bônus informado.</p></div><button class="ghost-btn" type="button" id="addAttackBtn">Adicionar ataque</button></div>
-            <div class="table-wrap"><table><thead><tr><th>Nome</th><th>Tipo</th><th>Bônus</th><th>Dano</th><th>Crítico / alcance</th><th>Ações</th></tr></thead><tbody id="attacksBody"></tbody></table></div>
-          </div>
-
-          <div class="step-panel" id="step-equipamento">
-            <div class="section-head"><div><p class="eyebrow">Etapa 8</p><h2>Equipamento</h2><p>Organize inventário, itens paranormais, dinheiro, munição e componentes.</p></div><button class="ghost-btn" type="button" id="addItemBtn">Adicionar item</button></div>
-            <div class="grid"><div class="field third"><label>Prestígio / crédito</label><input name="prestigio" placeholder="Conforme campanha"></div><div class="field third"><label>Dinheiro</label><input name="dinheiro" placeholder="R$"></div><div class="field third"><label>Carga atual</label><input name="carga" placeholder="Opcional"></div></div>
-            <div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>Item</th><th>Categoria</th><th>Quantidade</th><th>Espaço</th><th>Observações</th><th>Ações</th></tr></thead><tbody id="itemsBody"></tbody></table></div>
-          </div>
-
-          <div class="step-panel" id="step-paranormal">
-            <div class="section-head"><div><p class="eyebrow">Etapa 9</p><h2>Paranormal, poderes e rituais</h2><p>Registre poderes paranormais, rituais, afinidades, componentes e efeitos importantes.</p></div><button class="ghost-btn" type="button" id="addRitualBtn">Adicionar ritual</button></div>
-            <div class="grid"><div class="field third"><label>Exposição Paranormal</label><input name="exposicao" placeholder="Baixa, média, alta..."></div><div class="field third"><label>Afinidade</label><select name="afinidade"><option>Nenhuma</option><option>Conhecimento</option><option>Energia</option><option>Morte</option><option>Sangue</option><option>Medo</option></select></div><div class="field third"><label>Poderes Paranormais</label><input name="poderesResumo" placeholder="Resumo rápido"></div><div class="field full"><label>Anotações do Outro Lado</label><textarea name="anotacoesParanormais" placeholder="Marcas, símbolos, cicatrizes, efeitos de rituais, pactos, consequências..."></textarea></div></div>
-            <div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>Ritual/Poder</th><th>Elemento</th><th>Círculo</th><th>Custo</th><th>Efeito</th><th>Ações</th></tr></thead><tbody id="ritualsBody"></tbody></table></div>
-          </div>
-
-          <div class="step-panel" id="step-rolagens">
-            <div class="section-head"><div><p class="eyebrow">Ferramenta</p><h2>Rolagens</h2><p>Faça testes d20 com perícias, atributos, bônus e DT. O resultado fica salvo no histórico da sessão.</p></div><button class="danger-btn" type="button" id="clearLogBtn">Limpar histórico</button></div>
-            <div class="roller"><div class="field"><label>Teste</label><select id="rollSkill"></select></div><div class="field"><label>Bônus extra</label><input type="number" id="rollBonus" value="0"></div><div class="field"><label>DT</label><input type="number" id="rollDT" value="15"></div><button class="primary-btn" type="button" id="rollBtn">Rolar d20</button></div>
-            <div class="roll-log" id="rollLog" style="margin-top:14px"></div>
-          </div>
-
-          <div class="step-panel" id="step-final">
-            <div class="section-head"><div><p class="eyebrow">Etapa final</p><h2>Ficha final</h2><p>Revise, salve, exporte ou imprima a ficha completa do agente.</p></div><span class="pill">Pronta para mesa</span></div>
-            <div class="sheet-summary" id="summary"></div>
-          </div>
-
-          <div class="footer-actions no-print"><button class="ghost-btn" type="button" id="prevBtn">Voltar</button><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="ghost-btn" type="button" id="saveBtn">Salvar</button><button class="ghost-btn" type="button" id="exportBtn">Exportar JSON</button><button class="primary-btn" type="button" id="nextBtn">Próxima etapa</button></div></div>
-        </form>
-      </section>
-    </section>
-  </main>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
-  <script src="auth.js"></script>
-
-  <script>
-  const sheetParams = new URLSearchParams(window.location.search);
-  const personagemId = sheetParams.get('personagemId') || sheetParams.get('agenteId') || sheetParams.get('id') || 'rascunho';
-  const SHEET_MODEL = sheetParams.get('modelo') || 'ordem-paranormal';
-  const STORAGE_KEY='ficha_ordem_paranormal_guiada_v1_' + personagemId;
-  let loadingFromCloud = false;
-  function getAuth(){ try { return (window.firebase && firebase.auth) ? firebase.auth() : null; } catch(e){ return null; } }
-  function getDb(){ try { return (window.firebase && firebase.firestore) ? firebase.firestore() : null; } catch(e){ return null; } }
-  function currentUid(){ return getAuth()?.currentUser?.uid || null; }
-  function sheetDocRef(){ const uid=currentUid(), db=getDb(); return (uid && db && personagemId !== 'rascunho') ? db.collection('usuarios').doc(uid).collection('fichas').doc(personagemId) : null; }
-  function personagemDocRef(){ const uid=currentUid(), db=getDb(); return (uid && db && personagemId !== 'rascunho') ? db.collection('usuarios').doc(uid).collection('personagens').doc(personagemId) : null; }
-  async function saveSheetToCloud(data){
-    const ref = sheetDocRef();
-    if(!ref || loadingFromCloud) return;
-    await ref.set({ personagemId, modelo:SHEET_MODEL, sheetFile:'ficha_ordem_paranormal.html', sheetData:data, updatedAt:firebase.firestore.FieldValue.serverTimestamp() }, { merge:true });
-    const charRef = personagemDocRef();
-    if(charRef){
-      await charRef.set({ id:personagemId, model:SHEET_MODEL, modelLabel:'Ordem Paranormal', sheetFile:'ficha_ordem_paranormal.html', name:data.nome || 'Personagem sem nome', updatedAt:firebase.firestore.FieldValue.serverTimestamp() }, { merge:true });
-    }
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="auth.js"></script>
+<script>
+  function toggleMenu(){
+    const menu = document.getElementById('menu');
+    if(menu) menu.classList.toggle('active');
   }
-  async function loadSheetFromCloud(){
-    const ref = sheetDocRef();
-    if(!ref) return null;
-    const snap = await ref.get();
-    if(!snap.exists) return null;
-    const data = snap.data();
-    return data.sheetData || data;
-  }
-  const steps=[['conceito','Conceito','Identidade e campanha'],['atributos','Atributos','AGI, FOR, INT, PRE, VIG'],['origem','Origem','Vida anterior'],['classe','Classe','Função e trilha'],['pericias','Perícias','Testes e treinamento'],['combate','Combate','PV, PE, SAN e defesa'],['ataques','Ataques','Armas e dano'],['equipamento','Equipamento','Inventário'],['paranormal','Paranormal','Rituais e poderes'],['rolagens','Rolagens','D20 e DT'],['final','Ficha final','Revisão completa']];
-  const attrs=[['agi','Agilidade','Reflexos, destreza e coordenação.'],['for','Força','Potência muscular e combate corporal.'],['int','Intelecto','Raciocínio, memória e conhecimento.'],['pre','Presença','Vontade, carisma e controle emocional.'],['vig','Vigor','Saúde e resistência física.']];
-  const classes={Combatente:{pv:20,pe:2,san:12,pericias:['Luta','Fortitude','Pontaria','Reflexos']},Especialista:{pv:16,pe:3,san:16,pericias:['Investigação','Tecnologia','Percepção','Diplomacia']},Ocultista:{pv:12,pe:4,san:20,pericias:['Ocultismo','Vontade','Religião','Intuição']}};
-  const origens={
-    'Acadêmico':'Ciências, Atualidades ou Investigação. Foco em estudo e pesquisa.', 'Agente de Saúde':'Medicina e Intuição. Foco em atendimento, hospital ou emergência.', 'Amnésico':'Escolha livre com aval do mestre. Foco em passado perdido.', 'Artista':'Artes e Enganação ou Diplomacia. Foco em fama, performance e expressão.', 'Atleta':'Atletismo e Fortitude ou Reflexos. Foco em preparo físico.', 'Chef':'Fortitude e Profissão. Foco em cozinha, rotina e resistência.', 'Criminoso':'Crime e Furtividade. Foco em submundo e contatos perigosos.', 'Cultista Arrependido':'Ocultismo e Religião. Foco em passado ligado ao Outro Lado.', 'Desgarrado':'Sobrevivência e Fortitude. Foco em viver à margem.', 'Engenheiro':'Profissão e Tecnologia. Foco em construção e solução técnica.', 'Executivo':'Diplomacia e Profissão. Foco em recursos, influência e liderança.', 'Investigador':'Investigação e Percepção. Foco em pistas e casos.', 'Lutador':'Luta e Reflexos. Foco em combate físico.', 'Magnata':'Diplomacia e Profissão. Foco em riqueza e influência.', 'Mercenário':'Iniciativa e Pontaria ou Luta. Foco em combate contratado.', 'Militar':'Tática e Pontaria. Foco em operação, disciplina e armas.', 'Operário':'Fortitude e Profissão. Foco em trabalho pesado.', 'Policial':'Percepção e Pontaria ou Investigação. Foco em lei e perseguição.', 'Religioso':'Religião e Vontade. Foco em fé e símbolos.', 'Servidor Público':'Atualidades e Diplomacia. Foco em burocracia.', 'Teórico da Conspiração':'Investigação e Ocultismo. Foco em paranoia e padrões.', 'T.I.':'Tecnologia e Investigação. Foco em sistemas e invasões.', 'Trabalhador Rural':'Sobrevivência e Adestramento. Foco em natureza e resistência.', 'Trambiqueiro':'Enganação e Crime. Foco em golpes e improviso.', 'Universitário':'Atualidades e Ciências. Foco em estudo recente.', 'Vítima':'Vontade e Percepção. Foco em sobreviver a um trauma paranormal.'
-  };
-  const skills=[['Acrobacia','agi'],['Adestramento','pre'],['Artes','pre'],['Atletismo','for'],['Atualidades','int'],['Ciências','int'],['Crime','agi'],['Diplomacia','pre'],['Enganação','pre'],['Fortitude','vig'],['Furtividade','agi'],['Iniciativa','agi'],['Intimidação','pre'],['Intuição','pre'],['Investigação','int'],['Luta','for'],['Medicina','int'],['Ocultismo','int'],['Percepção','pre'],['Pilotagem','agi'],['Pontaria','agi'],['Profissão','int'],['Reflexos','agi'],['Religião','pre'],['Sobrevivência','int'],['Tática','int'],['Tecnologia','int'],['Vontade','pre']];
-  let current=0, attacks=[], items=[], rituals=[], log=[], agentPhotoData="";
-  const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
-  function setup(){
-    $('#stepsNav').innerHTML=steps.map((s,i)=>`<button class="step-btn ${i===0?'active':''}" type="button" data-step="${i}"><span class="step-num">${i+1}</span><span><b>${s[1]}</b><span class="step-meta">${s[2]}</span></span></button>`).join('');
-    $('#stepsNav').addEventListener('click',e=>{const b=e.target.closest('.step-btn');if(b)goStep(+b.dataset.step)});
-    $('#nexSelect').innerHTML=Array.from({length:20},(_,i)=>`<option value="${(i+1)*5}">${(i+1)*5}%</option>`).join('');
-    $('#attrGrid').innerHTML=attrs.map(a=>`<div class="attr"><strong>${a[1]}</strong><input type="number" min="0" max="6" name="${a[0]}" value="1"><span>${a[2]}</span></div>`).join('');
-    $('[name="agi"]').value=2;$('[name="for"]').value=1;$('[name="int"]').value=2;$('[name="pre"]').value=1;$('[name="vig"]').value=3;
-    $('#origemSelect').innerHTML=Object.keys(origens).map(o=>`<option>${o}</option>`).join('');
-    $('#skillsGrid').innerHTML=skills.map(([n,a])=>`<label class="skill-row"><input type="checkbox" name="skill_${slug(n)}"><span><b>${n}</b><br><small>${labelAttr(a)}</small></span><input type="number" name="skillBonus_${slug(n)}" value="0" title="Bônus manual"><strong id="skillTotal_${slug(n)}">+0</strong></label>`).join('');
-    $('#rollSkill').innerHTML='<option value="atributo:agi">Agilidade pura</option><option value="atributo:for">Força pura</option><option value="atributo:int">Intelecto puro</option><option value="atributo:pre">Presença pura</option><option value="atributo:vig">Vigor puro</option>'+skills.map(([n])=>`<option value="${n}">${n}</option>`).join('');
-    bindButtons();load();if(!attacks.length)addAttack();if(!items.length)addItem();renderAll();
-  }
-  function bindButtons(){
-    $('#nextBtn').onclick=()=>goStep(Math.min(current+1,steps.length-1));$('#prevBtn').onclick=()=>goStep(Math.max(current-1,0));$('#startBtn').onclick=()=>goStep(0);
-    ['saveBtn','saveBtnTop'].forEach(id=>$('#'+id).onclick=()=>save(true));['exportBtn','exportBtnTop'].forEach(id=>$('#'+id).onclick=exportJSON);
-    ['resetBtnTop'].forEach(id=>$('#'+id).onclick=resetSheet);$('#addAttackBtn').onclick=()=>{addAttack();renderAttacks();save(false)};$('#addItemBtn').onclick=()=>{addItem();renderItems();save(false)};$('#addRitualBtn').onclick=()=>{addRitual();renderRituals();save(false)};$('#rollBtn').onclick=rollTest;$('#clearLogBtn').onclick=()=>{log=[];renderLog();save(false)};
-    $('#sheetForm').addEventListener('input',e=>{if(e.target && e.target.dataset && e.target.dataset.arr)return;renderAll();save(false)});$('#sheetForm').addEventListener('change',e=>{if(e.target && e.target.dataset && e.target.dataset.arr)return;renderAll();save(false)});
-    $('#agentPhotoInput').addEventListener('change',handleAgentPhotoUpload);const removeAgentPhotoBtn=$('#removeAgentPhotoBtn');if(removeAgentPhotoBtn){removeAgentPhotoBtn.onclick=()=>{agentPhotoData='';renderAgentPhoto();save(false)}};
-  }
-  function goStep(i){current=i;$$('.step-panel').forEach(p=>p.classList.remove('active'));$('#step-'+steps[i][0]).classList.add('active');$$('.step-btn').forEach((b,idx)=>b.classList.toggle('active',idx===i));$('#nextBtn').textContent=i===steps.length-1?'Finalizado':'Próxima etapa';window.scrollTo({top:0,behavior:'smooth'});renderAll()}
-  function labelAttr(a){return attrs.find(x=>x[0]===a)?.[1]||a} function slug(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'_').toLowerCase()} function num(name){return +($(`[name="${name}"]`)?.value||0)} function val(name){return $(`[name="${name}"]`)?.value||''} function mod(a){return num(a)}
-  function treinoBonus(){const nex=num('nex');return nex>=70?15:nex>=35?10:5} function limitePeRodada(){return Math.max(1,Math.floor(num('nex')/5))}
-  function calcBase(){const cls=classes[val('classe')]||classes.Combatente;const nexSteps=Math.max(0,Math.floor((num('nex')-5)/5));const vig=mod('vig'), pre=mod('pre');let pv=cls.pv+vig;let pe=cls.pe+pre;let san=cls.san; if(nexSteps>0){ if(val('classe')==='Combatente'){pv+=nexSteps*(4+vig);pe+=nexSteps*2;san+=nexSteps*3} if(val('classe')==='Especialista'){pv+=nexSteps*(3+vig);pe+=nexSteps*3;san+=nexSteps*4} if(val('classe')==='Ocultista'){pv+=nexSteps*(2+vig);pe+=nexSteps*4;san+=nexSteps*5} } return {pv:Math.max(1,pv),pe:Math.max(1,pe),san:Math.max(1,san),def:10+mod('agi')+num('bonusDefesa'),lim:limitePeRodada()}}
-  function skillTotal(n){const s=skills.find(x=>x[0]===n); if(!s)return 0; const trained=$(`[name="skill_${slug(n)}"]`)?.checked; return mod(s[1])+(trained?treinoBonus():0)+(+($(`[name="skillBonus_${slug(n)}"]`)?.value||0))}
-  function renderAll(){renderOriginHint();renderStats();renderSkills();renderAttacks();renderItems();renderRituals();renderLog();renderSummary();renderAgentPhoto();}
-  function renderOriginHint(){const o=val('origem')||Object.keys(origens)[0];$('#origemHint').textContent=origens[o]||''}
-  function renderStats(){const c=calcBase();$('#defesaCalc').textContent=c.def;$('#iniCalc').textContent=(skillTotal('Iniciativa')>=0?'+':'')+skillTotal('Iniciativa');$('#pvCalc').textContent=c.pv;$('#sanCalc').textContent=c.san;$('#pvClasse').textContent=c.pv;$('#peClasse').textContent=c.pe;$('#sanClasse').textContent=c.san;$('#limitePe').textContent=c.lim;$('#heroName').textContent=val('nome')||'Sem nome';$('#heroClass').textContent=val('classe')||'—';$('#heroNex').textContent=(val('nex')||5)+'%';$('#heroCombat').textContent=`${c.def} / ${c.pv} / ${c.san}`;setBar('pvBar',num('pvAtual'),c.pv);setBar('peBar',num('peAtual'),c.pe);setBar('sanBar',num('sanAtual'),c.san)}
-  function setBar(id,cur,max){const pct=max?Math.max(0,Math.min(100,cur/max*100)):0;$('#'+id).style.width=pct+'%'}
-  function renderSkills(){skills.forEach(([n])=>{const el=$('#skillTotal_'+slug(n));if(el){const t=skillTotal(n);el.textContent=(t>=0?'+':'')+t}})}
-  function addAttack(){attacks.push({nome:'',tipo:'Arma',bonus:0,dano:'1d6',critico:'20/x2'})}
-  function addItem(){items.push({nome:'',cat:'Geral',qtd:1,espaco:1,obs:''})}
-  function addRitual(){rituals.push({nome:'',elemento:'Conhecimento',circulo:'1º',custo:'',efeito:''})}
-  function renderAttacks(){const body=$('#attacksBody');body.innerHTML=attacks.map((a,i)=>`<tr><td><input value="${esc(a.nome)}" data-arr="attacks" data-i="${i}" data-k="nome" placeholder="Revólver, faca..."></td><td><select data-arr="attacks" data-i="${i}" data-k="tipo"><option ${sel(a.tipo,'Arma')}>Arma</option><option ${sel(a.tipo,'Ritual')}>Ritual</option><option ${sel(a.tipo,'Poder')}>Poder</option></select></td><td><input type="number" value="${a.bonus||0}" data-arr="attacks" data-i="${i}" data-k="bonus"></td><td><input value="${esc(a.dano)}" data-arr="attacks" data-i="${i}" data-k="dano"></td><td><input value="${esc(a.critico)}" data-arr="attacks" data-i="${i}" data-k="critico"></td><td><button type="button" class="danger-btn" onclick="removeRow('attacks',${i})">Excluir</button></td></tr>`).join('');bindArrayInputs(body)}
-  function renderItems(){const body=$('#itemsBody');body.innerHTML=items.map((a,i)=>`<tr><td><input value="${esc(a.nome)}" data-arr="items" data-i="${i}" data-k="nome"></td><td><select data-arr="items" data-i="${i}" data-k="cat"><option ${sel(a.cat,'Geral')}>Geral</option><option ${sel(a.cat,'Arma')}>Arma</option><option ${sel(a.cat,'Proteção')}>Proteção</option><option ${sel(a.cat,'Paranormal')}>Paranormal</option><option ${sel(a.cat,'Componente')}>Componente</option></select></td><td><input type="number" value="${a.qtd||1}" data-arr="items" data-i="${i}" data-k="qtd"></td><td><input type="number" value="${a.espaco||0}" data-arr="items" data-i="${i}" data-k="espaco"></td><td><input value="${esc(a.obs)}" data-arr="items" data-i="${i}" data-k="obs"></td><td><button type="button" class="danger-btn" onclick="removeRow('items',${i})">Excluir</button></td></tr>`).join('');bindArrayInputs(body)}
-  function renderRituals(){const body=$('#ritualsBody');body.innerHTML=rituals.map((a,i)=>`<tr><td><input value="${esc(a.nome)}" data-arr="rituals" data-i="${i}" data-k="nome"></td><td><select data-arr="rituals" data-i="${i}" data-k="elemento"><option ${sel(a.elemento,'Conhecimento')}>Conhecimento</option><option ${sel(a.elemento,'Energia')}>Energia</option><option ${sel(a.elemento,'Morte')}>Morte</option><option ${sel(a.elemento,'Sangue')}>Sangue</option><option ${sel(a.elemento,'Medo')}>Medo</option></select></td><td><input value="${esc(a.circulo)}" data-arr="rituals" data-i="${i}" data-k="circulo"></td><td><input value="${esc(a.custo)}" data-arr="rituals" data-i="${i}" data-k="custo"></td><td><input value="${esc(a.efeito)}" data-arr="rituals" data-i="${i}" data-k="efeito"></td><td><button type="button" class="danger-btn" onclick="removeRow('rituals',${i})">Excluir</button></td></tr>`).join('');bindArrayInputs(body)}
-  function bindArrayInputs(root){root.querySelectorAll('[data-arr]').forEach(el=>{el.oninput=el.onchange=()=>{const arr=window[el.dataset.arr];arr[+el.dataset.i][el.dataset.k]=el.type==='number'?+el.value:el.value;save(false);renderSummary()}})}
-  function removeRow(arr,i){window[arr].splice(i,1); if(arr==='attacks')renderAttacks(); if(arr==='items')renderItems(); if(arr==='rituals')renderRituals(); save(false);renderSummary()} window.removeRow=removeRow;
-  function sel(a,b){return a===b?'selected':''} function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;')}
-  function rollTest(){const opt=$('#rollSkill').value;let name=opt,totalBonus=0;if(opt.startsWith('atributo:')){const a=opt.split(':')[1];name=labelAttr(a);totalBonus=mod(a)}else totalBonus=skillTotal(opt);totalBonus+= +$('#rollBonus').value||0;const d=Math.floor(Math.random()*20)+1;const total=d+totalBonus;const dt=+$('#rollDT').value||0;log.unshift({name,d,totalBonus,total,dt,ok:total>=dt,date:new Date().toLocaleTimeString()});renderLog();save(false)}
-  function renderLog(){const box=$('#rollLog');box.innerHTML=log.length?log.map(l=>`<div class="log-item"><b>${esc(l.name)}</b> — d20: <b>${l.d}</b> ${l.totalBonus>=0?'+':''}${l.totalBonus} = <b>${l.total}</b> contra DT ${l.dt} • <span style="color:${l.ok?'var(--green)':'#ff9aa8'}">${l.ok?'Sucesso':'Falha'}</span><br><small class="hint">${l.date}</small></div>`).join(''):'<p class="hint">Nenhuma rolagem ainda.</p>'}
-  function renderAgentPhoto(){const frame=$('#agentPhotoFrame'), img=$('#agentPhotoPreview');if(!frame||!img)return; if(agentPhotoData){img.src=agentPhotoData;frame.classList.add('has-photo')}else{img.removeAttribute('src');frame.classList.remove('has-photo')}}
-  function handleAgentPhotoUpload(e){const file=e.target.files&&e.target.files[0]; if(!file)return; if(!file.type.startsWith('image/')){toast('Escolha um arquivo de imagem.');e.target.value='';return} const reader=new FileReader();reader.onload=()=>resizeAgentPhoto(reader.result);reader.readAsDataURL(file)}
-  function resizeAgentPhoto(src){const img=new Image();img.onload=()=>{const max=900;let w=img.width,h=img.height;if(w>h&&w>max){h=Math.round(h*max/w);w=max}else if(h>=w&&h>max){w=Math.round(w*max/h);h=max}const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,w,h);agentPhotoData=canvas.toDataURL('image/jpeg',.86);renderAgentPhoto();save(false);toast('Foto do agente adicionada.');};img.src=src}
-  function collect(){const data={}; new FormData($('#sheetForm')).forEach((v,k)=>data[k]=v); attrs.forEach(([a])=>data[a]=num(a)); skills.forEach(([n])=>{data['skill_'+slug(n)]=$(`[name="skill_${slug(n)}"]`).checked;data['skillBonus_'+slug(n)]=+($(`[name="skillBonus_${slug(n)}"]`).value||0)});data.attacks=attacks;data.items=items;data.rituals=rituals;data.log=log;data.agentPhoto=agentPhotoData;data.current=current;return data}
-  function apply(data){if(!data)return;Object.entries(data).forEach(([k,v])=>{const el=$(`[name="${k}"]`);if(el){if(el.type==='checkbox')el.checked=!!v;else el.value=v}});attacks=data.attacks||[];items=data.items||[];rituals=data.rituals||[];log=data.log||[];agentPhotoData=data.agentPhoto||'';current=data.current||0;goStep(current)}
-  function save(show){
-    const data = collect();
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
-    saveSheetToCloud(data).catch(function(error){ console.warn('Não foi possível salvar no Firestore:', error); });
-    if(show)toast(currentUid() ? 'Ficha salva na sua conta.' : 'Ficha salva no navegador. Faça login para salvar na conta.');
-  }
-  function load(){
-    loadingFromCloud = true;
-    try{apply(JSON.parse(localStorage.getItem(STORAGE_KEY)||'null'))}catch(e){console.warn(e)}
-    loadingFromCloud = false;
-    const auth = getAuth();
-    if(auth){
-      auth.onAuthStateChanged(async function(user){
-        if(!user) return;
-        try{
-          const cloudData = await loadSheetFromCloud();
-          if(cloudData){
-            loadingFromCloud = true;
-            apply(cloudData);
-            loadingFromCloud = false;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(collect()));
-            renderAll();
-          }else{
-            saveSheetToCloud(collect()).catch(console.warn);
-          }
-        }catch(error){
-          loadingFromCloud = false;
-          console.warn('Não foi possível carregar a ficha do Firestore:', error);
-        }
-      });
-    }
-  }
-  function exportJSON(){const blob=new Blob([JSON.stringify(collect(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=(val('nome')||'ficha_ordem_paranormal').replace(/\s+/g,'_').toLowerCase()+'.json';a.click();URL.revokeObjectURL(url)}
-  function resetSheet(){if(confirm('Tem certeza que deseja limpar toda a ficha?')){localStorage.removeItem(STORAGE_KEY);location.reload()}}
-  function toast(msg){const t=document.createElement('div');t.textContent=msg;t.style.cssText='position:fixed;right:18px;bottom:18px;background:rgba(20,16,24,.96);border:1px solid rgba(215,180,106,.5);color:#f3efe6;padding:12px 14px;border-radius:14px;z-index:9999;box-shadow:0 18px 45px rgba(0,0,0,.35)';document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
-  function renderSummary(){const c=calcBase();const trained=skills.filter(([n])=>$(`[name="skill_${slug(n)}"]`)?.checked).map(([n])=>`${n} (${skillTotal(n)>=0?'+':''}${skillTotal(n)})`).join(', ')||'Nenhuma marcada';$('#summary').innerHTML=`
-    <div class="summary-box"><h3>Identidade</h3><p><b>Nome:</b> ${esc(val('nome')||'—')}</p><p><b>Jogador:</b> ${esc(val('jogador')||'—')}</p><p><b>Campanha:</b> ${esc(val('campanha')||'—')}</p><p><b>NEX:</b> ${esc(val('nex')||'5')}% • <b>Patente:</b> ${esc(val('patente')||'—')}</p><p><b>Conceito:</b> ${esc(val('conceito')||'—')}</p></div>
-    <div class="summary-box"><h3>Atributos</h3><p>${attrs.map(a=>`<b>${a[1]}:</b> ${num(a[0])}`).join(' • ')}</p><p><b>Defesa:</b> ${c.def} • <b>PV:</b> ${num('pvAtual')||0}/${c.pv} • <b>PE:</b> ${num('peAtual')||0}/${c.pe} • <b>SAN:</b> ${num('sanAtual')||0}/${c.san}</p></div>
-    <div class="summary-box"><h3>Origem e Classe</h3><p><b>Origem:</b> ${esc(val('origem')||'—')}</p><p><b>Classe:</b> ${esc(val('classe')||'—')} • <b>Trilha:</b> ${esc(val('trilha')||'—')}</p><p><b>Elemento:</b> ${esc(val('elemento')||'—')} • <b>Afinidade:</b> ${esc(val('afinidade')||'—')}</p><p><b>Habilidades:</b> ${esc(val('habilidadesClasse')||'—')}</p></div>
-    <div class="summary-box"><h3>Perícias treinadas</h3><p>${esc(trained)}</p></div>
-    <div class="summary-box"><h3>Ataques</h3><p>${attacks.filter(a=>a.nome).map(a=>`${esc(a.nome)}: ${esc(a.dano)} (${a.bonus>=0?'+':''}${a.bonus})`).join('<br>')||'—'}</p></div>
-    <div class="summary-box"><h3>Equipamento</h3><p>${items.filter(a=>a.nome).map(a=>`${esc(a.nome)} x${a.qtd||1} — ${esc(a.cat)}`).join('<br>')||'—'}</p></div>
-    <div class="summary-box"><h3>Rituais e poderes</h3><p>${rituals.filter(a=>a.nome).map(a=>`${esc(a.nome)} — ${esc(a.elemento)} ${esc(a.circulo)} (${esc(a.custo)})`).join('<br>')||'—'}</p></div>
-    <div class="summary-box"><h3>Anotações</h3><p><b>Contato:</b> ${esc(val('contato')||'—')}</p><p><b>Condições:</b> ${esc(val('condicoes')||'—')}</p><p><b>Outro Lado:</b> ${esc(val('anotacoesParanormais')||'—')}</p></div>`}
-  document.addEventListener('DOMContentLoaded',setup);
-  </script>
-
-  <script>
-    // Garante que a foto fique dentro do painel lateral junto de Agente / Classe / NEX / Defesa.
-    document.addEventListener('DOMContentLoaded', function(){
-      const side = document.querySelector('.hero-side');
-      const photo = document.querySelector('.agent-photo-card');
-      if(side && photo && photo.parentElement !== side){
-        side.insertBefore(photo, side.firstChild);
-      }
-    });
-  </script>
+</script>
 </body>
 </html>
