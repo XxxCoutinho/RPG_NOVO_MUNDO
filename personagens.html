@@ -313,6 +313,105 @@
       });
     }
 
+    function normalizeCharacterName(value){
+      const name = String(value || '').trim();
+      const lower = name.toLowerCase();
+      if(!name || lower === 'novo personagem' || lower === 'novo npc' || lower === 'personagem sem nome') return '';
+      return name;
+    }
+
+    function extractNameDeep(value){
+      const seen = new Set();
+      function walk(node){
+        if(!node || typeof node !== 'object' || seen.has(node)) return '';
+        seen.add(node);
+
+        const directKeys = ['name','nome','nomePersonagem','personagemNome','characterName','nomeDoPersonagem','nome_completo'];
+        for(const key of directKeys){
+          if(Object.prototype.hasOwnProperty.call(node, key)){
+            const found = normalizeCharacterName(node[key]);
+            if(found) return found;
+          }
+        }
+
+        for(const childKey of Object.keys(node)){
+          const found = walk(node[childKey]);
+          if(found) return found;
+        }
+        return '';
+      }
+      return walk(value);
+    }
+
+    function findCharacterNameInLocalSheets(agent){
+      if(!agent || !agent.id) return '';
+      const id = String(agent.id);
+      const directKeys = [
+        'rpgNexusNomePersonagem_' + id,
+        'rpgNexusFicha_' + id,
+        'rpgNexusFicha:' + id,
+        'ficha_' + id,
+        'personagem_' + id
+      ];
+
+      for(const key of directKeys){
+        try{
+          const parsed = JSON.parse(localStorage.getItem(key));
+          const name = extractNameDeep(parsed);
+          if(name) return name;
+        }catch(error){}
+      }
+
+      for(let index = 0; index < localStorage.length; index += 1){
+        const key = localStorage.key(index);
+        if(!key) continue;
+        try{
+          const raw = localStorage.getItem(key);
+          if(!raw || raw.indexOf(id) === -1) continue;
+          const parsed = JSON.parse(raw);
+          const possibleId = String(parsed?.id || parsed?.personagemId || parsed?.agenteId || parsed?.characterId || '');
+          const containsId = possibleId === id || raw.indexOf(id) !== -1;
+          if(!containsId) continue;
+          const name = extractNameDeep(parsed);
+          if(name) return name;
+        }catch(error){}
+      }
+      return '';
+    }
+
+    async function syncNamesFromLocalSheets(agents){
+      if(!Array.isArray(agents) || !agents.length) return agents;
+      let changed = false;
+      const updated = agents.map(function(agent){
+        const foundName = findCharacterNameInLocalSheets(agent);
+        if(foundName && foundName !== agent.name){
+          changed = true;
+          return Object.assign({}, agent, { name: foundName, updatedAt: new Date().toISOString() });
+        }
+        return agent;
+      });
+
+      if(changed){
+        saveLocalAgents(updated);
+        const db = getDb();
+        const user = getAuth()?.currentUser || currentUser;
+        if(db && user){
+          updated.forEach(function(agent){
+            const original = agents.find(function(item){ return String(item.id) === String(agent.id); });
+            if(original && original.name !== agent.name){
+              db.collection('usuarios').doc(user.uid).collection('personagens').doc(agent.id).set({
+                name: agent.name,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+              }, { merge: true }).catch(function(error){
+                console.warn('Não foi possível sincronizar o nome do personagem:', error);
+              });
+            }
+          });
+        }
+      }
+      return updated;
+    }
+
     function getSheetFile(model){
       const sheetFiles = {
         'ordem-paranormal': 'ficha_ordem_paranormal.html',
@@ -426,6 +525,7 @@
         agents = loadLocalAgents();
       }
 
+      agents = await syncNamesFromLocalSheets(agents);
       visibleAgents = agents;
 
       if(!agents.length){
@@ -489,8 +589,14 @@
 
     form.addEventListener('submit', async function(event){
       event.preventDefault();
-      const user = requireLogin();
-      if(getAuth() && !user) return;
+
+      /*
+        Ao clicar em "Criar personagem", a página agora sempre monta a ficha
+        escolhida e direciona para o arquivo correspondente.
+        Se o usuário estiver logado, também tenta salvar no Firestore.
+        Se não estiver logado ou se o Firestore falhar, a ficha ainda é criada
+        localmente para não bloquear o redirecionamento.
+      */
 
       const formData = new FormData(form);
       const model = String(formData.get('sheetModel') || '');
@@ -540,10 +646,19 @@
         createdAt: new Date().toISOString()
       };
 
+      const targetUrl = buildSheetUrl(newAgent);
+
       await updateLocalAgent(newAgent);
-      await saveAgentToCloud(newAgent);
       localStorage.setItem('rpgNexusPersonagemEmCriacao', JSON.stringify(newAgent));
-      window.location.href = buildSheetUrl(newAgent);
+
+      try{
+        const authUser = getAuth()?.currentUser || currentUser;
+        if(authUser) await saveAgentToCloud(newAgent);
+      }catch(error){
+        console.warn('Não foi possível salvar o personagem no Firestore antes de abrir a ficha. A cópia local foi mantida:', error);
+      }
+
+      window.location.assign(targetUrl);
     });
 
     const auth = getAuth();
