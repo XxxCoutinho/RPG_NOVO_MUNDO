@@ -423,17 +423,44 @@
       return '';
     }
 
+    async function findCharacterNameInCloudSheet(agent){
+      const db = getDb();
+      const user = getAuth()?.currentUser || currentUser;
+      if(!db || !user || !agent || !agent.id) return '';
+
+      const id = String(agent.id);
+      const refs = [
+        db.collection('usuarios').doc(user.uid).collection('fichas').doc(id),
+        db.collection('usuarios').doc(user.uid).collection('personagens').doc(id),
+        db.collection('fichas').doc(id),
+        db.collection('personagens').doc(id)
+      ];
+
+      for(const ref of refs){
+        try{
+          const doc = await ref.get();
+          if(!doc.exists) continue;
+          const found = extractNameDeep(doc.data());
+          if(found) return found;
+        }catch(error){
+          console.warn('Não foi possível consultar nome da ficha no Firestore:', error);
+        }
+      }
+      return '';
+    }
+
     async function syncNamesFromLocalSheets(agents){
       if(!Array.isArray(agents) || !agents.length) return agents;
       let changed = false;
-      const updated = agents.map(function(agent){
-        const foundName = findCharacterNameInLocalSheets(agent);
+
+      const updated = await Promise.all(agents.map(async function(agent){
+        const foundName = findCharacterNameInLocalSheets(agent) || await findCharacterNameInCloudSheet(agent);
         if(foundName && foundName !== agent.name){
           changed = true;
           return Object.assign({}, agent, { name: foundName, updatedAt: new Date().toISOString() });
         }
         return agent;
-      });
+      }));
 
       if(changed){
         saveLocalAgents(updated);
@@ -581,7 +608,7 @@
         const sheetUrl = buildSheetUrl(agent);
         return `
           <article class="agent-card" data-character-id="${escapeHtml(agent.id)}">
-            <h3>${escapeHtml(agent.name || 'Personagem sem nome')}</h3>
+            <h3>${escapeHtml(normalizeCharacterName(agent.name) || 'Personagem sem nome')}</h3>
             <span>${escapeHtml(agent.modelLabel || agent.model)}</span>
             <span>${escapeHtml(agent.typeLabel || agent.type)}</span>
             <div class="card-actions">
@@ -633,7 +660,7 @@
     window.addEventListener('focus', function(){ renderAgents(); });
     window.addEventListener('pageshow', function(){ renderAgents(); });
     window.addEventListener('storage', function(event){
-      if(event.key && (event.key.indexOf('Personagem') !== -1 || event.key.indexOf('personagem') !== -1 || event.key.indexOf('Ficha') !== -1 || event.key.indexOf('ficha') !== -1)){
+      if(event.key && (event.key.indexOf('Personagem') !== -1 || event.key.indexOf('personagem') !== -1 || event.key.indexOf('Ficha') !== -1 || event.key.indexOf('ficha') !== -1 || event.key.indexOf('Nome') !== -1 || event.key.indexOf('nome') !== -1)){
         renderAgents();
       }
     });
@@ -686,7 +713,7 @@
       const sheetFile = getSheetFile(model);
       const newAgent = {
         id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
-        name: baseType === 'npc' ? 'Novo NPC' : 'Novo personagem',
+        name: '',
         model: model,
         modelLabel: modelLabels[model] || model,
         sheetFile: sheetFile,
