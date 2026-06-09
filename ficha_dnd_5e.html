@@ -401,7 +401,7 @@
       </a>
       <nav class="nav" aria-label="Navegação principal">
         <a href="index.html">Início</a>
-        <a href="agentes.html">Personagens</a>
+        <a href="personagens.html">Personagens</a>
         <a href="campanhas.html">Campanhas</a>
         <a href="ameacas.html">Ameaças</a>
         <a href="homebrew.html">Homebrew</a>
@@ -418,7 +418,7 @@
         <p>Preencha etapa por etapa. A página calcula modificadores, proficiência, pontos de vida, CA básica, testes, perícias, ataques e dados principais enquanto monta a ficha final.</p>
         <div class="hero-actions">
           <button class="primary-btn" onclick="goStep(0)">Começar criação</button>
-          <button class="ghost-btn" onclick="saveCharacter(true)">Salvar no navegador</button>
+          <button class="ghost-btn" onclick="saveCharacter(true)">Salvar na conta</button>
           <button class="ghost-btn" onclick="window.print()">Imprimir ficha</button>
         </div>
       </div>
@@ -592,7 +592,42 @@
     </section>
   </main>
 
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="auth.js"></script>
+
   <script>
+    const sheetParams = new URLSearchParams(window.location.search);
+    const personagemId = sheetParams.get('personagemId') || sheetParams.get('agenteId') || sheetParams.get('id') || 'rascunho';
+    const SHEET_MODEL = sheetParams.get('modelo') || 'dnd-5e';
+    const LOCAL_STORAGE_KEY = 'dnd5e_guided_character_' + personagemId;
+    let loadingFromCloud = false;
+
+    function getAuth(){ try { return (window.firebase && firebase.auth) ? firebase.auth() : null; } catch(e){ return null; } }
+    function getDb(){ try { return (window.firebase && firebase.firestore) ? firebase.firestore() : null; } catch(e){ return null; } }
+    function currentUid(){ return getAuth()?.currentUser?.uid || null; }
+    function sheetDocRef(){ const uid=currentUid(), db=getDb(); return (uid && db && personagemId !== 'rascunho') ? db.collection('usuarios').doc(uid).collection('fichas').doc(personagemId) : null; }
+    function personagemDocRef(){ const uid=currentUid(), db=getDb(); return (uid && db && personagemId !== 'rascunho') ? db.collection('usuarios').doc(uid).collection('personagens').doc(personagemId) : null; }
+    async function saveSheetToCloud(data){
+      const ref = sheetDocRef();
+      if(!ref || loadingFromCloud) return;
+      await ref.set({ personagemId, modelo:SHEET_MODEL, sheetFile:'ficha_dnd_5e.html', sheetData:data, updatedAt:firebase.firestore.FieldValue.serverTimestamp() }, { merge:true });
+      const charRef = personagemDocRef();
+      if(charRef){
+        await charRef.set({ id:personagemId, model:SHEET_MODEL, modelLabel:'D&D', sheetFile:'ficha_dnd_5e.html', name:data.name || 'Personagem sem nome', updatedAt:firebase.firestore.FieldValue.serverTimestamp() }, { merge:true });
+      }
+    }
+    async function loadSheetFromCloud(){
+      const ref = sheetDocRef();
+      if(!ref) return null;
+      const snap = await ref.get();
+      if(!snap.exists) return null;
+      const data = snap.data();
+      return data.sheetData || data;
+    }
+
     const steps = [
       ['Conceito', 'Nome e ideia'], ['Raça', 'Origem e traços'], ['Classe', 'Vocação e recursos'], ['Habilidades', 'Valores e mods'], ['Antecedente', 'Personalidade'], ['Perícias', 'Testes e prof.'], ['Combate', 'PV, CA e ataques'], ['Magias', 'CD e lista'], ['Equipamento', 'Itens e moedas'], ['Revisão', 'Ficha final']
     ];
@@ -907,15 +942,44 @@
     }
 
     function saveCharacter(show){
-      localStorage.setItem('dnd5e_guided_character', JSON.stringify(getData()));
-      if(show) alert('Ficha salva no navegador.');
+      const data = getData();
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+      saveSheetToCloud(data).catch(function(error){ console.warn('Não foi possível salvar no Firestore:', error); });
+      if(show) alert(currentUid() ? 'Ficha salva na sua conta.' : 'Ficha salva no navegador. Faça login para salvar na conta.');
     }
-    function loadCharacter(){
-      try { setData(JSON.parse(localStorage.getItem('dnd5e_guided_character') || 'null')); } catch(e) {}
+    async function loadCharacter(){
+      loadingFromCloud = true;
+      try { setData(JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || 'null')); } catch(e) {}
+      loadingFromCloud = false;
+
+      const auth = getAuth();
+      if(auth){
+        auth.onAuthStateChanged(async function(user){
+          if(!user) return;
+          try{
+            const cloudData = await loadSheetFromCloud();
+            if(cloudData){
+              loadingFromCloud = true;
+              setData(cloudData);
+              loadingFromCloud = false;
+              localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(getData()));
+              updateAll();
+            }else{
+              saveSheetToCloud(getData()).catch(console.warn);
+            }
+          }catch(error){
+            loadingFromCloud = false;
+            console.warn('Não foi possível carregar a ficha do Firestore:', error);
+          }
+        });
+      }
     }
     function clearCharacter(){
       if(!confirm('Limpar todos os dados desta ficha?')) return;
-      localStorage.removeItem('dnd5e_guided_character'); location.reload();
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+      const ref = sheetDocRef();
+      if(ref) ref.delete().catch(console.warn);
+      location.reload();
     }
     function exportJSON(){
       const blob = new Blob([JSON.stringify(getData(), null, 2)], {type:'application/json'});

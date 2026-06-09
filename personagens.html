@@ -155,19 +155,19 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="auth.js"></script>
 <script>
 (function(){
   const STORAGE_KEY = 'rpgNexusPersonagens';
   const OLD_STORAGE_KEY = 'rpgNexusAgentes';
+  let currentUser = null;
+  let authReady = false;
 
   function ready(fn){
-    if(document.readyState === 'loading'){
-      document.addEventListener('DOMContentLoaded', fn);
-    }else{
-      fn();
-    }
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
   }
 
   ready(function(){
@@ -186,9 +186,34 @@
       return;
     }
 
+    function getAuth(){
+      try{ return (window.firebase && firebase.auth) ? firebase.auth() : null; }
+      catch(error){ return null; }
+    }
+
+    function getDb(){
+      try{ return (window.firebase && firebase.firestore) ? firebase.firestore() : null; }
+      catch(error){ return null; }
+    }
+
+    function requireLogin(){
+      const auth = getAuth();
+      if(auth && !auth.currentUser){
+        if(loginHint) loginHint.hidden = false;
+        alert('Faça login antes de criar ou editar personagens.');
+        window.location.href = 'login.html';
+        return null;
+      }
+      return auth ? auth.currentUser : null;
+    }
+
     function openModal(){
-      // A validação de login fica para o momento de salvar.
-      // Assim o botão sempre abre a janela, mesmo enquanto o Firebase ainda carrega o usuário.
+      if(getAuth() && !getAuth().currentUser){
+        if(loginHint) loginHint.hidden = false;
+        alert('Faça login antes de criar personagens.');
+        window.location.href = 'login.html';
+        return;
+      }
       if(loginHint) loginHint.hidden = true;
       modal.classList.add('active');
       modal.setAttribute('aria-hidden','false');
@@ -202,51 +227,54 @@
       updateNpcFields();
     }
 
-    function getCurrentUser(){
-      try{
-        if(window.firebase && firebase.auth){
-          return firebase.auth().currentUser;
-        }
-      }catch(error){
-        console.warn('Firebase Auth ainda não está pronto:', error);
-      }
-      return null;
-    }
-
-    function isAuthAvailable(){
-      try{
-        return !!(window.firebase && firebase.auth);
-      }catch(error){
-        return false;
-      }
-    }
-
-    function loadAgents(){
+    function loadLocalAgents(){
       try{
         const current = localStorage.getItem(STORAGE_KEY);
         const old = localStorage.getItem(OLD_STORAGE_KEY);
-        if(!current && old){
-          localStorage.setItem(STORAGE_KEY, old);
-        }
+        if(!current && old) localStorage.setItem(STORAGE_KEY, old);
         return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
       }catch(error){
         return [];
       }
     }
 
-    function saveAgents(agents){
+    function saveLocalAgents(agents){
       localStorage.setItem(STORAGE_KEY, JSON.stringify(agents));
+    }
+
+    async function loadAgents(){
+      const db = getDb();
+      const user = getAuth()?.currentUser || currentUser;
+      if(db && user){
+        const snap = await db.collection('usuarios').doc(user.uid).collection('personagens').orderBy('createdAt','desc').get();
+        const agents = snap.docs.map(function(doc){ return Object.assign({ id: doc.id }, doc.data()); });
+        saveLocalAgents(agents);
+        return agents;
+      }
+      return loadLocalAgents();
+    }
+
+    async function saveAgentToCloud(agent){
+      const db = getDb();
+      const user = requireLogin();
+      if(!db || !user) return;
+      const now = firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection('usuarios').doc(user.uid).collection('personagens').doc(agent.id).set(Object.assign({}, agent, {
+        ownerUid: user.uid,
+        updatedAt: now,
+        createdAt: agent.createdAt || new Date().toISOString()
+      }), { merge: true });
+    }
+
+    async function updateLocalAgent(agent){
+      const agents = loadLocalAgents().filter(function(item){ return item.id !== agent.id; });
+      agents.unshift(agent);
+      saveLocalAgents(agents);
     }
 
     function escapeHtml(value){
       return String(value ?? '').replace(/[&<>'"]/g, function(char){
-        return ({
-          '&':'&amp;',
-          '<':'&lt;',
-          '>':'&gt;',
-          "'":'&#39;',
-          '"':'&quot;'
-        })[char];
+        return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[char];
       });
     }
 
@@ -274,6 +302,7 @@
       const params = new URLSearchParams({
         personagemId: agent.id || '',
         agenteId: agent.id || '',
+        id: agent.id || '',
         modelo: agent.model || '',
         tipo: agent.type || '',
         categoria: agent.baseType || (String(agent.type || '').startsWith('npc-') ? 'npc' : 'personagem'),
@@ -283,8 +312,8 @@
       return file + '?' + params.toString();
     }
 
-    function deleteAgentById(id){
-      const agents = loadAgents();
+    async function deleteAgentById(id){
+      const agents = await loadAgents();
       const character = agents.find(function(agent){ return agent.id === id; });
       if(!character) return;
 
@@ -292,12 +321,25 @@
       const confirmed = confirm('Tem certeza que deseja excluir "' + label + '"? Essa ação não pode ser desfeita.');
       if(!confirmed) return;
 
-      saveAgents(agents.filter(function(agent){ return agent.id !== id; }));
-      renderAgents();
+      saveLocalAgents(agents.filter(function(agent){ return agent.id !== id; }));
+
+      const db = getDb();
+      const user = requireLogin();
+      if(db && user){
+        await db.collection('usuarios').doc(user.uid).collection('personagens').doc(id).delete().catch(console.warn);
+        await db.collection('usuarios').doc(user.uid).collection('fichas').doc(id).delete().catch(console.warn);
+      }
+      await renderAgents();
     }
 
-    function renderAgents(){
-      const agents = loadAgents();
+    async function renderAgents(){
+      let agents = [];
+      try{ agents = await loadAgents(); }
+      catch(error){
+        console.warn('Não foi possível carregar personagens do Firestore. Usando dados locais:', error);
+        agents = loadLocalAgents();
+      }
+
       if(!agents.length){
         agentList.innerHTML = '<div class="empty-state">Nenhum personagem criado ainda. Clique em <strong>Criar personagem</strong> para começar.</div>';
         return;
@@ -322,24 +364,17 @@
 
     function updateNpcFields(){
       const selectedType = document.querySelector('input[name="agentType"]:checked')?.value || 'personagem';
-      if(npcFields){
-        npcFields.classList.toggle('active', selectedType === 'npc');
-      }
+      if(npcFields) npcFields.classList.toggle('active', selectedType === 'npc');
     }
 
-    typeRadios.forEach(function(radio){
-      radio.addEventListener('change', updateNpcFields);
-    });
-
+    typeRadios.forEach(function(radio){ radio.addEventListener('change', updateNpcFields); });
     updateNpcFields();
 
     openBtn.addEventListener('click', openModal);
     closeBtn?.addEventListener('click', closeModal);
     cancelBtn?.addEventListener('click', closeModal);
 
-    modal.addEventListener('click', function(event){
-      if(event.target === modal) closeModal();
-    });
+    modal.addEventListener('click', function(event){ if(event.target === modal) closeModal(); });
 
     agentList.addEventListener('click', function(event){
       const deleteButton = event.target.closest('[data-delete-character]');
@@ -347,21 +382,12 @@
       deleteAgentById(deleteButton.getAttribute('data-delete-character'));
     });
 
-    document.addEventListener('keydown', function(event){
-      if(event.key === 'Escape' && modal.classList.contains('active')) closeModal();
-    });
+    document.addEventListener('keydown', function(event){ if(event.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
 
-    form.addEventListener('submit', function(event){
+    form.addEventListener('submit', async function(event){
       event.preventDefault();
-
-      // Se o Firebase estiver ativo, exige login para criar.
-      // Se estiver testando apenas o HTML localmente, permite seguir para não travar o desenvolvimento.
-      if(isAuthAvailable() && !getCurrentUser()){
-        if(loginHint) loginHint.hidden = false;
-        alert('Faça login antes de criar o personagem.');
-        window.location.href = 'login.html';
-        return;
-      }
+      const user = requireLogin();
+      if(getAuth() && !user) return;
 
       const formData = new FormData(form);
       const model = String(formData.get('sheetModel') || '');
@@ -411,26 +437,24 @@
         createdAt: new Date().toISOString()
       };
 
-      const agents = loadAgents();
-      agents.unshift(newAgent);
-      saveAgents(agents);
-
+      await updateLocalAgent(newAgent);
+      await saveAgentToCloud(newAgent);
       localStorage.setItem('rpgNexusPersonagemEmCriacao', JSON.stringify(newAgent));
-
       window.location.href = buildSheetUrl(newAgent);
     });
 
-    try{
-      if(isAuthAvailable()){
-        firebase.auth().onAuthStateChanged(function(user){
-          if(loginHint) loginHint.hidden = true;
-        });
-      }
-    }catch(error){
-      console.warn('Não foi possível observar o login do Firebase:', error);
+    const auth = getAuth();
+    if(auth){
+      auth.onAuthStateChanged(async function(user){
+        currentUser = user || null;
+        authReady = true;
+        if(loginHint) loginHint.hidden = !!user;
+        await renderAgents();
+      });
+    }else{
+      authReady = true;
+      renderAgents();
     }
-
-    renderAgents();
   });
 })();
 </script>

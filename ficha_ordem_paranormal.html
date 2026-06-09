@@ -129,8 +129,40 @@
       </section>
     </section>
   </main>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="auth.js"></script>
+
   <script>
-  const STORAGE_KEY='ficha_ordem_paranormal_guiada_v1';
+  const sheetParams = new URLSearchParams(window.location.search);
+  const personagemId = sheetParams.get('personagemId') || sheetParams.get('agenteId') || sheetParams.get('id') || 'rascunho';
+  const SHEET_MODEL = sheetParams.get('modelo') || 'ordem-paranormal';
+  const STORAGE_KEY='ficha_ordem_paranormal_guiada_v1_' + personagemId;
+  let loadingFromCloud = false;
+  function getAuth(){ try { return (window.firebase && firebase.auth) ? firebase.auth() : null; } catch(e){ return null; } }
+  function getDb(){ try { return (window.firebase && firebase.firestore) ? firebase.firestore() : null; } catch(e){ return null; } }
+  function currentUid(){ return getAuth()?.currentUser?.uid || null; }
+  function sheetDocRef(){ const uid=currentUid(), db=getDb(); return (uid && db && personagemId !== 'rascunho') ? db.collection('usuarios').doc(uid).collection('fichas').doc(personagemId) : null; }
+  function personagemDocRef(){ const uid=currentUid(), db=getDb(); return (uid && db && personagemId !== 'rascunho') ? db.collection('usuarios').doc(uid).collection('personagens').doc(personagemId) : null; }
+  async function saveSheetToCloud(data){
+    const ref = sheetDocRef();
+    if(!ref || loadingFromCloud) return;
+    await ref.set({ personagemId, modelo:SHEET_MODEL, sheetFile:'ficha_ordem_paranormal.html', sheetData:data, updatedAt:firebase.firestore.FieldValue.serverTimestamp() }, { merge:true });
+    const charRef = personagemDocRef();
+    if(charRef){
+      await charRef.set({ id:personagemId, model:SHEET_MODEL, modelLabel:'Ordem Paranormal', sheetFile:'ficha_ordem_paranormal.html', name:data.nome || 'Personagem sem nome', updatedAt:firebase.firestore.FieldValue.serverTimestamp() }, { merge:true });
+    }
+  }
+  async function loadSheetFromCloud(){
+    const ref = sheetDocRef();
+    if(!ref) return null;
+    const snap = await ref.get();
+    if(!snap.exists) return null;
+    const data = snap.data();
+    return data.sheetData || data;
+  }
   const steps=[['conceito','Conceito','Identidade e campanha'],['atributos','Atributos','AGI, FOR, INT, PRE, VIG'],['origem','Origem','Vida anterior'],['classe','Classe','Função e trilha'],['pericias','Perícias','Testes e treinamento'],['combate','Combate','PV, PE, SAN e defesa'],['ataques','Ataques','Armas e dano'],['equipamento','Equipamento','Inventário'],['paranormal','Paranormal','Rituais e poderes'],['rolagens','Rolagens','D20 e DT'],['final','Ficha final','Revisão completa']];
   const attrs=[['agi','Agilidade','Reflexos, destreza e coordenação.'],['for','Força','Potência muscular e combate corporal.'],['int','Intelecto','Raciocínio, memória e conhecimento.'],['pre','Presença','Vontade, carisma e controle emocional.'],['vig','Vigor','Saúde e resistência física.']];
   const classes={Combatente:{pv:20,pe:2,san:12,pericias:['Luta','Fortitude','Pontaria','Reflexos']},Especialista:{pv:16,pe:3,san:16,pericias:['Investigação','Tecnologia','Percepção','Diplomacia']},Ocultista:{pv:12,pe:4,san:20,pericias:['Ocultismo','Vontade','Religião','Intuição']}};
@@ -180,7 +212,38 @@
   function renderLog(){const box=$('#rollLog');box.innerHTML=log.length?log.map(l=>`<div class="log-item"><b>${esc(l.name)}</b> — d20: <b>${l.d}</b> ${l.totalBonus>=0?'+':''}${l.totalBonus} = <b>${l.total}</b> contra DT ${l.dt} • <span style="color:${l.ok?'var(--green)':'#ff9aa8'}">${l.ok?'Sucesso':'Falha'}</span><br><small class="hint">${l.date}</small></div>`).join(''):'<p class="hint">Nenhuma rolagem ainda.</p>'}
   function collect(){const data={}; new FormData($('#sheetForm')).forEach((v,k)=>data[k]=v); attrs.forEach(([a])=>data[a]=num(a)); skills.forEach(([n])=>{data['skill_'+slug(n)]=$(`[name="skill_${slug(n)}"]`).checked;data['skillBonus_'+slug(n)]=+($(`[name="skillBonus_${slug(n)}"]`).value||0)});data.attacks=attacks;data.items=items;data.rituals=rituals;data.log=log;data.current=current;return data}
   function apply(data){if(!data)return;Object.entries(data).forEach(([k,v])=>{const el=$(`[name="${k}"]`);if(el){if(el.type==='checkbox')el.checked=!!v;else el.value=v}});attacks=data.attacks||[];items=data.items||[];rituals=data.rituals||[];log=data.log||[];current=data.current||0;goStep(current)}
-  function save(show){localStorage.setItem(STORAGE_KEY,JSON.stringify(collect())); if(show)toast('Ficha salva no navegador.')} function load(){try{apply(JSON.parse(localStorage.getItem(STORAGE_KEY)||'null'))}catch(e){console.warn(e)}}
+  function save(show){
+    const data = collect();
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+    saveSheetToCloud(data).catch(function(error){ console.warn('Não foi possível salvar no Firestore:', error); });
+    if(show)toast(currentUid() ? 'Ficha salva na sua conta.' : 'Ficha salva no navegador. Faça login para salvar na conta.');
+  }
+  function load(){
+    loadingFromCloud = true;
+    try{apply(JSON.parse(localStorage.getItem(STORAGE_KEY)||'null'))}catch(e){console.warn(e)}
+    loadingFromCloud = false;
+    const auth = getAuth();
+    if(auth){
+      auth.onAuthStateChanged(async function(user){
+        if(!user) return;
+        try{
+          const cloudData = await loadSheetFromCloud();
+          if(cloudData){
+            loadingFromCloud = true;
+            apply(cloudData);
+            loadingFromCloud = false;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(collect()));
+            renderAll();
+          }else{
+            saveSheetToCloud(collect()).catch(console.warn);
+          }
+        }catch(error){
+          loadingFromCloud = false;
+          console.warn('Não foi possível carregar a ficha do Firestore:', error);
+        }
+      });
+    }
+  }
   function exportJSON(){const blob=new Blob([JSON.stringify(collect(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=(val('nome')||'ficha_ordem_paranormal').replace(/\s+/g,'_').toLowerCase()+'.json';a.click();URL.revokeObjectURL(url)}
   function resetSheet(){if(confirm('Tem certeza que deseja limpar toda a ficha?')){localStorage.removeItem(STORAGE_KEY);location.reload()}}
   function toast(msg){const t=document.createElement('div');t.textContent=msg;t.style.cssText='position:fixed;right:18px;bottom:18px;background:rgba(20,16,24,.96);border:1px solid rgba(215,180,106,.5);color:#f3efe6;padding:12px 14px;border-radius:14px;z-index:9999;box-shadow:0 18px 45px rgba(0,0,0,.35)';document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}

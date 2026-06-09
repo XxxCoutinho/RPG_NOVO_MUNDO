@@ -430,7 +430,7 @@
         <p>Preencha etapa por etapa. A página monta uma ficha de Vampiro V5 com atributos, habilidades, clã, disciplinas, fome, humanidade, força de vontade, vantagens, convicções e rolagens de dados com dados de fome.</p>
         <div class="hero-actions">
           <button class="primary-btn" onclick="goStep(0)">Começar criação</button>
-          <button class="ghost-btn" onclick="saveCharacter(true)">Salvar no navegador</button>
+          <button class="ghost-btn" onclick="saveCharacter(true)">Salvar na conta</button>
           <button class="ghost-btn" onclick="window.print()">Imprimir ficha</button>
         </div>
       </div>
@@ -570,8 +570,42 @@
     </section>
   </main>
 
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="auth.js"></script>
+
   <script>
-    const storageKey = 'novo-mundo-ficha-vampiro-v5';
+    const sheetParams = new URLSearchParams(window.location.search);
+    const personagemId = sheetParams.get('personagemId') || sheetParams.get('agenteId') || sheetParams.get('id') || 'rascunho';
+    const SHEET_MODEL = sheetParams.get('modelo') || 'vampiro-v5';
+    const storageKey = 'novo-mundo-ficha-vampiro-v5_' + personagemId;
+    let loadingFromCloud = false;
+    function getAuth(){ try { return (window.firebase && firebase.auth) ? firebase.auth() : null; } catch(e){ return null; } }
+    function getDb(){ try { return (window.firebase && firebase.firestore) ? firebase.firestore() : null; } catch(e){ return null; } }
+    function currentUid(){ return getAuth()?.currentUser?.uid || null; }
+    function sheetDocRef(){ const uid=currentUid(), db=getDb(); return (uid && db && personagemId !== 'rascunho') ? db.collection('usuarios').doc(uid).collection('fichas').doc(personagemId) : null; }
+    function personagemDocRef(){ const uid=currentUid(), db=getDb(); return (uid && db && personagemId !== 'rascunho') ? db.collection('usuarios').doc(uid).collection('personagens').doc(personagemId) : null; }
+    async function saveSheetToCloud(data){
+      const ref = sheetDocRef();
+      if(!ref || loadingFromCloud) return;
+      await ref.set({ personagemId, modelo:SHEET_MODEL, sheetFile:'ficha_vampiro_V5.html', sheetData:data, updatedAt:firebase.firestore.FieldValue.serverTimestamp() }, { merge:true });
+      const charRef = personagemDocRef();
+      if(charRef){
+        const clanKey = data.clan || '';
+        const label = (clanKey && clans[clanKey]) ? clans[clanKey].name : 'Vampiro: A Máscara';
+        await charRef.set({ id:personagemId, model:SHEET_MODEL, modelLabel:'Vampiro: A Máscara', sheetFile:'ficha_vampiro_V5.html', name:data.charName || 'Personagem sem nome', clanLabel:label, updatedAt:firebase.firestore.FieldValue.serverTimestamp() }, { merge:true });
+      }
+    }
+    async function loadSheetFromCloud(){
+      const ref = sheetDocRef();
+      if(!ref) return null;
+      const snap = await ref.get();
+      if(!snap.exists) return null;
+      const data = snap.data();
+      return data.sheetData || data;
+    }
     const steps = [
       ['Conceito', 'vida mortal'], ['Clã', 'sociedade'], ['Atributos', 'traços centrais'], ['Habilidades', 'vida prática'], ['Disciplinas', 'poderes'], ['Predador', 'caça'], ['Convicções', 'humanidade'], ['Vantagens', 'recursos'], ['Rolagens', 'dados V5'], ['Revisão', 'ficha final']
     ];
@@ -727,10 +761,49 @@
     function clearRollLog() { document.getElementById('rollLog').innerHTML=''; document.getElementById('rollResult').textContent='Resultado da rolagem aparecerá aqui.'; }
 
     function saveCharacter(show=false) {
-      const data={}; document.querySelectorAll('[data-save]').forEach(el=>data[el.id]=el.value); data.clan=selectedClan(); data.predator=selectedPredator(); data.dots={}; [...attrs.map(a=>a[0]),...skills.map(s=>s[0]),...disciplines.map(d=>'disc-'+slug(d))].forEach(id=>data.dots[id]=dots(id)); localStorage.setItem(storageKey, JSON.stringify(data)); if(show) alert('Ficha de Vampiro V5 salva no navegador.');
+      const data={};
+      document.querySelectorAll('[data-save]').forEach(el=>data[el.id]=el.value);
+      data.clan=selectedClan(); data.predator=selectedPredator(); data.dots={};
+      [...attrs.map(a=>a[0]),...skills.map(s=>s[0]),...disciplines.map(d=>'disc-'+slug(d))].forEach(id=>data.dots[id]=dots(id));
+      localStorage.setItem(storageKey, JSON.stringify(data));
+      saveSheetToCloud(data).catch(function(error){ console.warn('Não foi possível salvar no Firestore:', error); });
+      if(show) alert(currentUid() ? 'Ficha de Vampiro V5 salva na sua conta.' : 'Ficha salva no navegador. Faça login para salvar na conta.');
+    }
+    function applyCharacterData(data){
+      if(!data) return;
+      Object.entries(data).forEach(([k,v])=>{
+        if(k==='dots') Object.entries(v).forEach(([id,n])=>localStorage.setItem(storageKey+':dot:'+id,n));
+        else if(k==='clan') localStorage.setItem(storageKey+':clan',v);
+        else if(k==='predator') localStorage.setItem(storageKey+':predator',v);
+        else setVal(k,v);
+      });
     }
     function loadCharacter() {
-      const raw=localStorage.getItem(storageKey); if(!raw) return; try { const data=JSON.parse(raw); Object.entries(data).forEach(([k,v])=>{ if(k==='dots') Object.entries(v).forEach(([id,n])=>localStorage.setItem(storageKey+':dot:'+id,n)); else if(k==='clan') localStorage.setItem(storageKey+':clan',v); else if(k==='predator') localStorage.setItem(storageKey+':predator',v); else setVal(k,v); }); } catch(e) { console.warn(e); }
+      loadingFromCloud = true;
+      try { applyCharacterData(JSON.parse(localStorage.getItem(storageKey) || 'null')); } catch(e) { console.warn(e); }
+      loadingFromCloud = false;
+      const auth = getAuth();
+      if(auth){
+        auth.onAuthStateChanged(async function(user){
+          if(!user) return;
+          try{
+            const cloudData = await loadSheetFromCloud();
+            if(cloudData){
+              loadingFromCloud = true;
+              applyCharacterData(cloudData);
+              loadingFromCloud = false;
+              renderDots(); updateClanChoices(); const p=selectedPredator(); if(p) document.querySelectorAll('[data-predator]').forEach(el=>el.classList.toggle('selected',el.dataset.predator===p));
+              updateAll();
+              localStorage.setItem(storageKey, JSON.stringify(cloudData));
+            }else{
+              saveSheetToCloud(JSON.parse(localStorage.getItem(storageKey) || '{}')).catch(console.warn);
+            }
+          }catch(error){
+            loadingFromCloud = false;
+            console.warn('Não foi possível carregar a ficha do Firestore:', error);
+          }
+        });
+      }
     }
     function exportJSON() { saveCharacter(false); const blob=new Blob([localStorage.getItem(storageKey)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=(val('charName')||'ficha-vampiro-v5').toLowerCase().replace(/\s+/g,'-')+'.json'; a.click(); URL.revokeObjectURL(a.href); }
 
