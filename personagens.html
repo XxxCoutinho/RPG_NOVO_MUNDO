@@ -489,14 +489,8 @@
 
     form.addEventListener('submit', async function(event){
       event.preventDefault();
-
-      /*
-        Ao clicar em "Criar personagem", a página agora sempre monta a ficha
-        escolhida e direciona para o arquivo correspondente.
-        Se o usuário estiver logado, também tenta salvar no Firestore.
-        Se não estiver logado ou se o Firestore falhar, a ficha ainda é criada
-        localmente para não bloquear o redirecionamento.
-      */
+      const user = requireLogin();
+      if(getAuth() && !user) return;
 
       const formData = new FormData(form);
       const model = String(formData.get('sheetModel') || '');
@@ -546,19 +540,10 @@
         createdAt: new Date().toISOString()
       };
 
-      const targetUrl = buildSheetUrl(newAgent);
-
       await updateLocalAgent(newAgent);
+      await saveAgentToCloud(newAgent);
       localStorage.setItem('rpgNexusPersonagemEmCriacao', JSON.stringify(newAgent));
-
-      try{
-        const authUser = getAuth()?.currentUser || currentUser;
-        if(authUser) await saveAgentToCloud(newAgent);
-      }catch(error){
-        console.warn('Não foi possível salvar o personagem no Firestore antes de abrir a ficha. A cópia local foi mantida:', error);
-      }
-
-      window.location.assign(targetUrl);
+      window.location.href = buildSheetUrl(newAgent);
     });
 
     const auth = getAuth();
