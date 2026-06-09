@@ -3,36 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ordem Paranormal | RPG Nexus</title>
+  <title>Ficha Ordem Paranormal | RPG Nexus</title>
   <link rel="stylesheet" href="header.css" />
   <style>
     *{box-sizing:border-box}
     body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#151b35 0%,#090b14 45%,#04050a 100%);color:#fff;font-family:Arial,Helvetica,sans-serif}
     main{min-height:calc(100vh - 80px);padding:50px 8%;display:flex;align-items:center;justify-content:center}
     .panel{width:min(980px,100%);background:rgba(255,255,255,.07);border:1px solid rgba(245,199,107,.28);border-radius:22px;padding:32px;box-shadow:0 24px 80px rgba(0,0,0,.45);position:relative;overflow:hidden}
-    .panel::before{content:"";position:absolute;inset:-120px -80px auto auto;width:260px;height:260px;border-radius:50%;background:rgba(245,199,107,.10);filter:blur(8px);pointer-events:none}
-    .panel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;position:relative;z-index:1}
+    .panel::before{content:"";position:absolute;inset:-2px;background:radial-gradient(circle at top right,rgba(245,199,107,.13),transparent 35%),radial-gradient(circle at bottom left,rgba(111,25,65,.22),transparent 38%);pointer-events:none}
+    .panel-content{position:relative;z-index:1}
+    .panel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
     h1{margin:0 0 10px;color:#f5c76b;font-size:clamp(2rem,4vw,3.4rem)}
     h2{margin:0;color:#f5c76b;font-size:1.35rem}
     p{color:#ddd;line-height:1.6;font-size:1.05rem}
+    .construction-badge{display:inline-flex;align-items:center;gap:8px;margin-bottom:16px;padding:9px 13px;border-radius:999px;background:rgba(245,199,107,.12);border:1px solid rgba(245,199,107,.24);color:#f5c76b;font-size:.86rem;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+    .construction-icon{width:96px;height:96px;border-radius:26px;display:grid;place-items:center;background:rgba(245,199,107,.12);border:1px solid rgba(245,199,107,.28);box-shadow:0 18px 50px rgba(0,0,0,.25);font-size:3rem;flex:0 0 auto}
+    .hint{margin-top:18px;padding:14px 16px;border-radius:14px;background:rgba(245,199,107,.08);border:1px solid rgba(245,199,107,.18);color:#e9e1cf}
+    .status-grid{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+    .status-card{border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.22);border-radius:16px;padding:18px;color:#ddd}
+    .status-card h3{margin:0 0 8px;color:#fff;font-size:1.1rem}
+    .status-card p{margin:8px 0 0;color:#cfcfcf;font-size:.92rem;line-height:1.4}
+    .status-card span{display:inline-block;margin:5px 6px 0 0;padding:5px 9px;border-radius:999px;background:rgba(245,199,107,.12);border:1px solid rgba(245,199,107,.22);color:#f5c76b;font-size:.82rem;font-weight:700}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
     .btn,.btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border:0;cursor:pointer;padding:13px 18px;border-radius:10px;font-weight:800;font-size:.98rem;transition:.2s ease}
     .btn{background:#f5c76b;color:#161616;box-shadow:0 12px 30px rgba(245,199,107,.18)}
     .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
     .btn-secondary{background:rgba(255,255,255,.08);color:#f5c76b;border:1px solid rgba(245,199,107,.35)}
     .btn-secondary:hover{background:rgba(245,199,107,.12)}
-    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;position:relative;z-index:1}
-    .hint{margin-top:24px;padding:16px 18px;border-radius:14px;background:rgba(245,199,107,.08);border:1px solid rgba(245,199,107,.18);color:#e9e1cf;position:relative;z-index:1}
-    .construction-card{margin-top:26px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.22);border-radius:18px;padding:26px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;position:relative;z-index:1}
-    .construction-icon{width:76px;height:76px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:rgba(245,199,107,.12);border:1px solid rgba(245,199,107,.28);font-size:2.2rem;box-shadow:0 18px 40px rgba(0,0,0,.22)}
-    .status-tag{display:inline-block;margin:0 0 12px;padding:7px 11px;border-radius:999px;background:rgba(245,199,107,.12);border:1px solid rgba(245,199,107,.22);color:#f5c76b;font-size:.82rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
-    .construction-card h2{margin:0 0 8px;color:#fff;font-size:clamp(1.35rem,2.5vw,2rem)}
-    .construction-card p{margin:0;color:#cfcfcf;font-size:1rem;line-height:1.55}
-    .details-grid{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;position:relative;z-index:1}
-    .detail{border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.18);border-radius:14px;padding:14px}
-    .detail strong{display:block;color:#f5c76b;margin-bottom:6px;font-size:.9rem}
-    .detail span{color:#ddd;font-size:.95rem;line-height:1.4}
     footer{text-align:center;padding:20px;color:#aaa;background:rgba(0,0,0,.4);font-size:.9rem}
-    @media(max-width:620px){main{padding:28px 5%}.panel{padding:24px}.construction-card{grid-template-columns:1fr;text-align:left}.construction-icon{width:64px;height:64px;font-size:1.9rem}}
+    @media(max-width:620px){main{padding:28px 5%}.panel{padding:24px}.panel-header{display:block}.construction-icon{width:78px;height:78px;border-radius:20px;font-size:2.35rem;margin-bottom:18px}.actions .btn,.actions .btn-secondary{width:100%}}
   </style>
 </head>
 <body>
@@ -52,45 +51,44 @@
 
 <main>
   <section class="panel">
-    <div class="panel-header">
-      <div>
-        <h1>Ordem Paranormal</h1>
-        <p>Esta ficha ainda não está disponível para edição no RPG Nexus.</p>
+    <div class="panel-content">
+      <div class="panel-header">
+        <div>
+          <div class="construction-badge">Modelo em construção</div>
+          <h1>Ficha Ordem Paranormal</h1>
+          <p>Esta ficha ainda está sendo preparada para o RPG Nexus.</p>
+        </div>
+        <div class="construction-icon" aria-hidden="true">⚠️</div>
       </div>
-      <a class="btn" href="personagens.html">Voltar para personagens</a>
-    </div>
 
-    <div class="construction-card" aria-label="Página em construção">
-      <div class="construction-icon" aria-hidden="true">⚒️</div>
-      <div>
-        <span class="status-tag">Em construção</span>
-        <h2>Ficha em desenvolvimento</h2>
-        <p>Estamos preparando a tela guiada de <strong>Ordem Paranormal</strong>. Por enquanto, este modelo fica reservado no sistema para manter o fluxo de criação funcionando sem quebrar o layout.</p>
+      <div class="hint">
+        Em breve, este modelo terá campos próprios para agente, origem, classe, NEX, atributos, perícias, rituais, inventário e anotações da investigação.
       </div>
-    </div>
 
-    <div class="hint">
-      Você pode voltar para a página de personagens e escolher outro modelo de ficha já disponível.
-    </div>
+      <div class="status-grid" aria-label="Status da ficha Ordem Paranormal">
+        <article class="status-card">
+          <h3>Status atual</h3>
+          <span>Em construção</span>
+          <p>A estrutura visual já está reservada para receber a ficha completa.</p>
+        </article>
 
-    <div class="details-grid">
-      <div class="detail">
-        <strong>Modelo</strong>
-        <span>Ordem Paranormal</span>
-      </div>
-      <div class="detail">
-        <strong>Status</strong>
-        <span>Em construção</span>
-      </div>
-      <div class="detail">
-        <strong>Próxima etapa</strong>
-        <span>Adicionar criação guiada, campos da ficha e salvamento do personagem.</span>
-      </div>
-    </div>
+        <article class="status-card">
+          <h3>Modelo</h3>
+          <span>Ordem Paranormal</span>
+          <p>Esta página será usada quando o jogador escolher o modelo de ficha Ordem Paranormal.</p>
+        </article>
 
-    <div class="actions">
-      <a class="btn-secondary" href="index.html">Ir para início</a>
-      <a class="btn-secondary" href="campanhas.html">Ver campanhas</a>
+        <article class="status-card">
+          <h3>Próxima etapa</h3>
+          <span>Ficha guiada</span>
+          <p>Os blocos da ficha serão adicionados seguindo o mesmo padrão visual do site.</p>
+        </article>
+      </div>
+
+      <div class="actions">
+        <a class="btn" href="personagens.html">Voltar para Personagens</a>
+        <a class="btn-secondary" href="index.html">Ir para Início</a>
+      </div>
     </div>
   </section>
 </main>
@@ -103,10 +101,10 @@
 <script src="firebase-config.js"></script>
 <script src="auth.js"></script>
 <script>
-  function toggleMenu(){
+  window.toggleMenu = window.toggleMenu || function(){
     const menu = document.getElementById('menu');
     if(menu) menu.classList.toggle('active');
-  }
+  };
 </script>
 </body>
 </html>
