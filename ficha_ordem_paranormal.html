@@ -13,7 +13,91 @@
     }
     *{box-sizing:border-box} body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,rgba(143,38,50,.30),transparent 34rem),radial-gradient(circle at 80% 10%,rgba(120,87,216,.16),transparent 28rem),linear-gradient(135deg,#09080b 0%,var(--bg) 42%,#18080d 100%)}
     a{color:inherit;text-decoration:none}.site-header{position:sticky;top:0;z-index:100;backdrop-filter:blur(16px);background:rgba(12,10,15,.86);border-bottom:1px solid var(--line)}
-    .header-wrap{max-width:1220px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:12px;min-width:fit-content}.brand-mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-weight:900;color:#130b0d;background:linear-gradient(135deg,var(--red-2),var(--gold));box-shadow:0 10px 24px rgba(190,55,73,.20)}.brand small{color:var(--muted);display:block;margin-top:2px}.brand strong{letter-spacing:.04em}.nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.nav a,.ghost-btn,.primary-btn,.danger-btn{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:10px 12px;border-radius:999px;font-size:.92rem;cursor:pointer;transition:.18s ease;display:inline-flex;align-items:center;justify-content:center;gap:8px}.nav a:hover,.ghost-btn:hover{border-color:rgba(215,180,106,.65);transform:translateY(-1px)}.nav a.active{background:rgba(215,180,106,.16);border-color:rgba(215,180,106,.75);color:var(--gold-2)}.primary-btn{background:linear-gradient(135deg,var(--red),var(--red-2));border-color:rgba(255,255,255,.12);font-weight:800}.danger-btn{background:rgba(143,38,50,.16);border-color:rgba(190,55,73,.52);color:#ffd6dc}.page{max-width:1220px;margin:0 auto;padding:28px 18px 56px}.hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:18px;align-items:stretch;margin-bottom:18px}.panel,.sheet-card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(38,30,46,.94),rgba(23,19,29,.94));border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.hero-main{padding:28px;position:relative}.hero-main:after{content:"";position:absolute;inset:auto 24px 0 auto;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(190,55,73,.18),transparent 68%);pointer-events:none}.eyebrow{color:var(--gold-2);text-transform:uppercase;letter-spacing:.16em;font-size:.74rem;font-weight:900;margin:0 0 8px}h1,h2,h3{margin:0}h1{font-size:clamp(2rem,4vw,3.35rem);line-height:.98;letter-spacing:-.04em}.hero-main p{color:var(--muted);max-width:800px;line-height:1.6;margin:14px 0 0}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.hero-side{padding:18px;display:grid;gap:12px}.stat-pill{display:flex;justify-content:space-between;gap:12px;padding:14px;border-radius:16px;border:1px solid var(--line-2);background:rgba(255,255,255,.035)}.stat-pill span{color:var(--muted);font-size:.85rem}.stat-pill strong{color:var(--gold-2);font-size:1.05rem}.layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:18px;align-items:start}.sidebar{position:sticky;top:86px;padding:14px}.steps{display:grid;gap:8px}.step-btn{width:100%;display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--line-2);background:rgba(255,255,255,.035);color:var(--text);padding:12px;border-radius:14px;cursor:pointer}.step-btn:hover{border-color:rgba(215,180,106,.50)}.step-btn.active{background:rgba(143,38,50,.22);border-color:rgba(215,180,106,.55)}.step-num{width:28px;height:28px;border-radius:10px;display:grid;place-items:center;background:rgba(215,180,106,.14);color:var(--gold-2);font-weight:900}.step-meta{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}.content{min-width:0}.step-panel{display:none;padding:18px}.step-panel.active{display:block}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding-bottom:16px;border-bottom:1px solid var(--line-2);margin-bottom:16px}.section-head p{color:var(--muted);line-height:1.55;margin:6px 0 0}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.field{grid-column:span 6;display:grid;gap:7px}.field.full{grid-column:1/-1}.field.third{grid-column:span 4}.field.quarter{grid-column:span 3}.field.small{grid-column:span 2}label{font-size:.82rem;color:var(--gold-2);font-weight:800;letter-spacing:.03em}input,select,textarea{width:100%;border:1px solid var(--line-2);background:rgba(9,8,11,.55);color:var(--text);border-radius:13px;padding:11px 12px;font:inherit;outline:none}textarea{min-height:92px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:rgba(215,180,106,.65);box-shadow:0 0 0 3px rgba(215,180,106,.08)}.hint{color:var(--muted);font-size:.86rem;line-height:1.45}.mini-card{border:1px solid var(--line-2);background:rgba(255,255,255,.035);border-radius:16px;padding:14px}.mini-card h3{font-size:1rem;color:var(--gold-2);margin-bottom:8px}.attr-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.attr{border:1px solid var(--line-2);background:rgba(255,255,255,.035);border-radius:16px;padding:12px;display:grid;gap:9px;text-align:center}.attr strong{color:var(--gold-2)}.attr input{text-align:center;font-size:1.2rem;font-weight:900;padding:9px}.attr span{font-size:.85rem;color:var(--muted)}.calc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.big-stat{border:1px solid var(--line-2);border-radius:16px;background:rgba(255,255,255,.035);padding:14px;text-align:center}.big-stat span{display:block;color:var(--muted);font-size:.85rem}.big-stat strong{display:block;color:var(--gold-2);font-size:1.5rem;margin-top:4px}.check-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.check-item{display:flex;gap:9px;align-items:center;border:1px solid var(--line-2);background:rgba(255,255,255,.025);border-radius:13px;padding:9px}.check-item input{width:auto}.skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.skill-row{display:grid;grid-template-columns:24px 1fr 90px 70px;gap:8px;align-items:center;border:1px solid var(--line-2);border-radius:14px;padding:8px;background:rgba(255,255,255,.025)}.skill-row input[type=checkbox]{width:auto}.skill-row b{font-size:.92rem}.skill-row small{color:var(--muted)}.skill-row input[type=number]{padding:8px;text-align:center}.table-wrap{overflow:auto;border:1px solid var(--line-2);border-radius:16px}table{width:100%;border-collapse:collapse;min-width:680px}th,td{border-bottom:1px solid var(--line-2);padding:10px;text-align:left}th{color:var(--gold-2);font-size:.82rem;background:rgba(255,255,255,.035)}td input,td select{min-width:100px}.bar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red-2),var(--gold));width:0%}.footer-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--line-2)}.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;background:rgba(215,180,106,.12);color:var(--gold-2);font-size:.8rem;font-weight:800}.roller{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end}.roll-log{display:grid;gap:8px;max-height:260px;overflow:auto}.log-item{border:1px solid var(--line-2);background:rgba(0,0,0,.16);border-radius:14px;padding:10px}.sheet-summary{display:grid;grid-template-columns:1fr 1fr;gap:12px}.summary-box{border:1px solid var(--line-2);border-radius:16px;padding:14px;background:rgba(255,255,255,.025)}.summary-box h3{color:var(--gold-2);font-size:1rem;margin-bottom:8px}.summary-box p{color:var(--muted);margin:4px 0;line-height:1.45}.print-only{display:none}@media(max-width:920px){.hero,.layout{grid-template-columns:1fr}.sidebar{position:static}.attr-grid{grid-template-columns:repeat(2,1fr)}.calc-row,.sheet-summary{grid-template-columns:1fr 1fr}.field,.field.third,.field.quarter,.field.small{grid-column:1/-1}.skills-grid,.check-list{grid-template-columns:1fr}.roller{grid-template-columns:1fr}.nav{justify-content:flex-start}.header-wrap{align-items:flex-start;flex-direction:column}}@media(max-width:520px){.calc-row{grid-template-columns:1fr}.attr-grid{grid-template-columns:1fr}.hero-main{padding:20px}.step-panel{padding:14px}.skill-row{grid-template-columns:24px 1fr 62px 54px}.brand small{display:none}}@media print{body{background:white;color:#111}.site-header,.sidebar,.hero,.footer-actions,.no-print{display:none!important}.page{padding:0;max-width:none}.layout{display:block}.step-panel{display:block!important;padding:0}.sheet-card,.panel{box-shadow:none;border:0;background:white}.print-only{display:block}.content .step-panel:not(#step-final){display:none!important}.summary-box{break-inside:avoid;border:1px solid #999;background:white;color:#111}.summary-box p{color:#222}.summary-box h3{color:#111}}
+    .header-wrap{max-width:1220px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:12px;min-width:fit-content}.brand-mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-weight:900;color:#130b0d;background:linear-gradient(135deg,var(--red-2),var(--gold));box-shadow:0 10px 24px rgba(190,55,73,.20)}.brand small{color:var(--muted);display:block;margin-top:2px}.brand strong{letter-spacing:.04em}.nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.nav a,.ghost-btn,.primary-btn,.danger-btn{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:10px 12px;border-radius:999px;font-size:.92rem;cursor:pointer;transition:.18s ease;display:inline-flex;align-items:center;justify-content:center;gap:8px}.nav a:hover,.ghost-btn:hover{border-color:rgba(215,180,106,.65);transform:translateY(-1px)}.nav a.active{background:rgba(215,180,106,.16);border-color:rgba(215,180,106,.75);color:var(--gold-2)}.primary-btn{background:linear-gradient(135deg,var(--red),var(--red-2));border-color:rgba(255,255,255,.12);font-weight:800}.danger-btn{background:rgba(143,38,50,.16);border-color:rgba(190,55,73,.52);color:#ffd6dc}.page{max-width:1220px;margin:0 auto;padding:28px 18px 56px}.hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(420px,.92fr);gap:18px;align-items:stretch;margin-bottom:18px}.panel,.sheet-card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(38,30,46,.94),rgba(23,19,29,.94));border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.hero-main{padding:28px;position:relative}.hero-main:after{content:"";position:absolute;inset:auto 24px 0 auto;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(190,55,73,.18),transparent 68%);pointer-events:none}.eyebrow{color:var(--gold-2);text-transform:uppercase;letter-spacing:.16em;font-size:.74rem;font-weight:900;margin:0 0 8px}h1,h2,h3{margin:0}h1{font-size:clamp(2rem,4vw,3.35rem);line-height:.98;letter-spacing:-.04em}.hero-main p{color:var(--muted);max-width:660px;line-height:1.6;margin:14px 0 0}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.hero-side{padding:18px;display:grid;grid-template-columns:minmax(180px,220px) minmax(0,1fr);gap:12px;align-items:stretch}.hero-side-stats{display:grid;gap:12px;min-width:0}.stat-pill{display:flex;justify-content:space-between;gap:12px;padding:14px;border-radius:16px;border:1px solid var(--line-2);background:rgba(255,255,255,.035)}.stat-pill span{color:var(--muted);font-size:.85rem}.stat-pill strong{color:var(--gold-2);font-size:1.05rem}.layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:18px;align-items:start}.sidebar{position:sticky;top:86px;padding:14px}.steps{display:grid;gap:8px}.step-btn{width:100%;display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--line-2);background:rgba(255,255,255,.035);color:var(--text);padding:12px;border-radius:14px;cursor:pointer}.step-btn:hover{border-color:rgba(215,180,106,.50)}.step-btn.active{background:rgba(143,38,50,.22);border-color:rgba(215,180,106,.55)}.step-num{width:28px;height:28px;border-radius:10px;display:grid;place-items:center;background:rgba(215,180,106,.14);color:var(--gold-2);font-weight:900}.step-meta{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}.content{min-width:0}.step-panel{display:none;padding:18px}.step-panel.active{display:block}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding-bottom:16px;border-bottom:1px solid var(--line-2);margin-bottom:16px}.section-head p{color:var(--muted);line-height:1.55;margin:6px 0 0}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.field{grid-column:span 6;display:grid;gap:7px}.field.full{grid-column:1/-1}.field.third{grid-column:span 4}.field.quarter{grid-column:span 3}.field.small{grid-column:span 2}label{font-size:.82rem;color:var(--gold-2);font-weight:800;letter-spacing:.03em}input,select,textarea{width:100%;border:1px solid var(--line-2);background:rgba(9,8,11,.55);color:var(--text);border-radius:13px;padding:11px 12px;font:inherit;outline:none}textarea{min-height:92px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:rgba(215,180,106,.65);box-shadow:0 0 0 3px rgba(215,180,106,.08)}.hint{color:var(--muted);font-size:.86rem;line-height:1.45}.mini-card{border:1px solid var(--line-2);background:rgba(255,255,255,.035);border-radius:16px;padding:14px}.mini-card h3{font-size:1rem;color:var(--gold-2);margin-bottom:8px}.attr-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.attr{border:1px solid var(--line-2);background:rgba(255,255,255,.035);border-radius:16px;padding:12px;display:grid;gap:9px;text-align:center}.attr strong{color:var(--gold-2)}.attr input{text-align:center;font-size:1.2rem;font-weight:900;padding:9px}.attr span{font-size:.85rem;color:var(--muted)}.calc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.big-stat{border:1px solid var(--line-2);border-radius:16px;background:rgba(255,255,255,.035);padding:14px;text-align:center}.big-stat span{display:block;color:var(--muted);font-size:.85rem}.big-stat strong{display:block;color:var(--gold-2);font-size:1.5rem;margin-top:4px}.check-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.check-item{display:flex;gap:9px;align-items:center;border:1px solid var(--line-2);background:rgba(255,255,255,.025);border-radius:13px;padding:9px}.check-item input{width:auto}.skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.skill-row{display:grid;grid-template-columns:24px 1fr 90px 70px;gap:8px;align-items:center;border:1px solid var(--line-2);border-radius:14px;padding:8px;background:rgba(255,255,255,.025)}.skill-row input[type=checkbox]{width:auto}.skill-row b{font-size:.92rem}.skill-row small{color:var(--muted)}.skill-row input[type=number]{padding:8px;text-align:center}.table-wrap{overflow:auto;border:1px solid var(--line-2);border-radius:16px}table{width:100%;border-collapse:collapse;min-width:680px}th,td{border-bottom:1px solid var(--line-2);padding:10px;text-align:left}th{color:var(--gold-2);font-size:.82rem;background:rgba(255,255,255,.035)}td input,td select{min-width:100px}.bar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red-2),var(--gold));width:0%}.footer-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--line-2)}.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;background:rgba(215,180,106,.12);color:var(--gold-2);font-size:.8rem;font-weight:800}.roller{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end}.roll-log{display:grid;gap:8px;max-height:260px;overflow:auto}.log-item{border:1px solid var(--line-2);background:rgba(0,0,0,.16);border-radius:14px;padding:10px}.sheet-summary{display:grid;grid-template-columns:1fr 1fr;gap:12px}.summary-box{border:1px solid var(--line-2);border-radius:16px;padding:14px;background:rgba(255,255,255,.025)}.summary-box h3{color:var(--gold-2);font-size:1rem;margin-bottom:8px}.summary-box p{color:var(--muted);margin:4px 0;line-height:1.45}.print-only{display:none}@media(max-width:920px){.hero,.layout{grid-template-columns:1fr}.hero-side{grid-template-columns:1fr}.sidebar{position:static}.attr-grid{grid-template-columns:repeat(2,1fr)}.calc-row,.sheet-summary{grid-template-columns:1fr 1fr}.field,.field.third,.field.quarter,.field.small{grid-column:1/-1}.skills-grid,.check-list{grid-template-columns:1fr}.roller{grid-template-columns:1fr}.nav{justify-content:flex-start}.header-wrap{align-items:flex-start;flex-direction:column}}@media(max-width:520px){.calc-row{grid-template-columns:1fr}.attr-grid{grid-template-columns:1fr}.hero-main{padding:20px}.step-panel{padding:14px}.skill-row{grid-template-columns:24px 1fr 62px 54px}.brand small{display:none}}
+    /* Foto do agente no painel lateral do cabeçalho */
+    .hero-text{min-width:0;position:relative;z-index:1}
+    .agent-photo-card{position:relative;z-index:1;border:1px solid rgba(215,180,106,.36);background:rgba(9,8,11,.42);border-radius:18px;padding:12px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+    .hero-side .agent-photo-card{margin-bottom:0;height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto}
+    .agent-photo-frame{width:100%;height:100%;min-height:220px;aspect-ratio:auto;border:1px dashed rgba(215,180,106,.58);border-radius:15px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.18));display:grid;place-items:center;overflow:hidden;position:relative;cursor:pointer;text-align:center;color:var(--muted)}
+    .agent-photo-frame:hover{border-color:rgba(241,211,139,.9);background:rgba(255,255,255,.06)}
+    .agent-photo-frame img{width:100%;height:100%;object-fit:cover;display:none}
+    .agent-photo-frame.has-photo img{display:block}
+    .agent-photo-frame.has-photo .agent-photo-placeholder{display:none}
+    .agent-photo-placeholder{padding:16px;display:grid;gap:8px;place-items:center;font-size:.86rem;line-height:1.35}
+    .agent-photo-placeholder strong{color:var(--gold-2);font-size:.95rem}
+    .agent-photo-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}
+    .agent-photo-actions .ghost-btn,.agent-photo-actions .danger-btn{width:100%;min-height:30px;padding:5px 8px;font-size:.76rem;line-height:1;border-radius:999px}
+    .agent-photo-input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
+    @media(max-width:920px){.hero-side .agent-photo-card{height:auto}.hero-side-stats{grid-template-columns:1fr}}@media(max-width:520px){.agent-photo-frame{min-height:220px}}
+
+    /* Correção final: a foto pertence ao painel lateral, nunca ao bloco do título */
+    .hero-main{display:block!important}
+    .hero-main>.agent-photo-card{display:none!important}
+    .hero-side>.agent-photo-card{display:block!important;order:-1}
+
+    /* AJUSTE FINAL REAL - card da foto com botões dentro do layout */
+    .hero-side{
+      grid-template-columns:minmax(145px,175px) minmax(0,1fr)!important;
+      align-items:start!important;
+    }
+    .hero-side>.agent-photo-card{
+      display:grid!important;
+      grid-template-rows:minmax(0,1fr) 24px!important;
+      height:250px!important;
+      min-height:250px!important;
+      max-height:250px!important;
+      padding:8px!important;
+      overflow:hidden!important;
+      align-self:start!important;
+      order:-1!important;
+    }
+    .hero-side>.agent-photo-card .agent-photo-frame{
+      width:100%!important;
+      height:100%!important;
+      min-height:0!important;
+      max-height:none!important;
+      aspect-ratio:auto!important;
+      margin:0!important;
+      border-radius:14px!important;
+    }
+    .hero-side>.agent-photo-card .agent-photo-placeholder{
+      padding:8px!important;
+      gap:4px!important;
+      font-size:.74rem!important;
+      line-height:1.15!important;
+    }
+    .hero-side>.agent-photo-card .agent-photo-placeholder strong{
+      font-size:.84rem!important;
+    }
+    .hero-side>.agent-photo-card .agent-photo-actions{
+      display:grid!important;
+      grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+      gap:5px!important;
+      margin-top:6px!important;
+      height:24px!important;
+      min-height:24px!important;
+      overflow:hidden!important;
+    }
+    .hero-side>.agent-photo-card .agent-photo-actions .ghost-btn,
+    .hero-side>.agent-photo-card .agent-photo-actions .danger-btn{
+      width:100%!important;
+      min-width:0!important;
+      height:24px!important;
+      min-height:24px!important;
+      max-height:24px!important;
+      padding:0 5px!important;
+      font-size:.68rem!important;
+      line-height:1!important;
+      border-radius:999px!important;
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:ellipsis!important;
+    }
+    @media(max-width:520px){
+      .hero-side>.agent-photo-card{height:230px!important;min-height:230px!important;max-height:230px!important}
+    }
+
+@media print{body{background:white;color:#111}.site-header,.sidebar,.hero,.footer-actions,.no-print{display:none!important}.page{padding:0;max-width:none}.layout{display:block}.step-panel{display:block!important;padding:0}.sheet-card,.panel{box-shadow:none;border:0;background:white}.print-only{display:block}.content .step-panel:not(#step-final){display:none!important}.summary-box{break-inside:avoid;border:1px solid #999;background:white;color:#111}.summary-box p{color:#222}.summary-box h3{color:#111}}
   </style>
 </head>
 <body>
@@ -28,16 +112,27 @@
   <main class="page">
     <section class="hero">
       <div class="panel hero-main">
-        <p class="eyebrow">Ordem Paranormal RPG</p>
-        <h1>Ficha de Agente Guiada</h1>
-        <p>Crie um agente passo a passo, mantendo a mesma identidade visual das fichas guiadas do site. A ficha organiza conceito, atributos, origem, classe, perícias, combate, equipamento, rituais e revisão final.</p>
-        <div class="hero-actions"><button class="primary-btn" id="startBtn">Começar criação</button><button class="ghost-btn" id="saveBtnTop">Salvar</button><button class="ghost-btn" id="exportBtnTop">Exportar JSON</button><button class="danger-btn" id="resetBtnTop">Limpar ficha</button></div>
+        <div class="hero-text">
+          <p class="eyebrow">Ordem Paranormal RPG</p>
+          <h1>Ficha de Agente Guiada</h1>
+          <p>Crie um agente passo a passo, mantendo a mesma identidade visual das fichas guiadas do site. A ficha organiza conceito, atributos, origem, classe, perícias, combate, equipamento, rituais e revisão final.</p>
+          <div class="hero-actions"><button class="primary-btn" id="startBtn">Começar criação</button><button class="ghost-btn" id="saveBtnTop">Salvar</button><button class="ghost-btn" id="exportBtnTop">Exportar JSON</button><button class="danger-btn" id="resetBtnTop">Limpar ficha</button></div>
+        </div>
       </div>
       <aside class="panel hero-side">
-        <div class="stat-pill"><span>Agente</span><strong id="heroName">Sem nome</strong></div>
-        <div class="stat-pill"><span>Classe</span><strong id="heroClass">—</strong></div>
-        <div class="stat-pill"><span>NEX</span><strong id="heroNex">5%</strong></div>
-        <div class="stat-pill"><span>Defesa / PV / SAN</span><strong id="heroCombat">10 / 0 / 0</strong></div>
+        <div class="agent-photo-card no-print" aria-label="Foto do agente">
+          <label class="agent-photo-frame" id="agentPhotoFrame" for="agentPhotoInput">
+            <img id="agentPhotoPreview" alt="Foto do agente">
+            <span class="agent-photo-placeholder"><strong>Foto do agente</strong><span>Clique para adicionar imagem</span></span>
+          </label>
+          <input class="agent-photo-input" id="agentPhotoInput" type="file" accept="image/*">
+        </div>
+        <div class="hero-side-stats">
+          <div class="stat-pill"><span>Agente</span><strong id="heroName">Sem nome</strong></div>
+          <div class="stat-pill"><span>Classe</span><strong id="heroClass">—</strong></div>
+          <div class="stat-pill"><span>NEX</span><strong id="heroNex">5%</strong></div>
+          <div class="stat-pill"><span>Defesa / PV / SAN</span><strong id="heroCombat">10 / 0 / 0</strong></div>
+        </div>
       </aside>
     </section>
 
@@ -170,7 +265,7 @@
     'Acadêmico':'Ciências, Atualidades ou Investigação. Foco em estudo e pesquisa.', 'Agente de Saúde':'Medicina e Intuição. Foco em atendimento, hospital ou emergência.', 'Amnésico':'Escolha livre com aval do mestre. Foco em passado perdido.', 'Artista':'Artes e Enganação ou Diplomacia. Foco em fama, performance e expressão.', 'Atleta':'Atletismo e Fortitude ou Reflexos. Foco em preparo físico.', 'Chef':'Fortitude e Profissão. Foco em cozinha, rotina e resistência.', 'Criminoso':'Crime e Furtividade. Foco em submundo e contatos perigosos.', 'Cultista Arrependido':'Ocultismo e Religião. Foco em passado ligado ao Outro Lado.', 'Desgarrado':'Sobrevivência e Fortitude. Foco em viver à margem.', 'Engenheiro':'Profissão e Tecnologia. Foco em construção e solução técnica.', 'Executivo':'Diplomacia e Profissão. Foco em recursos, influência e liderança.', 'Investigador':'Investigação e Percepção. Foco em pistas e casos.', 'Lutador':'Luta e Reflexos. Foco em combate físico.', 'Magnata':'Diplomacia e Profissão. Foco em riqueza e influência.', 'Mercenário':'Iniciativa e Pontaria ou Luta. Foco em combate contratado.', 'Militar':'Tática e Pontaria. Foco em operação, disciplina e armas.', 'Operário':'Fortitude e Profissão. Foco em trabalho pesado.', 'Policial':'Percepção e Pontaria ou Investigação. Foco em lei e perseguição.', 'Religioso':'Religião e Vontade. Foco em fé e símbolos.', 'Servidor Público':'Atualidades e Diplomacia. Foco em burocracia.', 'Teórico da Conspiração':'Investigação e Ocultismo. Foco em paranoia e padrões.', 'T.I.':'Tecnologia e Investigação. Foco em sistemas e invasões.', 'Trabalhador Rural':'Sobrevivência e Adestramento. Foco em natureza e resistência.', 'Trambiqueiro':'Enganação e Crime. Foco em golpes e improviso.', 'Universitário':'Atualidades e Ciências. Foco em estudo recente.', 'Vítima':'Vontade e Percepção. Foco em sobreviver a um trauma paranormal.'
   };
   const skills=[['Acrobacia','agi'],['Adestramento','pre'],['Artes','pre'],['Atletismo','for'],['Atualidades','int'],['Ciências','int'],['Crime','agi'],['Diplomacia','pre'],['Enganação','pre'],['Fortitude','vig'],['Furtividade','agi'],['Iniciativa','agi'],['Intimidação','pre'],['Intuição','pre'],['Investigação','int'],['Luta','for'],['Medicina','int'],['Ocultismo','int'],['Percepção','pre'],['Pilotagem','agi'],['Pontaria','agi'],['Profissão','int'],['Reflexos','agi'],['Religião','pre'],['Sobrevivência','int'],['Tática','int'],['Tecnologia','int'],['Vontade','pre']];
-  let current=0, attacks=[], items=[], rituals=[], log=[];
+  let current=0, attacks=[], items=[], rituals=[], log=[], agentPhotoData="";
   const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
   function setup(){
     $('#stepsNav').innerHTML=steps.map((s,i)=>`<button class="step-btn ${i===0?'active':''}" type="button" data-step="${i}"><span class="step-num">${i+1}</span><span><b>${s[1]}</b><span class="step-meta">${s[2]}</span></span></button>`).join('');
@@ -188,13 +283,14 @@
     ['saveBtn','saveBtnTop'].forEach(id=>$('#'+id).onclick=()=>save(true));['exportBtn','exportBtnTop'].forEach(id=>$('#'+id).onclick=exportJSON);
     ['resetBtnTop'].forEach(id=>$('#'+id).onclick=resetSheet);$('#addAttackBtn').onclick=()=>{addAttack();renderAttacks();save(false)};$('#addItemBtn').onclick=()=>{addItem();renderItems();save(false)};$('#addRitualBtn').onclick=()=>{addRitual();renderRituals();save(false)};$('#rollBtn').onclick=rollTest;$('#clearLogBtn').onclick=()=>{log=[];renderLog();save(false)};
     $('#sheetForm').addEventListener('input',e=>{if(e.target && e.target.dataset && e.target.dataset.arr)return;renderAll();save(false)});$('#sheetForm').addEventListener('change',e=>{if(e.target && e.target.dataset && e.target.dataset.arr)return;renderAll();save(false)});
+    $('#agentPhotoInput').addEventListener('change',handleAgentPhotoUpload);const removeAgentPhotoBtn=$('#removeAgentPhotoBtn');if(removeAgentPhotoBtn){removeAgentPhotoBtn.onclick=()=>{agentPhotoData='';renderAgentPhoto();save(false)}};
   }
   function goStep(i){current=i;$$('.step-panel').forEach(p=>p.classList.remove('active'));$('#step-'+steps[i][0]).classList.add('active');$$('.step-btn').forEach((b,idx)=>b.classList.toggle('active',idx===i));$('#nextBtn').textContent=i===steps.length-1?'Finalizado':'Próxima etapa';window.scrollTo({top:0,behavior:'smooth'});renderAll()}
   function labelAttr(a){return attrs.find(x=>x[0]===a)?.[1]||a} function slug(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'_').toLowerCase()} function num(name){return +($(`[name="${name}"]`)?.value||0)} function val(name){return $(`[name="${name}"]`)?.value||''} function mod(a){return num(a)}
   function treinoBonus(){const nex=num('nex');return nex>=70?15:nex>=35?10:5} function limitePeRodada(){return Math.max(1,Math.floor(num('nex')/5))}
   function calcBase(){const cls=classes[val('classe')]||classes.Combatente;const nexSteps=Math.max(0,Math.floor((num('nex')-5)/5));const vig=mod('vig'), pre=mod('pre');let pv=cls.pv+vig;let pe=cls.pe+pre;let san=cls.san; if(nexSteps>0){ if(val('classe')==='Combatente'){pv+=nexSteps*(4+vig);pe+=nexSteps*2;san+=nexSteps*3} if(val('classe')==='Especialista'){pv+=nexSteps*(3+vig);pe+=nexSteps*3;san+=nexSteps*4} if(val('classe')==='Ocultista'){pv+=nexSteps*(2+vig);pe+=nexSteps*4;san+=nexSteps*5} } return {pv:Math.max(1,pv),pe:Math.max(1,pe),san:Math.max(1,san),def:10+mod('agi')+num('bonusDefesa'),lim:limitePeRodada()}}
   function skillTotal(n){const s=skills.find(x=>x[0]===n); if(!s)return 0; const trained=$(`[name="skill_${slug(n)}"]`)?.checked; return mod(s[1])+(trained?treinoBonus():0)+(+($(`[name="skillBonus_${slug(n)}"]`)?.value||0))}
-  function renderAll(){renderOriginHint();renderStats();renderSkills();renderAttacks();renderItems();renderRituals();renderLog();renderSummary();}
+  function renderAll(){renderOriginHint();renderStats();renderSkills();renderAttacks();renderItems();renderRituals();renderLog();renderSummary();renderAgentPhoto();}
   function renderOriginHint(){const o=val('origem')||Object.keys(origens)[0];$('#origemHint').textContent=origens[o]||''}
   function renderStats(){const c=calcBase();$('#defesaCalc').textContent=c.def;$('#iniCalc').textContent=(skillTotal('Iniciativa')>=0?'+':'')+skillTotal('Iniciativa');$('#pvCalc').textContent=c.pv;$('#sanCalc').textContent=c.san;$('#pvClasse').textContent=c.pv;$('#peClasse').textContent=c.pe;$('#sanClasse').textContent=c.san;$('#limitePe').textContent=c.lim;$('#heroName').textContent=val('nome')||'Sem nome';$('#heroClass').textContent=val('classe')||'—';$('#heroNex').textContent=(val('nex')||5)+'%';$('#heroCombat').textContent=`${c.def} / ${c.pv} / ${c.san}`;setBar('pvBar',num('pvAtual'),c.pv);setBar('peBar',num('peAtual'),c.pe);setBar('sanBar',num('sanAtual'),c.san)}
   function setBar(id,cur,max){const pct=max?Math.max(0,Math.min(100,cur/max*100)):0;$('#'+id).style.width=pct+'%'}
@@ -210,8 +306,11 @@
   function sel(a,b){return a===b?'selected':''} function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;')}
   function rollTest(){const opt=$('#rollSkill').value;let name=opt,totalBonus=0;if(opt.startsWith('atributo:')){const a=opt.split(':')[1];name=labelAttr(a);totalBonus=mod(a)}else totalBonus=skillTotal(opt);totalBonus+= +$('#rollBonus').value||0;const d=Math.floor(Math.random()*20)+1;const total=d+totalBonus;const dt=+$('#rollDT').value||0;log.unshift({name,d,totalBonus,total,dt,ok:total>=dt,date:new Date().toLocaleTimeString()});renderLog();save(false)}
   function renderLog(){const box=$('#rollLog');box.innerHTML=log.length?log.map(l=>`<div class="log-item"><b>${esc(l.name)}</b> — d20: <b>${l.d}</b> ${l.totalBonus>=0?'+':''}${l.totalBonus} = <b>${l.total}</b> contra DT ${l.dt} • <span style="color:${l.ok?'var(--green)':'#ff9aa8'}">${l.ok?'Sucesso':'Falha'}</span><br><small class="hint">${l.date}</small></div>`).join(''):'<p class="hint">Nenhuma rolagem ainda.</p>'}
-  function collect(){const data={}; new FormData($('#sheetForm')).forEach((v,k)=>data[k]=v); attrs.forEach(([a])=>data[a]=num(a)); skills.forEach(([n])=>{data['skill_'+slug(n)]=$(`[name="skill_${slug(n)}"]`).checked;data['skillBonus_'+slug(n)]=+($(`[name="skillBonus_${slug(n)}"]`).value||0)});data.attacks=attacks;data.items=items;data.rituals=rituals;data.log=log;data.current=current;return data}
-  function apply(data){if(!data)return;Object.entries(data).forEach(([k,v])=>{const el=$(`[name="${k}"]`);if(el){if(el.type==='checkbox')el.checked=!!v;else el.value=v}});attacks=data.attacks||[];items=data.items||[];rituals=data.rituals||[];log=data.log||[];current=data.current||0;goStep(current)}
+  function renderAgentPhoto(){const frame=$('#agentPhotoFrame'), img=$('#agentPhotoPreview');if(!frame||!img)return; if(agentPhotoData){img.src=agentPhotoData;frame.classList.add('has-photo')}else{img.removeAttribute('src');frame.classList.remove('has-photo')}}
+  function handleAgentPhotoUpload(e){const file=e.target.files&&e.target.files[0]; if(!file)return; if(!file.type.startsWith('image/')){toast('Escolha um arquivo de imagem.');e.target.value='';return} const reader=new FileReader();reader.onload=()=>resizeAgentPhoto(reader.result);reader.readAsDataURL(file)}
+  function resizeAgentPhoto(src){const img=new Image();img.onload=()=>{const max=900;let w=img.width,h=img.height;if(w>h&&w>max){h=Math.round(h*max/w);w=max}else if(h>=w&&h>max){w=Math.round(w*max/h);h=max}const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,w,h);agentPhotoData=canvas.toDataURL('image/jpeg',.86);renderAgentPhoto();save(false);toast('Foto do agente adicionada.');};img.src=src}
+  function collect(){const data={}; new FormData($('#sheetForm')).forEach((v,k)=>data[k]=v); attrs.forEach(([a])=>data[a]=num(a)); skills.forEach(([n])=>{data['skill_'+slug(n)]=$(`[name="skill_${slug(n)}"]`).checked;data['skillBonus_'+slug(n)]=+($(`[name="skillBonus_${slug(n)}"]`).value||0)});data.attacks=attacks;data.items=items;data.rituals=rituals;data.log=log;data.agentPhoto=agentPhotoData;data.current=current;return data}
+  function apply(data){if(!data)return;Object.entries(data).forEach(([k,v])=>{const el=$(`[name="${k}"]`);if(el){if(el.type==='checkbox')el.checked=!!v;else el.value=v}});attacks=data.attacks||[];items=data.items||[];rituals=data.rituals||[];log=data.log||[];agentPhotoData=data.agentPhoto||'';current=data.current||0;goStep(current)}
   function save(show){
     const data = collect();
     localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
@@ -257,6 +356,17 @@
     <div class="summary-box"><h3>Rituais e poderes</h3><p>${rituals.filter(a=>a.nome).map(a=>`${esc(a.nome)} — ${esc(a.elemento)} ${esc(a.circulo)} (${esc(a.custo)})`).join('<br>')||'—'}</p></div>
     <div class="summary-box"><h3>Anotações</h3><p><b>Contato:</b> ${esc(val('contato')||'—')}</p><p><b>Condições:</b> ${esc(val('condicoes')||'—')}</p><p><b>Outro Lado:</b> ${esc(val('anotacoesParanormais')||'—')}</p></div>`}
   document.addEventListener('DOMContentLoaded',setup);
+  </script>
+
+  <script>
+    // Garante que a foto fique dentro do painel lateral junto de Agente / Classe / NEX / Defesa.
+    document.addEventListener('DOMContentLoaded', function(){
+      const side = document.querySelector('.hero-side');
+      const photo = document.querySelector('.agent-photo-card');
+      if(side && photo && photo.parentElement !== side){
+        side.insertBefore(photo, side.firstChild);
+      }
+    });
   </script>
 </body>
 </html>
