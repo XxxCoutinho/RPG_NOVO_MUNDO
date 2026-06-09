@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mago: A Ascensão | RPG Nexus</title>
+  <link rel="stylesheet" href="header.css" />
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#151b35 0%,#090b14 45%,#04050a 100%);color:#fff;font-family:Arial,Helvetica,sans-serif}
+    main{min-height:calc(100vh - 80px);padding:50px 8%;display:flex;align-items:center;justify-content:center}
+    .panel{width:min(980px,100%);background:rgba(255,255,255,.07);border:1px solid rgba(245,199,107,.28);border-radius:22px;padding:32px;box-shadow:0 24px 80px rgba(0,0,0,.45);text-align:center;overflow:hidden;position:relative}
+    .panel::before{content:"";position:absolute;inset:-80px auto auto -80px;width:220px;height:220px;border-radius:50%;background:rgba(245,199,107,.08);filter:blur(2px)}
+    .badge{display:inline-flex;align-items:center;justify-content:center;margin-bottom:18px;padding:8px 14px;border-radius:999px;background:rgba(245,199,107,.12);border:1px solid rgba(245,199,107,.28);color:#f5c76b;font-weight:900;font-size:.88rem}
+    h1{margin:0 0 10px;color:#f5c76b;font-size:clamp(2rem,4vw,3.4rem)}
+    p{max-width:720px;margin:0 auto;color:#ddd;line-height:1.6;font-size:1.05rem}
+    .actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:24px}
+    .btn,.btn-secondary{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:0;cursor:pointer;padding:13px 18px;border-radius:10px;font-weight:900;font-size:.98rem;transition:.2s ease}
+    .btn{background:#f5c76b;color:#161616;box-shadow:0 12px 30px rgba(245,199,107,.18)}
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+    .btn-secondary{background:rgba(255,255,255,.08);color:#f5c76b;border:1px solid rgba(245,199,107,.35)}
+    .btn-secondary:hover{background:rgba(245,199,107,.12)}
+    footer{text-align:center;padding:20px;color:#aaa;background:rgba(0,0,0,.4);font-size:.9rem}
+    @media(max-width:620px){main{padding:28px 5%}.panel{padding:24px}}
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <a href="index.html" class="site-logo">RPG Nexus</a>
+  <button class="site-menu-btn" type="button" onclick="toggleMenu()" aria-label="Abrir menu">☰</button>
+  <nav id="menu" class="site-nav">
+    <a href="index.html" data-page="index">Início</a>
+    <a href="personagens.html" data-page="personagens">Personagens</a>
+    <a href="campanhas.html" data-page="campanhas">Campanhas</a>
+    <a href="ameacas.html" data-page="ameacas">Ameaças</a>
+    <a href="homebrew.html" data-page="homebrew">Homebrew</a>
+    <a href="login.html" id="loginLink" class="login-btn" data-page="login">Login</a>
+    <button id="logoutBtn" class="logout-btn" type="button" hidden>Sair</button>
+  </nav>
+</header>
+
+<main>
+  <section class="panel">
+    <span class="badge">Ficha em desenvolvimento</span>
+    <h1>Mago: A Ascensão</h1>
+    <p>A ficha guiada de Mago: A Ascensão ainda está em desenvolvimento dentro do módulo Mundo das Trevas.</p>
+    <div class="actions">
+      <a class="btn" href="personagens.html">Voltar para personagens</a>
+      <a class="btn-secondary" href="index.html">Ir para o início</a>
+    </div>
+  </section>
+</main>
+
+<footer>RPG Nexus © 2026</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="auth.js"></script>
+<script>
+  function toggleMenu(){
+    const menu = document.getElementById('menu');
+    if(menu) menu.classList.toggle('active');
+  }
+</script>
+</body>
+</html>

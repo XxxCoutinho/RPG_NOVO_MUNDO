@@ -30,6 +30,20 @@
     .btn-small{padding:9px 12px;border-radius:9px;font-size:.86rem}
     .btn-danger{background:rgba(220,38,38,.14);color:#ffb4b4;border:1px solid rgba(248,113,113,.38)}
     .btn-danger:hover{background:rgba(220,38,38,.22);color:#fff}
+    .delete-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;padding:18px;z-index:1200}
+    .delete-modal-backdrop.active{display:flex}
+    .delete-modal{width:min(430px,100%);background:linear-gradient(180deg,#0d132b 0%,#080b1a 100%);border:1px solid rgba(245,199,107,.48);border-radius:22px;box-shadow:0 26px 90px rgba(0,0,0,.65);padding:24px 20px 18px}
+    .delete-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:22px}
+    .delete-modal-title{margin:0;color:#f5c76b;font-size:1.35rem;line-height:1.15;font-weight:900}
+    .delete-modal-close{background:transparent;border:0;color:#fff;cursor:pointer;font-size:2rem;font-weight:900;line-height:.8;padding:0 4px;transition:.2s ease}
+    .delete-modal-close:hover{color:#f5c76b;transform:scale(1.05)}
+    .delete-modal-message{margin:0 0 18px;color:#d9deee;line-height:1.45;font-size:1rem}
+    .delete-modal-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .delete-confirm-btn,.delete-cancel-btn{border:1px solid transparent;border-radius:11px;cursor:pointer;font-weight:900;font-size:.95rem;padding:11px 15px;transition:.2s ease}
+    .delete-confirm-btn{background:rgba(111,25,65,.74);border-color:#f06a9a;color:#fff}
+    .delete-confirm-btn:hover{background:rgba(145,30,78,.9);transform:translateY(-1px)}
+    .delete-cancel-btn{background:#4a5068;border-color:#697089;color:#fff}
+    .delete-cancel-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
     .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}
     .modal-backdrop.active{display:flex}
     .modal{width:min(560px,100%);background:linear-gradient(180deg,rgba(25,31,58,.98),rgba(8,10,18,.98));border:1px solid rgba(245,199,107,.34);border-radius:22px;box-shadow:0 30px 90px rgba(0,0,0,.65);overflow:hidden}
@@ -151,6 +165,20 @@
   </div>
 </div>
 
+<div class="delete-modal-backdrop" id="deleteCharacterModal" aria-hidden="true">
+  <div class="delete-modal" role="dialog" aria-modal="true" aria-labelledby="deleteCharacterTitle">
+    <div class="delete-modal-head">
+      <h2 class="delete-modal-title" id="deleteCharacterTitle">Confirmar exclusão</h2>
+      <button class="delete-modal-close" type="button" id="closeDeleteCharacterModal" aria-label="Fechar janela">×</button>
+    </div>
+    <p class="delete-modal-message" id="deleteCharacterMessage">Excluir este personagem? Esta ação não pode ser desfeita.</p>
+    <div class="delete-modal-actions">
+      <button class="delete-confirm-btn" type="button" id="confirmDeleteCharacter">Excluir</button>
+      <button class="delete-cancel-btn" type="button" id="cancelDeleteCharacter">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <footer>RPG Nexus © 2026</footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
@@ -181,6 +209,12 @@
     const loginHint = document.getElementById('loginHint');
     const npcFields = document.getElementById('npcFields');
     const typeRadios = document.querySelectorAll('input[name="agentType"]');
+    const deleteModal = document.getElementById('deleteCharacterModal');
+    const deleteMessage = document.getElementById('deleteCharacterMessage');
+    const closeDeleteBtn = document.getElementById('closeDeleteCharacterModal');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteCharacter');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteCharacter');
+    let pendingDeleteResolver = null;
 
     if(!modal || !openBtn || !form || !agentList){
       console.error('Elementos da página Personagens não encontrados. Verifique os IDs do HTML.');
@@ -313,6 +347,32 @@
       return file + '?' + params.toString();
     }
 
+    function resolveDeleteModal(result){
+      if(deleteModal){
+        deleteModal.classList.remove('active');
+        deleteModal.setAttribute('aria-hidden','true');
+      }
+      if(pendingDeleteResolver){
+        pendingDeleteResolver(result);
+        pendingDeleteResolver = null;
+      }
+    }
+
+    function confirmDeleteCharacter(character){
+      const label = character.name || character.modelLabel || 'este personagem';
+      const safeLabel = escapeHtml(label);
+      if(!deleteModal || !deleteMessage) return Promise.resolve(confirm('Tem certeza que deseja excluir "' + label + '"? Essa ação não pode ser desfeita.'));
+
+      deleteMessage.innerHTML = 'Excluir o personagem <strong>"' + safeLabel + '"</strong>? Esta ação também removerá a ficha vinculada a ele.';
+      deleteModal.classList.add('active');
+      deleteModal.setAttribute('aria-hidden','false');
+      setTimeout(function(){ confirmDeleteBtn?.focus(); }, 50);
+
+      return new Promise(function(resolve){
+        pendingDeleteResolver = resolve;
+      });
+    }
+
     async function deleteAgentById(id){
       if(!id) return;
 
@@ -332,8 +392,7 @@
         return;
       }
 
-      const label = character.name || character.modelLabel || 'este personagem';
-      const confirmed = confirm('Tem certeza que deseja excluir "' + label + '"? Essa ação não pode ser desfeita.');
+      const confirmed = await confirmDeleteCharacter(character);
       if(!confirmed) return;
 
       const remainingLocal = loadLocalAgents().filter(function(agent){ return String(agent.id) !== String(id); });
@@ -404,6 +463,10 @@
     cancelBtn?.addEventListener('click', closeModal);
 
     modal.addEventListener('click', function(event){ if(event.target === modal) closeModal(); });
+    deleteModal?.addEventListener('click', function(event){ if(event.target === deleteModal) resolveDeleteModal(false); });
+    closeDeleteBtn?.addEventListener('click', function(){ resolveDeleteModal(false); });
+    cancelDeleteBtn?.addEventListener('click', function(){ resolveDeleteModal(false); });
+    confirmDeleteBtn?.addEventListener('click', function(){ resolveDeleteModal(true); });
 
     agentList.addEventListener('click', async function(event){
       const deleteButton = event.target.closest('[data-delete-character]');
@@ -418,7 +481,11 @@
       }
     });
 
-    document.addEventListener('keydown', function(event){ if(event.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
+    document.addEventListener('keydown', function(event){
+      if(event.key !== 'Escape') return;
+      if(deleteModal?.classList.contains('active')) resolveDeleteModal(false);
+      else if(modal.classList.contains('active')) closeModal();
+    });
 
     form.addEventListener('submit', async function(event){
       event.preventDefault();
