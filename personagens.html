@@ -317,18 +317,42 @@
       const name = String(value || '').trim();
       const lower = name.toLowerCase();
       if(!name || lower === 'novo personagem' || lower === 'novo npc' || lower === 'personagem sem nome') return '';
+      if(lower === 'undefined' || lower === 'null' || lower === '[object object]') return '';
       return name;
     }
 
+    function normalizeKeyName(key){
+      return String(key || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '');
+    }
+
+    function keyLooksLikeCharacterName(key){
+      const normalized = normalizeKeyName(key);
+      return [
+        'name',
+        'nome',
+        'nomepersonagem',
+        'personagemnome',
+        'charactername',
+        'nomedopersonagem',
+        'nomecompleto'
+      ].some(function(pattern){ return normalized === pattern || normalized.endsWith(pattern); });
+    }
+
     function extractNameDeep(value){
+      const directString = normalizeCharacterName(value);
+      if(typeof value === 'string' && directString) return directString;
+
       const seen = new Set();
       function walk(node){
         if(!node || typeof node !== 'object' || seen.has(node)) return '';
         seen.add(node);
 
-        const directKeys = ['name','nome','nomePersonagem','personagemNome','characterName','nomeDoPersonagem','nome_completo'];
-        for(const key of directKeys){
-          if(Object.prototype.hasOwnProperty.call(node, key)){
+        for(const key of Object.keys(node)){
+          if(keyLooksLikeCharacterName(key)){
             const found = normalizeCharacterName(node[key]);
             if(found) return found;
           }
@@ -343,21 +367,41 @@
       return walk(value);
     }
 
+    function getNameFromStorageValue(raw){
+      const plain = normalizeCharacterName(raw);
+      if(plain && raw.length <= 120 && raw[0] !== '{' && raw[0] !== '[') return plain;
+
+      try{
+        const parsed = JSON.parse(raw);
+        return extractNameDeep(parsed);
+      }catch(error){
+        return '';
+      }
+    }
+
     function findCharacterNameInLocalSheets(agent){
       if(!agent || !agent.id) return '';
       const id = String(agent.id);
       const directKeys = [
         'rpgNexusNomePersonagem_' + id,
+        'rpgNexusCharacterName_' + id,
+        'nomePersonagem_' + id,
+        'personagemNome_' + id,
+        'characterName_' + id,
         'rpgNexusFicha_' + id,
         'rpgNexusFicha:' + id,
+        'rpgNexusFichaVampiroV5_' + id,
+        'rpgNexusFichaDnd5e_' + id,
+        'rpgNexusFichaOrdemParanormal_' + id,
         'ficha_' + id,
         'personagem_' + id
       ];
 
       for(const key of directKeys){
         try{
-          const parsed = JSON.parse(localStorage.getItem(key));
-          const name = extractNameDeep(parsed);
+          const raw = localStorage.getItem(key);
+          if(!raw) continue;
+          const name = getNameFromStorageValue(raw);
           if(name) return name;
         }catch(error){}
       }
@@ -367,12 +411,12 @@
         if(!key) continue;
         try{
           const raw = localStorage.getItem(key);
-          if(!raw || raw.indexOf(id) === -1) continue;
-          const parsed = JSON.parse(raw);
-          const possibleId = String(parsed?.id || parsed?.personagemId || parsed?.agenteId || parsed?.characterId || '');
-          const containsId = possibleId === id || raw.indexOf(id) !== -1;
-          if(!containsId) continue;
-          const name = extractNameDeep(parsed);
+          if(!raw) continue;
+          const keyHasId = key.indexOf(id) !== -1;
+          const rawHasId = raw.indexOf(id) !== -1;
+          if(!keyHasId && !rawHasId) continue;
+
+          const name = getNameFromStorageValue(raw);
           if(name) return name;
         }catch(error){}
       }
@@ -540,7 +584,6 @@
             <h3>${escapeHtml(agent.name || 'Personagem sem nome')}</h3>
             <span>${escapeHtml(agent.modelLabel || agent.model)}</span>
             <span>${escapeHtml(agent.typeLabel || agent.type)}</span>
-            <p>Arquivo da ficha: <strong>${escapeHtml(agent.sheetFile || getSheetFile(agent.model))}</strong></p>
             <div class="card-actions">
               <a class="btn-secondary btn-small" href="${escapeHtml(sheetUrl)}">Abrir ficha</a>
               <button class="btn-secondary btn-small btn-danger" type="button" data-delete-character="${escapeHtml(agent.id)}">Excluir</button>
@@ -585,6 +628,14 @@
       if(event.key !== 'Escape') return;
       if(deleteModal?.classList.contains('active')) resolveDeleteModal(false);
       else if(modal.classList.contains('active')) closeModal();
+    });
+
+    window.addEventListener('focus', function(){ renderAgents(); });
+    window.addEventListener('pageshow', function(){ renderAgents(); });
+    window.addEventListener('storage', function(event){
+      if(event.key && (event.key.indexOf('Personagem') !== -1 || event.key.indexOf('personagem') !== -1 || event.key.indexOf('Ficha') !== -1 || event.key.indexOf('ficha') !== -1)){
+        renderAgents();
+      }
     });
 
     form.addEventListener('submit', async function(event){
