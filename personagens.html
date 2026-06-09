@@ -24,7 +24,12 @@
     .agent-list{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
     .empty-state,.agent-card{border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.22);border-radius:16px;padding:18px;color:#ddd}
     .agent-card h3{margin:0 0 8px;color:#fff;font-size:1.1rem}
+    .agent-card p{margin:8px 0 0;color:#cfcfcf;font-size:.92rem;line-height:1.4}
     .agent-card span{display:inline-block;margin:5px 6px 0 0;padding:5px 9px;border-radius:999px;background:rgba(245,199,107,.12);border:1px solid rgba(245,199,107,.22);color:#f5c76b;font-size:.82rem;font-weight:700}
+    .card-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .btn-small{padding:9px 12px;border-radius:9px;font-size:.86rem}
+    .btn-danger{background:rgba(220,38,38,.14);color:#ffb4b4;border:1px solid rgba(248,113,113,.38)}
+    .btn-danger:hover{background:rgba(220,38,38,.22);color:#fff}
     .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}
     .modal-backdrop.active{display:flex}
     .modal{width:min(560px,100%);background:linear-gradient(180deg,rgba(25,31,58,.98),rgba(8,10,18,.98));border:1px solid rgba(245,199,107,.34);border-radius:22px;box-shadow:0 30px 90px rgba(0,0,0,.65);overflow:hidden}
@@ -96,18 +101,22 @@
       </div>
       <div class="modal-body">
         <div class="field">
-          <label for="characterName">Nome do personagem</label>
-          <input id="characterName" name="characterName" type="text" placeholder="Ex.: Arthur, Helena, Cultista..." required />
-        </div>
-
-        <div class="field">
           <label for="sheetModel">Modelo da ficha</label>
           <select id="sheetModel" name="sheetModel" required>
             <option value="" selected disabled>Selecione um modelo</option>
             <option value="ordem-paranormal">Ordem Paranormal</option>
-            <option value="dnd">D&amp;D</option>
-            <option value="mundo-das-trevas">Mundo das Trevas</option>
+            <option value="dnd-5e">D&amp;D</option>
+            <option value="tormenta">Tormenta</option>
             <option value="ciberpunk">Ciberpunk</option>
+            <option value="call-of-cthulhu">Call of Cthulhu</option>
+            <optgroup label="Mundo das Trevas">
+              <option value="vampiro-v5">Vampiro: A Máscara</option>
+              <option value="lobisomem-apocalipse">Lobisomem: O Apocalipse</option>
+              <option value="mago-ascensao">Mago: A Ascensão</option>
+              <option value="wraith">Wraith</option>
+              <option value="cacador-revanche">Caçador: A Revanche</option>
+              <option value="demonio-queda">Demônio: A Queda</option>
+            </optgroup>
           </select>
         </div>
 
@@ -170,7 +179,6 @@
     const form = document.getElementById('characterForm');
     const agentList = document.getElementById('agentList');
     const loginHint = document.getElementById('loginHint');
-    const nameInput = document.getElementById('characterName');
     const npcFields = document.getElementById('npcFields');
     const typeRadios = document.querySelectorAll('input[name="agentType"]');
 
@@ -185,7 +193,7 @@
       if(loginHint) loginHint.hidden = true;
       modal.classList.add('active');
       modal.setAttribute('aria-hidden','false');
-      setTimeout(function(){ nameInput?.focus(); }, 50);
+      setTimeout(function(){ document.getElementById('sheetModel')?.focus(); }, 50);
     }
 
     function closeModal(){
@@ -243,6 +251,52 @@
       });
     }
 
+    function getSheetFile(model){
+      const sheetFiles = {
+        'ordem-paranormal': 'ficha_ordem_paranormal.html',
+        'dnd': 'ficha_dnd_5e.html',
+        'dnd-5e': 'ficha_dnd_5e.html',
+        'tormenta': 'ficha_tormenta.html',
+        'ciberpunk': 'ficha_ciberpunk.html',
+        'call-of-cthulhu': 'ficha_call_of_cthulhu.html',
+        'mundo-das-trevas': 'ficha_vampiro_V5.html',
+        'vampiro-v5': 'ficha_vampiro_V5.html',
+        'lobisomem-apocalipse': 'ficha_lobisomem_apocalipse.html',
+        'mago-ascensao': 'ficha_mago_ascensao.html',
+        'wraith': 'ficha_wraith.html',
+        'cacador-revanche': 'ficha_cacador_revanche.html',
+        'demonio-queda': 'ficha_demonio_queda.html'
+      };
+      return sheetFiles[model] || 'ficha.html';
+    }
+
+    function buildSheetUrl(agent){
+      const file = agent.sheetFile || getSheetFile(agent.model);
+      const params = new URLSearchParams({
+        personagemId: agent.id || '',
+        agenteId: agent.id || '',
+        modelo: agent.model || '',
+        tipo: agent.type || '',
+        categoria: agent.baseType || (String(agent.type || '').startsWith('npc-') ? 'npc' : 'personagem'),
+        relacaoNpc: agent.npcRelation || '',
+        origem: 'personagens'
+      });
+      return file + '?' + params.toString();
+    }
+
+    function deleteAgentById(id){
+      const agents = loadAgents();
+      const character = agents.find(function(agent){ return agent.id === id; });
+      if(!character) return;
+
+      const label = character.name || character.modelLabel || 'este personagem';
+      const confirmed = confirm('Tem certeza que deseja excluir "' + label + '"? Essa ação não pode ser desfeita.');
+      if(!confirmed) return;
+
+      saveAgents(agents.filter(function(agent){ return agent.id !== id; }));
+      renderAgents();
+    }
+
     function renderAgents(){
       const agents = loadAgents();
       if(!agents.length){
@@ -251,11 +305,17 @@
       }
 
       agentList.innerHTML = agents.map(function(agent){
+        const sheetUrl = buildSheetUrl(agent);
         return `
-          <article class="agent-card">
-            <h3>${escapeHtml(agent.name)}</h3>
+          <article class="agent-card" data-character-id="${escapeHtml(agent.id)}">
+            <h3>${escapeHtml(agent.name || 'Personagem sem nome')}</h3>
             <span>${escapeHtml(agent.modelLabel || agent.model)}</span>
             <span>${escapeHtml(agent.typeLabel || agent.type)}</span>
+            <p>Arquivo da ficha: <strong>${escapeHtml(agent.sheetFile || getSheetFile(agent.model))}</strong></p>
+            <div class="card-actions">
+              <a class="btn-secondary btn-small" href="${escapeHtml(sheetUrl)}">Abrir ficha</a>
+              <button class="btn-secondary btn-small btn-danger" type="button" data-delete-character="${escapeHtml(agent.id)}">Excluir</button>
+            </div>
           </article>
         `;
       }).join('');
@@ -282,6 +342,12 @@
       if(event.target === modal) closeModal();
     });
 
+    agentList.addEventListener('click', function(event){
+      const deleteButton = event.target.closest('[data-delete-character]');
+      if(!deleteButton) return;
+      deleteAgentById(deleteButton.getAttribute('data-delete-character'));
+    });
+
     document.addEventListener('keydown', function(event){
       if(event.key === 'Escape' && modal.classList.contains('active')) closeModal();
     });
@@ -299,22 +365,30 @@
       }
 
       const formData = new FormData(form);
-      const name = String(formData.get('characterName') || '').trim();
       const model = String(formData.get('sheetModel') || '');
       const baseType = String(formData.get('agentType') || 'personagem');
       const npcRelation = String(formData.get('npcRelation') || 'aliado');
       const type = baseType === 'npc' ? 'npc-' + npcRelation : 'personagem';
 
-      if(!name || !model || !baseType){
-        alert('Informe o nome, o modelo da ficha e o tipo.');
+      if(!model || !baseType){
+        alert('Escolha o modelo da ficha e o tipo.');
         return;
       }
 
       const modelLabels = {
         'ordem-paranormal': 'Ordem Paranormal',
         'dnd': 'D&D',
+        'dnd-5e': 'D&D',
+        'tormenta': 'Tormenta',
+        'ciberpunk': 'Ciberpunk',
+        'call-of-cthulhu': 'Call of Cthulhu',
         'mundo-das-trevas': 'Mundo das Trevas',
-        'ciberpunk': 'Ciberpunk'
+        'vampiro-v5': 'Vampiro: A Máscara',
+        'lobisomem-apocalipse': 'Lobisomem: O Apocalipse',
+        'mago-ascensao': 'Mago: A Ascensão',
+        'wraith': 'Wraith',
+        'cacador-revanche': 'Caçador: A Revanche',
+        'demonio-queda': 'Demônio: A Queda'
       };
 
       const typeLabels = {
@@ -324,11 +398,13 @@
         'npc-neutro': 'NPC neutro'
       };
 
+      const sheetFile = getSheetFile(model);
       const newAgent = {
         id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
-        name: name,
+        name: baseType === 'npc' ? 'Novo NPC' : 'Novo personagem',
         model: model,
         modelLabel: modelLabels[model] || model,
+        sheetFile: sheetFile,
         type: type,
         baseType: baseType,
         npcRelation: baseType === 'npc' ? npcRelation : '',
@@ -342,17 +418,7 @@
 
       localStorage.setItem('rpgNexusPersonagemEmCriacao', JSON.stringify(newAgent));
 
-      const params = new URLSearchParams({
-        nome: name,
-        modelo: model,
-        tipo: type,
-        categoria: baseType,
-        relacaoNpc: baseType === 'npc' ? npcRelation : '',
-        agenteId: newAgent.id
-      });
-
-      // A página ficha.html deve ler esses parâmetros e carregar o modelo escolhido.
-      window.location.href = 'ficha.html?' + params.toString();
+      window.location.href = buildSheetUrl(newAgent);
     });
 
     try{
