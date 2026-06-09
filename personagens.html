@@ -164,6 +164,7 @@
   const OLD_STORAGE_KEY = 'rpgNexusAgentes';
   let currentUser = null;
   let authReady = false;
+  let visibleAgents = [];
 
   function ready(fn){
     if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
@@ -313,22 +314,48 @@
     }
 
     async function deleteAgentById(id){
-      const agents = await loadAgents();
-      const character = agents.find(function(agent){ return agent.id === id; });
-      if(!character) return;
+      if(!id) return;
+
+      let agents = [];
+      try{ agents = await loadAgents(); }
+      catch(error){
+        console.warn('Não foi possível carregar personagens antes de excluir. Usando lista visível/local:', error);
+        agents = visibleAgents.length ? visibleAgents : loadLocalAgents();
+      }
+
+      let character = agents.find(function(agent){ return String(agent.id) === String(id); });
+      if(!character){
+        character = visibleAgents.find(function(agent){ return String(agent.id) === String(id); }) || loadLocalAgents().find(function(agent){ return String(agent.id) === String(id); });
+      }
+      if(!character){
+        alert('Não foi possível encontrar este personagem para excluir. Atualize a página e tente novamente.');
+        return;
+      }
 
       const label = character.name || character.modelLabel || 'este personagem';
       const confirmed = confirm('Tem certeza que deseja excluir "' + label + '"? Essa ação não pode ser desfeita.');
       if(!confirmed) return;
 
-      saveLocalAgents(agents.filter(function(agent){ return agent.id !== id; }));
+      const remainingLocal = loadLocalAgents().filter(function(agent){ return String(agent.id) !== String(id); });
+      saveLocalAgents(remainingLocal);
+      visibleAgents = visibleAgents.filter(function(agent){ return String(agent.id) !== String(id); });
 
       const db = getDb();
-      const user = requireLogin();
+      const user = getAuth()?.currentUser || currentUser;
       if(db && user){
-        await db.collection('usuarios').doc(user.uid).collection('personagens').doc(id).delete().catch(console.warn);
-        await db.collection('usuarios').doc(user.uid).collection('fichas').doc(id).delete().catch(console.warn);
+        try{
+          await db.collection('usuarios').doc(user.uid).collection('personagens').doc(id).delete();
+        }catch(error){
+          console.warn('Não foi possível excluir o personagem no Firestore:', error);
+        }
+
+        try{
+          await db.collection('usuarios').doc(user.uid).collection('fichas').doc(id).delete();
+        }catch(error){
+          console.warn('Não foi possível excluir a ficha vinculada no Firestore:', error);
+        }
       }
+
       await renderAgents();
     }
 
@@ -339,6 +366,8 @@
         console.warn('Não foi possível carregar personagens do Firestore. Usando dados locais:', error);
         agents = loadLocalAgents();
       }
+
+      visibleAgents = agents;
 
       if(!agents.length){
         agentList.innerHTML = '<div class="empty-state">Nenhum personagem criado ainda. Clique em <strong>Criar personagem</strong> para começar.</div>';
@@ -376,10 +405,17 @@
 
     modal.addEventListener('click', function(event){ if(event.target === modal) closeModal(); });
 
-    agentList.addEventListener('click', function(event){
+    agentList.addEventListener('click', async function(event){
       const deleteButton = event.target.closest('[data-delete-character]');
       if(!deleteButton) return;
-      deleteAgentById(deleteButton.getAttribute('data-delete-character'));
+      event.preventDefault();
+      event.stopPropagation();
+      deleteButton.disabled = true;
+      try{
+        await deleteAgentById(deleteButton.getAttribute('data-delete-character'));
+      }finally{
+        deleteButton.disabled = false;
+      }
     });
 
     document.addEventListener('keydown', function(event){ if(event.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
