@@ -797,6 +797,164 @@ tr.origin-skill td{background:rgba(245,199,107,.065)}
 }
 </style>
 
+
+
+<style id="op-rounded-header-css">
+/* PATCH 2026-06-10: cabeçalho com bordas arredondadas nos botões, igual ao modelo novo */
+.site-header{
+  min-height:72px!important;
+  padding:0 clamp(22px,6.25vw,78px)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:28px!important;
+  background:#060914!important;
+  border-bottom:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.site-logo{
+  color:var(--gold,#f5c76b)!important;
+  font-size:1.5rem!important;
+  font-weight:900!important;
+  letter-spacing:.01em!important;
+  text-decoration:none!important;
+  line-height:1!important;
+}
+.site-nav{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:12px!important;
+  flex-wrap:wrap!important;
+}
+.site-nav a,
+.site-nav button{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:38px!important;
+  padding:10px 14px!important;
+  border:0!important;
+  border-radius:9px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#f3f3f5!important;
+  font:inherit!important;
+  font-weight:900!important;
+  line-height:1!important;
+  text-decoration:none!important;
+  cursor:pointer!important;
+  transition:background .18s ease,color .18s ease,transform .18s ease,filter .18s ease!important;
+}
+.site-nav a:hover,
+.site-nav button:hover{
+  color:var(--gold,#f5c76b)!important;
+  background:rgba(245,199,107,.10)!important;
+  transform:translateY(-1px)!important;
+}
+.site-nav a.active:not(.login-btn),
+.site-nav button.active:not(.login-btn):not(.logout-btn){
+  background:var(--gold,#f5c76b)!important;
+  color:#16110a!important;
+  border-radius:9px!important;
+  box-shadow:none!important;
+}
+.site-nav a.active:not(.login-btn):hover,
+.site-nav button.active:not(.login-btn):not(.logout-btn):hover{
+  filter:brightness(1.04)!important;
+  color:#16110a!important;
+  background:var(--gold,#f5c76b)!important;
+}
+.site-nav .login-btn,
+.site-nav .login-btn.active{
+  min-height:40px!important;
+  padding:11px 15px!important;
+  border:1px solid rgba(240,106,154,.38)!important;
+  border-radius:8px!important;
+  background:#9d194d!important;
+  color:#fff!important;
+  box-shadow:none!important;
+}
+.site-nav .login-btn:hover,
+.site-nav .login-btn.active:hover{
+  background:#b1255b!important;
+  color:#fff!important;
+  transform:translateY(-1px)!important;
+}
+.site-nav .logout-btn{
+  min-height:40px!important;
+  padding:11px 15px!important;
+  border:1px solid rgba(240,106,154,.38)!important;
+  border-radius:8px!important;
+  background:#9d194d!important;
+  color:#fff!important;
+  box-shadow:none!important;
+}
+.site-menu-btn{
+  border-radius:10px!important;
+  border:1px solid rgba(245,199,107,.35)!important;
+  background:rgba(245,199,107,.10)!important;
+  color:var(--gold,#f5c76b)!important;
+}
+@media(max-width:720px){
+  .site-header{
+    min-height:auto!important;
+    padding:14px 5%!important;
+    align-items:center!important;
+    flex-wrap:wrap!important;
+  }
+  .site-logo{font-size:1.35rem!important}
+  .site-nav{
+    display:none!important;
+    width:100%!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:8px!important;
+    margin-top:12px!important;
+    padding:10px!important;
+    background:rgba(5,6,13,.96)!important;
+    border:1px solid rgba(245,199,107,.20)!important;
+    border-radius:16px!important;
+  }
+  .site-nav.active{display:flex!important}
+  .site-nav a,
+  .site-nav button{
+    width:100%!important;
+    justify-content:flex-start!important;
+    text-align:left!important;
+    border-radius:10px!important;
+  }
+  .site-nav .login-btn,
+  .site-nav .logout-btn{justify-content:center!important}
+}
+</style>
+<script id="op-rounded-header-js">
+(function(){
+  'use strict';
+  function applyRoundedHeaderActive(){
+    var file=(location.pathname.split('/').pop()||'index.html').replace(/\.html?$/,'');
+    var current={
+      'ficha_ordem_paranormal':'personagens',
+      'ficha_ordem_paranormal_jogo':'personagens',
+      'ficha_ordem_paranormal_header_arredondado':'personagens',
+      'personagens':'personagens',
+      'index':'index',
+      'campanhas':'campanhas',
+      'ameacas':'ameacas',
+      'homebrew':'homebrew',
+      'login':'login'
+    }[file] || file;
+    document.querySelectorAll('.site-nav [data-page]').forEach(function(item){
+      item.classList.toggle('active', item.getAttribute('data-page') === current);
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyRoundedHeaderActive);
+  else applyRoundedHeaderActive();
+})();
+</script>
+
 </head>
 <body>
 <header class="site-header">

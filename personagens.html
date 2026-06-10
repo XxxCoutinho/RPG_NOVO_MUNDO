@@ -28,6 +28,8 @@
     .agent-card span{display:inline-block;margin:5px 6px 0 0;padding:5px 9px;border-radius:999px;background:rgba(245,199,107,.12);border:1px solid rgba(245,199,107,.22);color:#f5c76b;font-size:.82rem;font-weight:700}
     .card-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
     .btn-small{padding:9px 12px;border-radius:9px;font-size:.86rem}
+    .btn-play{background:#f5c76b;color:#161616;border-color:rgba(245,199,107,.95);box-shadow:0 10px 22px rgba(245,199,107,.14)}
+    .btn-play:hover{background:#ffd884;color:#161616;transform:translateY(-1px)}
     .btn-danger{background:rgba(220,38,38,.14);color:#ffb4b4;border:1px solid rgba(248,113,113,.38)}
     .btn-danger:hover{background:rgba(220,38,38,.22);color:#fff}
     .delete-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;padding:18px;z-index:1200}
@@ -517,6 +519,23 @@
       return file + '?' + params.toString();
     }
 
+    function buildPlayUrl(agent){
+      const file = agent.sheetFile || getSheetFile(agent.model);
+      const params = new URLSearchParams({
+        personagemId: agent.id || '',
+        agenteId: agent.id || '',
+        id: agent.id || '',
+        modelo: agent.model || '',
+        tipo: agent.type || '',
+        categoria: agent.baseType || (String(agent.type || '').startsWith('npc-') ? 'npc' : 'personagem'),
+        relacaoNpc: agent.npcRelation || '',
+        origem: 'personagens',
+        modo: 'jogar',
+        jogar: '1'
+      });
+      return file + '?' + params.toString();
+    }
+
     function resolveDeleteModal(result){
       if(deleteModal){
         deleteModal.classList.remove('active');
@@ -606,6 +625,7 @@
 
       agentList.innerHTML = agents.map(function(agent){
         const sheetUrl = buildSheetUrl(agent);
+        const playUrl = buildPlayUrl(agent);
         return `
           <article class="agent-card" data-character-id="${escapeHtml(agent.id)}">
             <h3>${escapeHtml(normalizeCharacterName(agent.name) || 'Personagem sem nome')}</h3>
@@ -613,6 +633,7 @@
             <span>${escapeHtml(agent.typeLabel || agent.type)}</span>
             <div class="card-actions">
               <a class="btn-secondary btn-small" href="${escapeHtml(sheetUrl)}">Abrir ficha</a>
+              <a class="btn-secondary btn-small btn-play" href="${escapeHtml(playUrl)}">Jogar</a>
               <button class="btn-secondary btn-small btn-danger" type="button" data-delete-character="${escapeHtml(agent.id)}">Excluir</button>
             </div>
           </article>
