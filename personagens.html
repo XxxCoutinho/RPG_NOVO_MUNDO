@@ -620,9 +620,19 @@
       return normalizedAgent.sheetFile + '?' + buildCharacterParams(normalizedAgent, 'editar').toString();
     }
 
+    function getPlaySheetFile(agent){
+      const normalizedAgent = normalizeAgent(agent);
+
+      if(normalizedAgent.model === 'ordem-paranormal'){
+        return 'ficha_ordem_paranormal_jogo.html';
+      }
+
+      return normalizedAgent.sheetFile;
+    }
+
     function buildPlayUrl(agent){
       const normalizedAgent = normalizeAgent(agent);
-      return normalizedAgent.sheetFile + '?' + buildCharacterParams(normalizedAgent, 'jogar').toString();
+      return getPlaySheetFile(normalizedAgent) + '?' + buildCharacterParams(normalizedAgent, 'jogar').toString();
     }
 
     function findVisibleAgentById(id){
