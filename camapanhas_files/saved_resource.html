@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0040)https://web-sandbox.oaiusercontent.com/? -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Campanhas — RPG Nexus</title>
 <style>
@@ -527,36 +527,36 @@ footer{
   }
 }
 </style>
-<link rel="stylesheet" href="header.css">
-</head>
+<link rel="stylesheet" href="./header.css">
+<style>html,body,#root{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;margin:0;padding:0}html,body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Helvetica Neue,Arial,sans-serif!important}button,input,textarea,select{font-family:inherit}html{background-color:#fff}html.dark{background-color:#212121}html.chatgptOled.dark,html.mobileSkybridge.dark{background-color:#000}@supports (font: -apple-system-body){html.mobileSkybridge{font:-apple-system-body}}html.desktopSkybridge.dark{background-color:#1e1e1e}html.androidSkybridge,html.androidSkybridge body,html.androidSkybridge *{-webkit-tap-highlight-color:rgba(255,255,255,0)}html.androidSkybridge *::selection,html.androidSkybridge *::-moz-selection{background:#fff0;color:inherit}</style></head>
 <body>
 <header class="site-header">
-  <a href="index.html" class="site-logo">RPG Nexus</a>
+  <a href="https://web-sandbox.oaiusercontent.com/index.html" class="site-logo">RPG Nexus</a>
   <button class="site-menu-btn" type="button" onclick="toggleMenu()" aria-label="Abrir menu">☰</button>
   <nav id="menu" class="site-nav">
-    <a href="index.html" data-page="index">Início</a>
-    <a href="personagens.html" data-page="personagens">Personagens</a>
-    <a href="campanhas.html" data-page="campanhas">Campanhas</a>
-    <a href="ameacas.html" data-page="ameacas">Ameaças</a>
-    <a href="homebrew.html" data-page="homebrew">Homebrew</a>
-    <a href="login.html" id="loginLink" class="login-btn" data-page="login">Login</a>
-    <button id="logoutBtn" class="logout-btn" type="button" hidden>Sair</button>
+    <a href="https://web-sandbox.oaiusercontent.com/index.html" data-page="index">Início</a>
+    <a href="https://web-sandbox.oaiusercontent.com/personagens.html" data-page="personagens">Personagens</a>
+    <a href="https://web-sandbox.oaiusercontent.com/campanhas.html" data-page="campanhas">Campanhas</a>
+    <a href="https://web-sandbox.oaiusercontent.com/ameacas.html" data-page="ameacas">Ameaças</a>
+    <a href="https://web-sandbox.oaiusercontent.com/homebrew.html" data-page="homebrew">Homebrew</a>
+    <a href="https://web-sandbox.oaiusercontent.com/login.html" id="loginLink" class="login-btn" data-page="login">Login</a>
+    <button id="logoutBtn" class="logout-btn" type="button" hidden="">Sair</button>
   </nav>
 </header>
 <div class="app">
   <header class="topbar">
-    <div class="title"><h1 id="appTitle">Campanhas</h1><p id="appSubtitle">Crie campanhas, edite fichas universais e gerencie suas mesas.</p></div>
+    <div class="title"><h1 id="appTitle">Campanhas</h1><p id="appSubtitle">Faça login para carregar suas campanhas e fichas salvas no Firebase.</p></div>
   </header>
 
   <main id="homeView">
-    <nav class="tabs"><button class="tab active" data-tab="campaigns" onclick="switchTab('campaigns')">Suas campanhas</button><button class="tab" data-tab="sheets" onclick="switchTab('sheets')">Fichas</button></nav>
+    <nav class="tabs"><button class="tab active" data-tab="campaigns" onclick="switchTab(&#39;campaigns&#39;)">Suas campanhas</button><button class="tab" data-tab="sheets" onclick="switchTab(&#39;sheets&#39;)">Fichas</button></nav>
     <section id="campaignsTab" class="panel">
       <div class="toolbar"><div><strong>Campanhas salvas</strong><div class="muted">Clique em uma campanha para abrir a página da campanha.</div><div class="counter counter-inline" id="campaignCounter">Campanhas criadas: 0/15</div></div><button id="newCampaignBtn" class="btn btn-primary" onclick="newCampaign()">+ Criar campanha</button></div>
-      <div id="campaignList" class="grid"></div>
+      <div id="campaignList" class="grid"><div class="empty">Faça login para ver suas campanhas e as campanhas compartilhadas com você.</div></div>
     </section>
     <section id="sheetsTab" class="panel hidden">
       <div class="toolbar"><div><strong>Fichas</strong><div class="muted">Crie modelos editáveis para disponibilizar aos jogadores.</div><div class="counter counter-inline" id="sheetCounter">Fichas criadas: 0/15</div></div><button id="newSheetBtn" class="btn btn-primary" onclick="newSheet()">+ Criar fichas</button></div>
-      <div id="sheetList" class="grid"></div>
+      <div id="sheetList" class="grid"><div class="empty">Faça login para ver fichas criadas por você e fichas das campanhas compartilhadas.</div></div>
     </section>
   </main>
 
@@ -565,34 +565,34 @@ footer{
   </main>
 </div>
 
-<div class="overlay" id="campaignModal"><section class="modal"><div class="modal-header"><div><h2 id="campaignModalTitle">Criar campanha</h2><div class="muted">Edite informações, capa e modelo de ficha.</div></div><button class="close" onclick="closeOverlay('campaignModal')">×</button></div><div class="grid-2"><div class="field"><label>Nome da campanha</label><input id="campaignName" placeholder="Ex: A Corte das Cinzas"></div><div class="field"><label>Imagem de capa</label><input id="campaignCoverInput" type="file" accept="image/*" onchange="openCropFromInput(event)"></div></div><div class="field"><label>Modelo de ficha da campanha</label><select id="campaignSheetModel"></select><div class="muted">Escolha um modelo padrão ou um modelo criado por você.</div></div><div class="field"><label>Descrição</label><textarea id="campaignDescription" placeholder="Resumo da campanha"></textarea></div><div class="actions"><button class="btn btn-primary" onclick="saveCampaignModal()">Salvar campanha</button><button class="btn" onclick="closeOverlay('campaignModal')">Cancelar</button></div></section></div>
+<div class="overlay" id="campaignModal"><section class="modal"><div class="modal-header"><div><h2 id="campaignModalTitle">Criar campanha</h2><div class="muted">Edite informações, capa e modelo de ficha.</div></div><button class="close" onclick="closeOverlay(&#39;campaignModal&#39;)">×</button></div><div class="grid-2"><div class="field"><label>Nome da campanha</label><input id="campaignName" placeholder="Ex: A Corte das Cinzas"></div><div class="field"><label>Imagem de capa</label><input id="campaignCoverInput" type="file" accept="image/*" onchange="openCropFromInput(event)"></div></div><div class="field"><label>Modelo de ficha da campanha</label><select id="campaignSheetModel"></select><div class="muted">Escolha um modelo padrão ou um modelo criado por você.</div></div><div class="field"><label>Descrição</label><textarea id="campaignDescription" placeholder="Resumo da campanha"></textarea></div><div class="actions"><button class="btn btn-primary" onclick="saveCampaignModal()">Salvar campanha</button><button class="btn" onclick="closeOverlay(&#39;campaignModal&#39;)">Cancelar</button></div></section></div>
 
-<div class="overlay" id="cropModal"><section class="modal"><div class="modal-header"><div><h2>Editar capa</h2><div class="muted">Arraste a imagem, mova o recorte livre e use o canto inferior para redimensionar.</div></div><button class="close" onclick="closeOverlay('cropModal')">×</button></div><div class="crop-area" id="cropArea"><img id="cropImage" alt="Imagem para recorte"><div class="crop-box" id="cropBox"><span class="crop-handle" id="cropHandle"></span></div></div><div class="range-row"><label>Zoom</label><input id="cropZoom" type="range" min="0.5" max="3" value="1" step="0.01" oninput="setCropZoom(this.value)"></div><div class="actions"><button class="btn btn-primary" onclick="applyCrop()">Usar recorte</button><button class="btn" onclick="closeOverlay('cropModal')">Cancelar</button></div></section></div>
+<div class="overlay" id="cropModal"><section class="modal"><div class="modal-header"><div><h2>Editar capa</h2><div class="muted">Arraste a imagem, mova o recorte livre e use o canto inferior para redimensionar.</div></div><button class="close" onclick="closeOverlay(&#39;cropModal&#39;)">×</button></div><div class="crop-area" id="cropArea"><img id="cropImage" alt="Imagem para recorte"><div class="crop-box" id="cropBox"><span class="crop-handle" id="cropHandle"></span></div></div><div class="range-row"><label>Zoom</label><input id="cropZoom" type="range" min="0.5" max="3" value="1" step="0.01" oninput="setCropZoom(this.value)"></div><div class="actions"><button class="btn btn-primary" onclick="applyCrop()">Usar recorte</button><button class="btn" onclick="closeOverlay(&#39;cropModal&#39;)">Cancelar</button></div></section></div>
 
-<div class="overlay" id="confirmModal"><section class="modal confirm"><div class="modal-header"><h2>Confirmar exclusão</h2><button class="close" onclick="closeOverlay('confirmModal')">×</button></div><p id="confirmText">Tem certeza?</p><div class="actions"><button class="btn btn-danger" id="confirmYes">Excluir</button><button class="btn" onclick="closeOverlay('confirmModal')">Cancelar</button></div></section></div>
+<div class="overlay" id="confirmModal"><section class="modal confirm"><div class="modal-header"><h2>Confirmar exclusão</h2><button class="close" onclick="closeOverlay(&#39;confirmModal&#39;)">×</button></div><p id="confirmText">Tem certeza?</p><div class="actions"><button class="btn btn-danger" id="confirmYes">Excluir</button><button class="btn" onclick="closeOverlay(&#39;confirmModal&#39;)">Cancelar</button></div></section></div>
 
-<div class="overlay" id="sheetModal"><section class="modal sheet-shell"><div class="modal-header"><div><h2>Editar ficha</h2><div class="muted">Monte uma ficha com blocos e campos editáveis. Depois vincule a uma campanha.</div></div><button class="close" onclick="closeOverlay('sheetModal');renderAll()">×</button></div><div class="grid-2"><div class="field"><label>Nome da ficha</label><input id="sheetName" placeholder="Digite o nome do modelo" oninput="saveCurrentSheet(false)"></div><div class="field"><label>Vincular campanha</label><select id="campaignLink" onchange="saveCurrentSheet(false)"><option value="">Nenhuma campanha vinculada</option></select></div></div><div class="field"><label>Descrição do modelo</label><textarea id="sheetDescription" placeholder="Explique para que tipo de sistema ou campanha essa ficha serve." oninput="saveCurrentSheet(false)"></textarea></div><div class="add-panel"><div class="add-row"><select id="blockType"><option value="text">Bloco de texto</option><option value="number">Campo numérico / atributos</option><option value="skills">Perícias</option><option value="resources">Recursos / barras</option><option value="rolls">Rolagens</option><option value="list">Lista simples</option><option value="inventory">Inventário</option></select><button class="btn" onclick="addBlock()">+ Adicionar bloco</button><div class="muted">Os blocos podem ser arrastados pelo ícone ☰.</div></div></div><div id="blocks" class="blocks"></div><div class="actions"><button class="btn" onclick="previewCurrentSheet()">Preview</button><button class="btn btn-primary" onclick="saveCurrentSheet(true)">Salvar ficha</button></div></section></div>
+<div class="overlay" id="sheetModal"><section class="modal sheet-shell"><div class="modal-header"><div><h2>Editar ficha</h2><div class="muted">Monte uma ficha com blocos e campos editáveis. Depois vincule a uma campanha.</div></div><button class="close" onclick="closeOverlay(&#39;sheetModal&#39;);renderAll()">×</button></div><div class="grid-2"><div class="field"><label>Nome da ficha</label><input id="sheetName" placeholder="Digite o nome do modelo" oninput="saveCurrentSheet(false)"></div><div class="field"><label>Vincular campanha</label><select id="campaignLink" onchange="saveCurrentSheet(false)"><option value="">Nenhuma campanha vinculada</option></select></div></div><div class="field"><label>Descrição do modelo</label><textarea id="sheetDescription" placeholder="Explique para que tipo de sistema ou campanha essa ficha serve." oninput="saveCurrentSheet(false)"></textarea></div><div class="add-panel"><div class="add-row"><select id="blockType"><option value="text">Bloco de texto</option><option value="number">Campo numérico / atributos</option><option value="skills">Perícias</option><option value="resources">Recursos / barras</option><option value="rolls">Rolagens</option><option value="list">Lista simples</option><option value="inventory">Inventário</option></select><button class="btn" onclick="addBlock()">+ Adicionar bloco</button><div class="muted">Os blocos podem ser arrastados pelo ícone ☰.</div></div></div><div id="blocks" class="blocks"></div><div class="actions"><button class="btn" onclick="previewCurrentSheet()">Preview</button><button class="btn btn-primary" onclick="saveCurrentSheet(true)">Salvar ficha</button></div></section></div>
 
-<div class="overlay" id="sheetPreviewModal"><section class="modal sheet-shell"><div class="modal-header"><div><h2 id="sheetPreviewTitle">Preview da ficha</h2><div class="muted">Visualização aproximada de como os jogadores verão este modelo.</div></div><button class="close" onclick="closeOverlay('sheetPreviewModal')">×</button></div><div id="sheetPreviewContent" class="blocks"></div><div class="actions"><button class="btn" onclick="closeOverlay('sheetPreviewModal')">Fechar preview</button></div></section></div>
+<div class="overlay" id="sheetPreviewModal"><section class="modal sheet-shell"><div class="modal-header"><div><h2 id="sheetPreviewTitle">Preview da ficha</h2><div class="muted">Visualização aproximada de como os jogadores verão este modelo.</div></div><button class="close" onclick="closeOverlay(&#39;sheetPreviewModal&#39;)">×</button></div><div id="sheetPreviewContent" class="blocks"></div><div class="actions"><button class="btn" onclick="closeOverlay(&#39;sheetPreviewModal&#39;)">Fechar preview</button></div></section></div>
 
-<div class="overlay" id="playerModal"><section class="modal confirm"><div class="modal-header"><h2>Adicionar jogador</h2><button class="close" onclick="closeOverlay('playerModal')">×</button></div><div class="field"><label>Nome do jogador</label><input id="playerName" placeholder="Ex: Ana"></div><div class="field"><label>E-mail ou contato opcional</label><input id="playerContact" placeholder="Ex: ana@email.com"></div><div class="actions"><button class="btn btn-primary" onclick="savePlayer()">Adicionar</button><button class="btn" onclick="closeOverlay('playerModal')">Cancelar</button></div></section></div>
+<div class="overlay" id="playerModal"><section class="modal confirm"><div class="modal-header"><h2>Adicionar jogador</h2><button class="close" onclick="closeOverlay(&#39;playerModal&#39;)">×</button></div><div class="field"><label>Nome do jogador</label><input id="playerName" placeholder="Ex: Ana"></div><div class="field"><label>E-mail ou contato opcional</label><input id="playerContact" placeholder="Ex: ana@email.com"></div><div class="actions"><button class="btn btn-primary" onclick="savePlayer()">Adicionar</button><button class="btn" onclick="closeOverlay(&#39;playerModal&#39;)">Cancelar</button></div></section></div>
 
-<div class="overlay" id="characterModal"><section class="modal confirm"><div class="modal-header"><h2>Adicionar personagem</h2><button class="close" onclick="closeOverlay('characterModal')">×</button></div><div class="field"><label>Nome do personagem</label><input id="characterName" placeholder="Ex: Eleonora"></div><div class="field"><label>Jogador</label><select id="characterPlayer"></select></div><div class="field"><label>Ficha/modelo</label><select id="characterSheet"></select></div><div class="actions"><button class="btn btn-primary" onclick="saveCharacter()">Adicionar</button><button class="btn" onclick="closeOverlay('characterModal')">Cancelar</button></div></section></div>
+<div class="overlay" id="characterModal"><section class="modal confirm"><div class="modal-header"><h2>Adicionar personagem</h2><button class="close" onclick="closeOverlay(&#39;characterModal&#39;)">×</button></div><div class="field"><label>Nome do personagem</label><input id="characterName" placeholder="Ex: Eleonora"></div><div class="field"><label>Jogador</label><select id="characterPlayer"></select></div><div class="field"><label>Ficha/modelo</label><select id="characterSheet"></select></div><div class="actions"><button class="btn btn-primary" onclick="saveCharacter()">Adicionar</button><button class="btn" onclick="closeOverlay(&#39;characterModal&#39;)">Cancelar</button></div></section></div>
 
-<div class="overlay" id="inviteModal"><section class="modal"><div class="modal-header"><div><h2>Convidar jogadores</h2><div class="muted">Este protótipo cria um link visual. Em um site real, ele apontaria para uma rota de convite no servidor.</div></div><button class="close" onclick="closeOverlay('inviteModal')">×</button></div><div class="field"><label>Link de convite da campanha</label><div class="invite-box"><input id="inviteLink" readonly><button class="btn btn-primary" onclick="copyInvite()">Copiar</button></div></div></section></div>
+<div class="overlay" id="inviteModal"><section class="modal"><div class="modal-header"><div><h2>Convidar jogadores</h2><div class="muted">Este protótipo cria um link visual. Em um site real, ele apontaria para uma rota de convite no servidor.</div></div><button class="close" onclick="closeOverlay(&#39;inviteModal&#39;)">×</button></div><div class="field"><label>Link de convite da campanha</label><div class="invite-box"><input id="inviteLink" readonly=""><button class="btn btn-primary" onclick="copyInvite()">Copiar</button></div></div></section></div>
 
-<div class="overlay" id="combatModal"><section class="modal"><div class="modal-header"><div><h2>Criar combate</h2><div class="muted">Organize uma cena de combate inicial para a campanha.</div></div><button class="close" onclick="closeOverlay('combatModal')">×</button></div><div class="grid-3"><div class="field"><label>Nome do combate</label><input id="combatName" placeholder="Ex: Emboscada na ponte"></div><div class="field"><label>Local</label><input id="combatPlace" placeholder="Ex: Ruínas"></div><div class="field"><label>Dificuldade</label><select id="combatDifficulty"><option>Baixa</option><option>Média</option><option>Alta</option><option>Mortal</option></select></div></div><div class="field"><label>Notas</label><textarea id="combatNotes" placeholder="Inimigos, terreno, objetivos e recompensas."></textarea></div><div class="actions"><button class="btn btn-primary" onclick="saveCombat()">Salvar combate</button><button class="btn" onclick="closeOverlay('combatModal')">Cancelar</button></div></section></div>
+<div class="overlay" id="combatModal"><section class="modal"><div class="modal-header"><div><h2>Criar combate</h2><div class="muted">Organize uma cena de combate inicial para a campanha.</div></div><button class="close" onclick="closeOverlay(&#39;combatModal&#39;)">×</button></div><div class="grid-3"><div class="field"><label>Nome do combate</label><input id="combatName" placeholder="Ex: Emboscada na ponte"></div><div class="field"><label>Local</label><input id="combatPlace" placeholder="Ex: Ruínas"></div><div class="field"><label>Dificuldade</label><select id="combatDifficulty"><option>Baixa</option><option>Média</option><option>Alta</option><option>Mortal</option></select></div></div><div class="field"><label>Notas</label><textarea id="combatNotes" placeholder="Inimigos, terreno, objetivos e recompensas."></textarea></div><div class="actions"><button class="btn btn-primary" onclick="saveCombat()">Salvar combate</button><button class="btn" onclick="closeOverlay(&#39;combatModal&#39;)">Cancelar</button></div></section></div>
 
-<div class="overlay" id="tableModal"><section class="modal"><div class="modal-header"><div><h2>Mesa virtual</h2><div class="muted">Área reservada para mapa, tokens, dados e chat da sessão.</div></div><button class="close" onclick="closeOverlay('tableModal')">×</button></div><div class="virtual-table"><div><strong>Mesa virtual da campanha</strong><br><br>Protótipo visual: aqui entrarão o mapa, personagens, rolagens, chat e ferramentas da sessão.</div></div></section></div>
+<div class="overlay" id="tableModal"><section class="modal"><div class="modal-header"><div><h2>Mesa virtual</h2><div class="muted">Área reservada para mapa, tokens, dados e chat da sessão.</div></div><button class="close" onclick="closeOverlay(&#39;tableModal&#39;)">×</button></div><div class="virtual-table"><div><strong>Mesa virtual da campanha</strong><br><br>Protótipo visual: aqui entrarão o mapa, personagens, rolagens, chat e ferramentas da sessão.</div></div></section></div>
 
-<div class="overlay" id="shieldModal"><section class="modal"><div class="modal-header"><div><h2>Painel da campanha</h2><div class="muted">Notas secretas, rolagem rápida e referências da campanha.</div></div><button class="close" onclick="closeOverlay('shieldModal')">×</button></div><div class="shield-grid"><div class="detail-box"><strong>Notas secretas</strong><textarea id="masterNotes" placeholder="Segredos, NPCs, pistas e eventos futuros..." oninput="saveMasterNotes()"></textarea></div><div class="detail-box"><strong>Rolagem rápida</strong><div class="dice-result" id="diceResult">—</div><div class="actions"><button class="btn" onclick="rollDie(4)">d4</button><button class="btn" onclick="rollDie(6)">d6</button><button class="btn" onclick="rollDie(8)">d8</button><button class="btn" onclick="rollDie(10)">d10</button><button class="btn" onclick="rollDie(12)">d12</button><button class="btn btn-primary" onclick="rollDie(20)">d20</button></div></div></div></section></div>
+<div class="overlay" id="shieldModal"><section class="modal"><div class="modal-header"><div><h2>Painel da campanha</h2><div class="muted">Notas secretas, rolagem rápida e referências da campanha.</div></div><button class="close" onclick="closeOverlay(&#39;shieldModal&#39;)">×</button></div><div class="shield-grid"><div class="detail-box"><strong>Notas secretas</strong><textarea id="masterNotes" placeholder="Segredos, NPCs, pistas e eventos futuros..." oninput="saveMasterNotes()"></textarea></div><div class="detail-box"><strong>Rolagem rápida</strong><div class="dice-result" id="diceResult">—</div><div class="actions"><button class="btn" onclick="rollDie(4)">d4</button><button class="btn" onclick="rollDie(6)">d6</button><button class="btn" onclick="rollDie(8)">d8</button><button class="btn" onclick="rollDie(10)">d10</button><button class="btn" onclick="rollDie(12)">d12</button><button class="btn btn-primary" onclick="rollDie(20)">d20</button></div></div></div></section></div>
 
 <footer>RPG Nexus © 2026</footer>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-<script src="firebase-config.js"></script>
+<script src="./firebase-app-compat.js.baixados"></script>
+<script src="./firebase-auth-compat.js.baixados"></script>
+<script src="./firebase-firestore-compat.js.baixados"></script>
+<script src="./firebase-config.js.baixados"></script>
 <script>
 const STORAGE_KEY='pagina_campanhas_rpg_v1';
 const LEGACY_STORAGE_KEY='pagina_mestre_rpg_v2';
@@ -729,6 +729,6 @@ function rollDie(sides){document.getElementById('diceResult').textContent=`d${si
 load();
 </script>
 
-<script src="auth.js"></script>
-</body>
-</html>
+<script src="./auth.js.baixados"></script>
+
+</body></html>
