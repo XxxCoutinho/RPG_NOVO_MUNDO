@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ficha de Jogo | Ordem Paranormal</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#0d0d0e;
+  --panel:#121214;
+  --panel2:#18181b;
+  --line:#2f3036;
+  --text:#f6f6f6;
+  --muted:#a7a9b3;
+  --purple:#a600ff;
+  --purple2:#d992ff;
+  --red:#bd2228;
+  --orange:#ff8617;
+  --blue:#0094ff;
+  --green:#31c653;
+  --gold:#f5c76b;
+}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+button,input,textarea,select{font:inherit}
+.site-header{min-height:64px;padding:0 26px;display:flex;align-items:center;justify-content:space-between;gap:18px;background:#090909;border-bottom:1px solid #202025;position:sticky;top:0;z-index:90}
+.site-logo{text-decoration:none;color:#fff;font-weight:900;letter-spacing:.03em}
+.site-nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.site-nav a,.site-nav button{color:#e9e9e9;text-decoration:none;background:transparent;border:1px solid transparent;padding:9px 10px;border-radius:10px;font-weight:800;cursor:pointer}
+.site-nav a:hover,.site-nav button:hover{border-color:#40404a;color:var(--purple2)}
+main{padding:18px 22px 38px}
+.sheet{width:min(1420px,100%);margin:0 auto;display:grid;grid-template-columns:292px minmax(315px,430px) minmax(440px,1fr);gap:18px;align-items:start}
+.panel{background:var(--panel);border:1px solid #202026;border-radius:18px;padding:16px;box-shadow:0 20px 65px rgba(0,0,0,.25)}
+.left-panel{position:sticky;top:82px}
+.portrait{position:relative;overflow:hidden;border:1px solid #2c2c33;border-radius:14px;background:#09090a;min-height:132px;margin-bottom:14px;display:grid;place-items:center;text-align:center;color:var(--muted)}
+.portrait img{width:100%;height:164px;object-fit:cover;display:block}
+.portrait.placeholder{padding:20px}
+.name-block{text-align:center;border-bottom:1px solid #26262e;padding-bottom:12px;margin-bottom:14px}
+.name-block h1{font-size:1.4rem;margin:0 0 5px;color:#fff;line-height:1.1}
+.name-block p{margin:0;color:var(--muted);font-size:.85rem}
+.attr-wheel{position:relative;height:250px;margin:6px auto 14px;display:grid;place-items:center}
+.attr-center{width:132px;height:132px;border-radius:50%;background:#f7f7f7;color:#111;display:grid;place-items:center;text-align:center;font-weight:900;border:4px solid #111;box-shadow:0 0 0 2px #fff;z-index:2}
+.attr-center span{font-size:.92rem;letter-spacing:.04em}
+.attr-circle{position:absolute;width:78px;height:78px;border-radius:50%;border:3px solid #f4f4f4;background:#050505;color:#fff;display:grid;place-items:center;text-align:center;box-shadow:0 0 0 1px #000}
+.attr-circle strong{display:block;font-size:1.45rem;line-height:1}.attr-circle small{display:block;font-size:.58rem;color:#d9d9d9;letter-spacing:.03em}.attr-circle b{font-size:.86rem}
+.attr-agi{top:0;left:50%;transform:translateX(-50%)}.attr-for{top:60px;left:0}.attr-int{top:60px;right:0}.attr-pre{bottom:0;left:38px}.attr-vig{bottom:0;right:38px}
+.mini-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.mini-box{border:1px solid #353540;border-radius:10px;padding:8px;text-align:center;background:#0d0d0f}.mini-box small{display:block;color:#b8bbc6;text-transform:uppercase;font-size:.65rem;font-weight:900}.mini-box strong{display:block;color:#fff;margin-top:4px;font-size:1.02rem}
+.resource{margin:10px 0}.resource label{display:flex;justify-content:center;margin:0 0 6px;color:#cfd1dc;font-weight:900;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}.bar{height:30px;display:grid;grid-template-columns:28px 28px 1fr 28px 28px;align-items:center;border-radius:0;overflow:hidden;background:#1b1b20;border:1px solid #2b2b33}.bar button{height:100%;border:0;background:transparent;color:#fff;font-weight:900;cursor:pointer;font-size:1rem}.bar input{height:100%;width:100%;border:0;background:transparent;color:#fff;text-align:center;font-weight:900;outline:none}.bar .fill{height:100%;display:grid;place-items:center;position:relative;overflow:hidden}.bar .fill::before{content:"";position:absolute;inset:0;width:var(--pct,100%);background:var(--barcolor);z-index:0}.bar .fill input{position:relative;z-index:1}.vida{--barcolor:var(--red)}.sanidade{--barcolor:var(--purple)}.esforco{--barcolor:var(--orange)}
+.def-grid{display:grid;grid-template-columns:90px 1fr 1fr;gap:10px;align-items:end;margin:16px 0}.shield{height:72px;display:grid;place-items:center;text-align:center;background:linear-gradient(180deg,#151515,#0b0b0d);border:2px solid #fff;border-radius:18px 18px 30px 30px;color:#fff}.shield strong{font-size:1.8rem;line-height:1}.shield small{font-size:.68rem;text-transform:uppercase;font-weight:900;color:#cfd1dc}.stat-line small{display:block;color:#b7bac4;font-size:.67rem;text-transform:uppercase;font-weight:900;text-align:center}.stat-line input{width:100%;border:0;border-bottom:2px solid #fff;border-radius:0;background:transparent;color:#fff;text-align:center;font-weight:900;padding:4px;outline:none}.notes-mini{margin-top:12px}.notes-mini label{display:block;font-size:.75rem;text-transform:uppercase;font-weight:900;color:#cfd1dc;margin:9px 0 4px}.notes-mini input{width:100%;border:0;border-bottom:1px solid #cfd1dc;background:transparent;color:#fff;padding:5px 2px;outline:none}
+.skills-panel{padding:14px}.skills-head{display:grid;grid-template-columns:1fr 50px 48px 48px;gap:6px;margin-bottom:6px;color:#fff;font-weight:900;font-size:.64rem;text-transform:uppercase;text-align:center}.skills-head span:first-child{text-align:left;padding-left:28px}.skill-list{display:grid;gap:2px}.skill-row{display:grid;grid-template-columns:22px minmax(130px,1fr) 50px 48px 48px;gap:6px;align-items:center;min-height:24px;color:#fff;font-size:.82rem}.skill-row.t5{color:var(--green)}.skill-row.t10{color:var(--blue)}.skill-row.t15{color:var(--orange)}.skill-row button{border:0;background:transparent;color:inherit;cursor:pointer;padding:0;width:20px;height:20px}.skill-row .die{display:grid;place-items:center;border:1px solid currentColor;border-radius:50%;font-size:.65rem;font-weight:900;line-height:1}.skill-name{font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.skill-val{text-align:center;border-bottom:1px solid currentColor;font-weight:900;min-height:18px}.skill-attr{font-weight:900;text-align:center}.small-note{color:var(--muted);font-size:.76rem;margin-top:10px;line-height:1.35}
+.main-panel{min-height:700px}.top-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #26262e;margin:-2px -2px 14px;padding:0 0 10px}.tabs{display:flex;gap:16px;overflow:auto}.tab{background:transparent;border:0;color:#dcdde5;padding:0 0 8px;cursor:pointer;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}.tab.active{color:#fff;border-bottom:2px solid var(--purple2)}.save-pill{font-size:.75rem;color:#9ea2ae;white-space:nowrap}.tab-panel{display:none}.tab-panel.active{display:block}.roller-line{display:grid;grid-template-columns:1fr auto;gap:10px;margin:4px 0 30px}.roller-line input{background:transparent;color:#fff;border:0;border-bottom:1px solid #b8bbc6;border-radius:0;outline:none;padding:10px 4px}.btn{border:1px solid var(--purple2);background:#261032;color:#fff;padding:10px 13px;border-radius:8px;font-weight:900;cursor:pointer}.btn:hover{background:#371249}.btn-secondary{border:1px solid #3a3a43;background:#18181b;color:#fff;padding:9px 12px;border-radius:8px;font-weight:900;cursor:pointer}.empty{min-height:160px;display:grid;place-items:center;text-align:center;color:#fff;font-weight:900}.attack-list,.card-list{display:grid;gap:10px}.attack-card,.info-card{border:1px solid #2d2d35;background:#0f0f12;border-radius:14px;padding:13px}.attack-card header,.info-card header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}.attack-card h3,.info-card h3{margin:0;color:#fff;font-size:1rem}.attack-card p,.info-card p{margin:5px 0;color:#cfd1dc;line-height:1.42;font-size:.9rem}.attack-actions{display:flex;gap:8px;flex-wrap:wrap}.tag{display:inline-flex;align-items:center;gap:4px;border:1px solid #3b3b46;border-radius:999px;padding:4px 8px;color:#cfd1dc;font-size:.74rem;font-weight:900}.description-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.text-box{border:1px solid #2d2d35;background:#0f0f12;border-radius:14px;padding:13px;min-height:120px}.text-box h3{margin:0 0 7px;color:#fff;font-size:.95rem}.text-box p{margin:0;color:#cfd1dc;white-space:pre-wrap;line-height:1.45;font-size:.9rem}.editable-note{width:100%;min-height:130px;background:#0c0c0f;border:1px solid #30303a;color:#fff;border-radius:12px;padding:11px;resize:vertical;outline:none}.toast{position:fixed;right:20px;bottom:20px;z-index:200;width:min(390px,calc(100vw - 30px));display:none;border:1px solid rgba(217,146,255,.45);background:linear-gradient(180deg,#19151f,#0c0c0e);box-shadow:0 18px 70px rgba(0,0,0,.55);border-radius:16px;padding:16px 42px 16px 17px;color:#fff}.toast.active{display:block;animation:toastIn .14s ease-out}.toast-close{position:absolute;right:9px;top:7px;background:transparent;border:0;color:#fff;font-size:1.35rem;cursor:pointer}.toast strong{display:block;color:#fff;font-size:1.18rem;margin-bottom:8px}.toast .roll-total{color:var(--purple2);font-size:1.55rem}.toast span{display:block;color:#dfe1ea;margin-top:4px}.toast .big{font-size:1.3rem;color:#fff;font-weight:900}@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:1100px){.sheet{grid-template-columns:280px 1fr}.main-panel{grid-column:1/-1}.left-panel{position:relative;top:auto}}
+@media(max-width:760px){.site-header{padding:12px 14px;align-items:flex-start;flex-direction:column}.site-nav{width:100%}.site-nav a,.site-nav button{font-size:.86rem;padding:8px}.sheet{grid-template-columns:1fr}.left-panel{position:relative;top:auto}.skills-head{grid-template-columns:1fr 42px 40px 40px}.skills-head span:first-child{padding-left:25px}.skill-row{grid-template-columns:20px minmax(105px,1fr) 42px 40px 40px;font-size:.76rem;gap:4px}.top-strip{align-items:flex-start;flex-direction:column}.tabs{width:100%;gap:12px}.roller-line{grid-template-columns:1fr}.btn,.btn-secondary{width:100%}.def-grid{grid-template-columns:1fr 1fr 1fr}}
+@media print{.site-header,.top-strip,.toast,.roller-line,.btn,.btn-secondary{display:none!important}main{padding:0}.sheet{width:100%;grid-template-columns:280px 1fr 1fr;gap:8px}.panel{box-shadow:none;border-color:#555}.left-panel{position:relative;top:auto}body{background:#fff;color:#000}.panel{background:#fff;color:#000}.skill-row,.skill-row.t5,.skill-row.t10,.skill-row.t15{color:#000}.tab-panel{display:block!important;break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="site-logo" href="index.html">RPG Nexus</a>
+  <nav class="site-nav">
+    <a id="editLink" href="ficha_ordem_paranormal.html">Editar ficha</a>
+    <button id="savePlayState" type="button">Salvar estado</button>
+    <button id="printSheet" type="button">Imprimir</button>
+  </nav>
+</header>
+<main>
+  <div class="sheet">
+    <aside class="panel left-panel">
+      <div class="portrait placeholder" id="portraitBox">Sem imagem</div>
+      <div class="name-block">
+        <h1 id="agentName">Agente sem nome</h1>
+        <p id="agentMeta">Origem — Classe — NEX 0%</p>
+      </div>
+      <div class="attr-wheel" aria-label="Atributos">
+        <div class="attr-center"><span>ATRIBUTOS</span></div>
+        <div class="attr-circle attr-agi"><div><strong id="agiVal">1</strong><small>AGILIDADE</small><b>AGI</b></div></div>
+        <div class="attr-circle attr-for"><div><strong id="forVal">1</strong><small>FORÇA</small><b>FOR</b></div></div>
+        <div class="attr-circle attr-int"><div><strong id="intVal">1</strong><small>INTELECTO</small><b>INT</b></div></div>
+        <div class="attr-circle attr-pre"><div><strong id="preVal">1</strong><small>PRESENÇA</small><b>PRE</b></div></div>
+        <div class="attr-circle attr-vig"><div><strong id="vigVal">1</strong><small>VIGOR</small><b>VIG</b></div></div>
+      </div>
+      <div class="mini-row">
+        <div class="mini-box"><small>NEX</small><strong id="nexBox">0%</strong></div>
+        <div class="mini-box"><small>Deslocamento</small><strong id="deslocamentoBox">9m</strong></div>
+      </div>
+      <div class="resource vida" data-res="pv"><label>Vida</label><div class="bar"><button data-res-btn="pv" data-delta="-5">≪</button><button data-res-btn="pv" data-delta="-1">‹</button><div class="fill"><input id="pvInput" inputmode="numeric" /></div><button data-res-btn="pv" data-delta="1">›</button><button data-res-btn="pv" data-delta="5">≫</button></div></div>
+      <div class="resource sanidade" data-res="san"><label>Sanidade</label><div class="bar"><button data-res-btn="san" data-delta="-5">≪</button><button data-res-btn="san" data-delta="-1">‹</button><div class="fill"><input id="sanInput" inputmode="numeric" /></div><button data-res-btn="san" data-delta="1">›</button><button data-res-btn="san" data-delta="5">≫</button></div></div>
+      <div class="resource esforco" data-res="pe"><label>Esforço</label><div class="bar"><button data-res-btn="pe" data-delta="-5">≪</button><button data-res-btn="pe" data-delta="-1">‹</button><div class="fill"><input id="peInput" inputmode="numeric" /></div><button data-res-btn="pe" data-delta="1">›</button><button data-res-btn="pe" data-delta="5">≫</button></div></div>
+      <div class="def-grid">
+        <div class="shield"><div><strong id="defesaBox">10</strong><small>Defesa</small></div></div>
+        <div class="stat-line"><small>Bloqueio</small><input id="bloqueioInput" /></div>
+        <div class="stat-line"><small>Esquiva</small><input id="esquivaInput" /></div>
+      </div>
+      <div class="notes-mini">
+        <label for="protecaoBox">Proteção</label><input id="protecaoBox" />
+        <label for="resistenciasBox">Resistências</label><input id="resistenciasBox" />
+        <label for="proficienciasBox">Proficiências</label><input id="proficienciasBox" />
+      </div>
+    </aside>
+
+    <section class="panel skills-panel">
+      <div class="skills-head"><span>Perícia</span><span>Dados</span><span>Treino</span><span>Outros</span></div>
+      <div class="skill-list" id="skillList"></div>
+      <p class="small-note">Clique no dado para rolar a perícia. Se o atributo for 0, rola 2d20 e usa o menor; caso contrário, rola uma quantidade de d20 igual ao atributo e usa o maior.</p>
+    </section>
+
+    <section class="panel main-panel">
+      <div class="top-strip">
+        <div class="tabs" role="tablist" aria-label="Áreas da ficha">
+          <button class="tab active" data-tab="combate" type="button">Combate</button>
+          <button class="tab" data-tab="habilidades" type="button">Habilidades</button>
+          <button class="tab" data-tab="rituais" type="button">Rituais</button>
+          <button class="tab" data-tab="inventario" type="button">Inventário</button>
+          <button class="tab" data-tab="descricao" type="button">Descrição</button>
+        </div>
+        <span class="save-pill" id="saveStatus">Estado carregado</span>
+      </div>
+
+      <div class="tab-panel active" id="tab-combate">
+        <div class="roller-line">
+          <input id="freeRoll" placeholder="Rolar dados. Ex.: 1d20+5, 2d6+3" />
+          <button class="btn-secondary" id="freeRollBtn" type="button">Rolar</button>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px"><button class="btn" id="newAttackBtn" type="button">Novo Ataque</button></div>
+        <div id="attackList" class="attack-list"></div>
+      </div>
+
+      <div class="tab-panel" id="tab-habilidades"><div id="abilityList" class="card-list"></div></div>
+      <div class="tab-panel" id="tab-rituais"><div id="ritualList" class="card-list"></div></div>
+      <div class="tab-panel" id="tab-inventario"><div id="itemList" class="card-list"></div></div>
+      <div class="tab-panel" id="tab-descricao">
+        <div class="description-grid" id="descriptionList"></div>
+        <div style="margin-top:12px"><label style="display:block;margin-bottom:6px;color:#cfd1dc;font-weight:900">Anotações durante o jogo</label><textarea class="editable-note" id="playNotes" placeholder="Pistas, dano temporário, condições, lembretes..."></textarea></div>
+      </div>
+    </section>
+  </div>
+</main>
+<div class="toast" id="rollToast" aria-live="polite"></div>
+<script>
+(function(){
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+  const params = new URLSearchParams(location.search);
+  const characterId = params.get('personagemId') || params.get('agenteId') || params.get('id') || 'ordem-paranormal-local';
+  const SHEET_KEYS = ['rpgNexusFichaOrdemParanormal_'+characterId, 'ficha_ordem_paranormal_'+characterId, 'rpgNexusFicha:'+characterId];
+  const PLAY_KEY = 'rpgNexusFichaOrdemParanormalPlay_' + characterId;
+  const attrLabels = {attrAgilidade:['AGI','agiVal'],attrForca:['FOR','forVal'],attrIntelecto:['INT','intVal'],attrPresenca:['PRE','preVal'],attrVigor:['VIG','vigVal']};
+  let sheet = null;
+  let fields = {};
+  let state = {};
+  let saveTimer = null;
+
+  function safe(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function num(v){const n=Number(String(v||'').replace(',','.'));return Number.isFinite(n)?n:0;}
+  function rand(sides){return Math.floor(Math.random()*sides)+1;}
+  function findStored(keys){for(const key of keys){try{const raw=localStorage.getItem(key); if(raw) return JSON.parse(raw);}catch(e){}} return null;}
+  function parseResource(text, fallback){
+    const nums = String(text||'').match(/\d+/g)?.map(Number) || [];
+    if(nums.length >= 2) return {cur:nums[0], max:nums[1]};
+    if(nums.length === 1) return {cur:nums[0], max:nums[0]};
+    return {cur:fallback, max:fallback};
+  }
+  function parseAbilityLine(line){
+    const parts = String(line||'').split(' — ').map(p=>p.trim()).filter(Boolean);
+    if(!parts.length) return null;
+    let nex='', name='', desc='';
+    if(parts.length >= 3 && /^(\d+%|Poder|—|-|Especial|Habilidade)/i.test(parts[0])){nex=parts.shift(); name=parts.shift(); desc=parts.join(' — ');} else if(parts.length >= 2){name=parts.shift(); desc=parts.join(' — ');} else {name=parts[0];}
+    return name ? {nex,name,desc} : null;
+  }
+  function parseAbilities(raw){
+    const trimmed = String(raw||'').trim();
+    if(!trimmed) return [];
+    try{const arr=JSON.parse(trimmed); if(Array.isArray(arr)) return arr.map(x=>({nex:x.nex||'', name:x.name||'', desc:x.desc||x.description||''})).filter(x=>x.name);}catch(e){}
+    return trimmed.split(/\n+/).map(parseAbilityLine).filter(Boolean);
+  }
+  function abilityItems(){
+    const list = [];
+    parseAbilities(fields.habilidadesClasse).forEach(x=>list.push({...x, source:'Classe'}));
+    parseAbilities(fields.habilidadesTrilha).forEach(x=>list.push({...x, source:'Trilha'}));
+    (sheet.powers||[]).filter(x=>x && (x.name||x.effect)).forEach(x=>list.push({name:x.name||'Poder', nex:x.cost||'', desc:x.effect||'', source:x.source||'Poder'}));
+    const origemPower = fields.poderOrigem || '';
+    if(origemPower.trim()) list.unshift({name:'Poder de origem', nex:fields.origem||'', desc:origemPower, source:'Origem'});
+    return list;
+  }
+  function showToast(title, lines, total){
+    const toast = $('rollToast');
+    toast.innerHTML = '<button class="toast-close" type="button" aria-label="Fechar">×</button><strong>'+safe(title)+' '+(total!=null?'<span class="roll-total">'+safe(total)+'</span>':'')+'</strong>' + lines.map(l=>'<span>'+safe(l)+'</span>').join('');
+    toast.classList.add('active');
+    toast.querySelector('.toast-close').onclick = () => toast.classList.remove('active');
+    clearTimeout(toast._timer); toast._timer = setTimeout(()=>toast.classList.remove('active'), 12000);
+  }
+  function rollSkill(skill){
+    const attrValue = num(fields[skill.attr]);
+    const qty = attrValue === 0 ? 2 : Math.max(1, attrValue);
+    const rolls = Array.from({length:qty},()=>rand(20));
+    const chosen = attrValue === 0 ? Math.min(...rolls) : Math.max(...rolls);
+    const training = num(skill.training);
+    const bonus = num(skill.bonus);
+    const total = chosen + training + bonus;
+    showToast((skill.name||'perícia').toLocaleLowerCase('pt-BR')+' -', ['( '+rolls.join(', ')+' )', '('+chosen+' + '+training+' + '+bonus+') = '+total], total);
+  }
+  function rollExpression(expression){
+    const clean = String(expression||'').replace(/\s+/g,'');
+    if(!clean) return null;
+    const terms = clean.match(/[+-]?[^+-]+/g) || [];
+    let total = 0;
+    const parts = [];
+    for(const term of terms){
+      const sign = term[0] === '-' ? -1 : 1;
+      const raw = term.replace(/^[+-]/,'');
+      const dice = raw.match(/^(\d*)d(\d+)$/i);
+      if(dice){
+        const count = Math.max(1, Math.min(100, Number(dice[1] || 1)));
+        const sides = Math.max(2, Math.min(1000, Number(dice[2])));
+        const rolls = Array.from({length:count},()=>rand(sides));
+        const sum = rolls.reduce((a,b)=>a+b,0) * sign;
+        total += sum;
+        parts.push((sign<0?'- ':'')+count+'d'+sides+' ['+rolls.join(', ')+']');
+      }else if(/^\d+$/.test(raw)){
+        const value = Number(raw) * sign;
+        total += value;
+        parts.push((value>=0?'+ ':'- ')+Math.abs(value));
+      }else{
+        showToast('Expressão inválida', ['Use formatos como 1d20+5, 2d6+3 ou d100.'], null);
+        return null;
+      }
+    }
+    return {total, parts};
+  }
+  function rollDamageFromAttack(attack){
+    const expr = attack.damage || attack.dano || '';
+    const result = rollExpression(expr);
+    if(!result) return;
+    showToast((attack.name||'Dano')+' — dano:', result.parts.concat(['Total = '+result.total]), result.total);
+  }
+  function rollAttack(attack){
+    const test = String(attack.test || '').trim();
+    const skill = (sheet.skills||[]).find(s => s.name && test && s.name.toLocaleLowerCase('pt-BR') === test.toLocaleLowerCase('pt-BR'));
+    if(skill){ rollSkill(skill); return; }
+    const result = rollExpression(test || '1d20');
+    if(result) showToast((attack.name||'Ataque')+' — teste:', result.parts.concat(['Total = '+result.total]), result.total);
+  }
+  function setText(id,value){const el=$(id); if(el) el.textContent=value;}
+  function setInput(id,value){const el=$(id); if(el) el.value=value == null ? '' : value;}
+  function saveState(){
+    try{localStorage.setItem(PLAY_KEY, JSON.stringify(state));}catch(e){}
+    const s=$('saveStatus'); if(s) s.textContent='Estado salvo às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  }
+  function scheduleSave(){clearTimeout(saveTimer); saveTimer=setTimeout(saveState,300);}
+  function readStateFromInputs(){
+    state.pv = num($('pvInput').value); state.pe = num($('peInput').value); state.san = num($('sanInput').value);
+    state.bloqueio = $('bloqueioInput').value; state.esquiva = $('esquivaInput').value;
+    state.protecao = $('protecaoBox').value; state.resistencias = $('resistenciasBox').value; state.proficiencias = $('proficienciasBox').value; state.playNotes = $('playNotes').value;
+  }
+  function updateBars(){
+    const pvPct = state.maxPv ? Math.max(0, Math.min(100, state.pv / state.maxPv * 100)) : 0;
+    const pePct = state.maxPe ? Math.max(0, Math.min(100, state.pe / state.maxPe * 100)) : 0;
+    const sanPct = state.maxSan ? Math.max(0, Math.min(100, state.san / state.maxSan * 100)) : 0;
+    document.querySelector('[data-res="pv"] .fill').style.setProperty('--pct', pvPct+'%');
+    document.querySelector('[data-res="pe"] .fill').style.setProperty('--pct', pePct+'%');
+    document.querySelector('[data-res="san"] .fill').style.setProperty('--pct', sanPct+'%');
+    setInput('pvInput', state.pv+' / '+state.maxPv); setInput('peInput', state.pe+' / '+state.maxPe); setInput('sanInput', state.san+' / '+state.maxSan);
+  }
+  function changeResource(res, delta){
+    const maxKey = res === 'pv' ? 'maxPv' : res === 'pe' ? 'maxPe' : 'maxSan';
+    state[res] = Math.max(0, Math.min(num(state[maxKey]), num(state[res]) + delta));
+    updateBars(); scheduleSave();
+  }
+  function readResourceInput(res, value){
+    const parsed = parseResource(value, state[res]);
+    const maxKey = res === 'pv' ? 'maxPv' : res === 'pe' ? 'maxPe' : 'maxSan';
+    state[res] = parsed.cur; state[maxKey] = parsed.max || state[maxKey] || parsed.cur;
+    updateBars(); scheduleSave();
+  }
+  function trainingClass(v){v=String(v||'0'); return v==='5'?'t5':v==='10'?'t10':v==='15'?'t15':'';}
+  function renderSkills(){
+    const list = $('skillList');
+    const skills = (sheet.skills||[]).filter(s=>s && s.name);
+    if(!skills.length){list.innerHTML='<div class="empty">Nenhuma perícia encontrada</div>'; return;}
+    list.innerHTML = skills.map((s,idx)=>{
+      const attr = attrLabels[s.attr] || ['INT'];
+      return '<div class="skill-row '+trainingClass(s.training)+'" data-skill-index="'+idx+'">'+
+        '<button type="button" data-roll-skill="'+idx+'"><span class="die">D20</span></button>'+
+        '<span class="skill-name">'+safe(s.name)+'</span>'+
+        '<span class="skill-attr">('+safe(attr[0])+') ('+safe(fields[s.attr]||0)+')</span>'+
+        '<span class="skill-val">'+safe(s.training||0)+'</span>'+
+        '<span class="skill-val">'+safe(s.bonus||0)+'</span>'+
+      '</div>';
+    }).join('');
+  }
+  function renderAttacks(){
+    const list = $('attackList');
+    const all = [...(sheet.weapons||[]), ...(state.extraAttacks||[])].filter(a=>a && (a.name||a.damage||a.test));
+    if(!all.length){list.innerHTML='<div class="empty">Você ainda não possui ataques</div>'; return;}
+    list.innerHTML = all.map((a,idx)=>'<article class="attack-card" data-attack-index="'+idx+'"><header><h3>'+safe(a.name||'Ataque')+'</h3><span class="tag">'+safe(a.test||'1d20')+'</span></header><p><b>Dano:</b> '+safe(a.damage||'—')+' &nbsp; <b>Crítico:</b> '+safe(a.critical||'—')+' &nbsp; <b>Alcance:</b> '+safe(a.range||'—')+'</p><p>'+safe(a.special||a.type||'')+'</p><div class="attack-actions"><button class="btn-secondary" type="button" data-roll-attack="'+idx+'">Rolar ataque</button><button class="btn-secondary" type="button" data-roll-damage="'+idx+'">Rolar dano</button></div></article>').join('');
+  }
+  function renderAbilities(){
+    const list = $('abilityList');
+    const abilities = abilityItems();
+    if(!abilities.length){list.innerHTML='<div class="empty">Nenhuma habilidade adicionada</div>';return;}
+    list.innerHTML = abilities.map(a=>'<article class="info-card"><header><h3>'+safe(a.name||'Habilidade')+'</h3><span class="tag">'+safe(a.source||a.nex||'')+'</span></header><p>'+safe(a.desc||'Sem descrição preenchida.')+'</p>'+(a.nex?'<p><b>NEX/Fonte:</b> '+safe(a.nex)+'</p>':'')+'</article>').join('');
+  }
+  function renderRituals(){
+    const list = $('ritualList'); const rows=(sheet.rituals||[]).filter(r=>r && (r.name||r.effect));
+    if(!rows.length){list.innerHTML='<div class="empty">Nenhum ritual adicionado</div>';return;}
+    list.innerHTML = rows.map(r=>'<article class="info-card"><header><h3>'+safe(r.name||'Ritual')+'</h3><span class="tag">'+safe(r.element||'')+' '+safe(r.circle||'')+'</span></header><p><b>Execução:</b> '+safe(r.casting||'—')+' &nbsp; <b>Alcance:</b> '+safe(r.range||'—')+' &nbsp; <b>Duração:</b> '+safe(r.duration||'—')+'</p><p><b>Alvo/Área:</b> '+safe(r.target||'—')+' &nbsp; <b>Resistência:</b> '+safe(r.resistance||'—')+'</p><p>'+safe(r.effect||'')+'</p></article>').join('');
+  }
+  function renderItems(){
+    const list=$('itemList'); const rows=(sheet.items||[]).filter(r=>r && (r.name||r.details));
+    if(!rows.length){list.innerHTML='<div class="empty">Nenhum item no inventário</div>';return;}
+    list.innerHTML = rows.map(i=>'<article class="info-card"><header><h3>'+safe(i.name||'Item')+'</h3><span class="tag">Qtd. '+safe(i.qty||1)+'</span></header><p><b>Categoria:</b> '+safe(i.category||'—')+' &nbsp; <b>Custo:</b> '+safe(i.cost||'—')+' &nbsp; <b>Espaços:</b> '+safe(i.space||'—')+'</p><p>'+safe(i.details||'')+'</p></article>').join('');
+  }
+  function renderDescription(){
+    const list = $('descriptionList');
+    const blocks = [
+      ['Conceito', fields.conceito], ['Aparência', fields.aparencia], ['Personalidade', fields.personalidade], ['Histórico', fields.historico], ['Objetivo', fields.objetivo], ['Investigação', fields.anotacoes], ['Origem', fields.ganchoOrigem]
+    ].filter(x=>String(x[1]||'').trim());
+    list.innerHTML = blocks.length ? blocks.map(b=>'<div class="text-box"><h3>'+safe(b[0])+'</h3><p>'+safe(b[1])+'</p></div>').join('') : '<div class="empty">Nenhuma descrição preenchida</div>';
+  }
+  function renderIdentity(){
+    const nome = fields.nomeAgente || 'Agente sem nome';
+    const origem = fields.origem || 'Origem'; const classe = fields.classe || 'Classe'; const nex = fields.nex || '0%';
+    setText('agentName', nome); setText('agentMeta', origem+' — '+classe+' — NEX '+nex); setText('nexBox', nex); setText('deslocamentoBox', fields.deslocamento || '9m');
+    Object.entries(attrLabels).forEach(([field,arr])=>setText(arr[1], fields[field] || '0'));
+    const portrait = fields.portraitData || '';
+    $('portraitBox').classList.toggle('placeholder', !portrait);
+    $('portraitBox').innerHTML = portrait ? '<img src="'+safe(portrait)+'" alt="Imagem do personagem" />' : 'Sem imagem';
+    setText('defesaBox', fields.reviewDefesaTexto || '10');
+    setInput('bloqueioInput', state.bloqueio ?? fields.reviewBloqueioTexto ?? '0');
+    setInput('esquivaInput', state.esquiva ?? fields.reviewDefesaTexto ?? '10');
+    setInput('protecaoBox', state.protecao ?? fields.protecao ?? '');
+    setInput('resistenciasBox', state.resistencias ?? fields.resistencias ?? '');
+    setInput('proficienciasBox', state.proficiencias ?? fields.patenteCarga ?? '');
+    setInput('playNotes', state.playNotes || '');
+  }
+  function initState(){
+    const pv = parseResource(fields.reviewPvTexto || fields.reviewPv, 1);
+    const pe = parseResource(fields.reviewPeTexto || fields.reviewPe, 1);
+    const san = parseResource(fields.reviewSanTexto || fields.reviewSan, 1);
+    const saved = findStored([PLAY_KEY]) || {};
+    state = Object.assign({pv:pv.cur,maxPv:pv.max,pe:pe.cur,maxPe:pe.max,san:san.cur,maxSan:san.max,bloqueio:fields.reviewBloqueioTexto||'',esquiva:fields.reviewDefesaTexto||'',extraAttacks:[],playNotes:''}, saved);
+    state.maxPv = state.maxPv || pv.max; state.maxPe = state.maxPe || pe.max; state.maxSan = state.maxSan || san.max;
+    if(!Array.isArray(state.extraAttacks)) state.extraAttacks = [];
+  }
+  function switchTab(name){
+    $$('.tab').forEach(btn=>btn.classList.toggle('active',btn.dataset.tab===name));
+    $$('.tab-panel').forEach(panel=>panel.classList.toggle('active',panel.id==='tab-'+name));
+  }
+  function addAttack(){
+    const name = prompt('Nome do ataque:'); if(!name) return;
+    const test = prompt('Teste do ataque (perícia ou expressão, ex.: Luta ou 1d20+5):','Luta') || '1d20';
+    const damage = prompt('Dano (ex.: 1d8+2):','1d6') || '';
+    const special = prompt('Especial/observação:','') || '';
+    state.extraAttacks.push({name,test,damage,critical:'',range:'',special});
+    renderAttacks(); saveState();
+  }
+  function init(){
+    const editParams = new URLSearchParams(location.search); if(!editParams.get('id') && !editParams.get('personagemId') && !editParams.get('agenteId')) editParams.set('id', characterId);
+    $('editLink').href = 'ficha_ordem_paranormal.html?' + editParams.toString();
+    sheet = findStored(SHEET_KEYS) || {fields:{},skills:[],weapons:[],items:[],rituals:[],powers:[]};
+    fields = sheet.fields || {};
+    initState(); renderIdentity(); updateBars(); renderSkills(); renderAttacks(); renderAbilities(); renderRituals(); renderItems(); renderDescription();
+    if(!Object.keys(fields).length){ showToast('Ficha não encontrada', ['Volte para o guia, preencha a ficha e clique em Finalizar.'], null); }
+    document.addEventListener('click', e=>{
+      const tab=e.target.closest('[data-tab]'); if(tab){switchTab(tab.dataset.tab); return;}
+      const skillBtn=e.target.closest('[data-roll-skill]'); if(skillBtn){rollSkill((sheet.skills||[])[Number(skillBtn.dataset.rollSkill)]); return;}
+      const attackBtn=e.target.closest('[data-roll-attack]'); if(attackBtn){const all=[...(sheet.weapons||[]),...(state.extraAttacks||[])].filter(a=>a&&(a.name||a.damage||a.test)); rollAttack(all[Number(attackBtn.dataset.rollAttack)]); return;}
+      const damageBtn=e.target.closest('[data-roll-damage]'); if(damageBtn){const all=[...(sheet.weapons||[]),...(state.extraAttacks||[])].filter(a=>a&&(a.name||a.damage||a.test)); rollDamageFromAttack(all[Number(damageBtn.dataset.rollDamage)]); return;}
+      const resBtn=e.target.closest('[data-res-btn]'); if(resBtn){changeResource(resBtn.dataset.resBtn, Number(resBtn.dataset.delta)); return;}
+    });
+    $('newAttackBtn').addEventListener('click', addAttack);
+    $('freeRollBtn').addEventListener('click', ()=>{const r=rollExpression($('freeRoll').value); if(r) showToast('Rolagem:', r.parts.concat(['Total = '+r.total]), r.total);});
+    $('freeRoll').addEventListener('keydown', e=>{if(e.key==='Enter'){e.preventDefault(); $('freeRollBtn').click();}});
+    ['pv','pe','san'].forEach(res=>$(res+'Input').addEventListener('change', e=>readResourceInput(res, e.target.value)));
+    ['bloqueioInput','esquivaInput','protecaoBox','resistenciasBox','proficienciasBox','playNotes'].forEach(id=>$(id).addEventListener('input', ()=>{readStateFromInputs(); scheduleSave();}));
+    $('savePlayState').addEventListener('click', ()=>{readStateFromInputs(); saveState();});
+    $('printSheet').addEventListener('click', ()=>window.print());
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+</body>
+</html>

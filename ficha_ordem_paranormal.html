@@ -1068,6 +1068,7 @@ tr.origin-skill td{background:rgba(245,199,107,.065)}
 
 <div class="row-actions" style="margin-top:18px">
 <button class="btn" id="finalSaveBtn" type="button">Salvar ficha</button>
+<button class="btn finish-sheet-btn" id="finishSheetBtn" type="button">Finalizar</button>
 
 
 
@@ -1939,6 +1940,39 @@ tr.origin-skill td{background:rgba(245,199,107,.065)}
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installResetFix);
   else installResetFix();
+})();
+</script>
+
+
+<style id="op-finish-sheet-css">
+.finish-sheet-btn{background:#8b2cff!important;color:#fff!important;border:1px solid rgba(217,146,255,.75)!important;box-shadow:0 12px 30px rgba(139,44,255,.22)!important}
+.finish-sheet-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+</style>
+<script id="op-finish-sheet-js">
+(function(){
+  'use strict';
+  function $(id){ return document.getElementById(id); }
+  function buildGameUrl(){
+    const params = new URLSearchParams(location.search);
+    const characterId = params.get('personagemId') || params.get('agenteId') || params.get('id') || 'ordem-paranormal-local';
+    if(!params.get('personagemId') && !params.get('agenteId') && !params.get('id')) params.set('id', characterId);
+    return 'ficha_ordem_paranormal_jogo.html?' + params.toString();
+  }
+  function finalizeSheet(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); }
+    const saveBtn = $('finalSaveBtn');
+    if(saveBtn) saveBtn.click();
+    const status = $('saveStatus');
+    if(status) status.textContent = 'Ficha finalizada. Abrindo ficha de jogo...';
+    setTimeout(function(){ location.href = buildGameUrl(); }, 180);
+  }
+  function init(){
+    const btn = $('finishSheetBtn');
+    if(!btn) return;
+    btn.addEventListener('click', finalizeSheet, true);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
 </script>
 
