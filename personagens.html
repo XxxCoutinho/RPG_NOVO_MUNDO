@@ -304,8 +304,10 @@
     }
 
     async function updateLocalAgent(agent){
-      const agents = loadLocalAgents().filter(function(item){ return item.id !== agent.id; });
-      agents.unshift(agent);
+      const normalizedAgent = normalizeAgent(agent);
+      const agentId = getAgentId(normalizedAgent);
+      const agents = loadLocalAgents().map(normalizeAgent).filter(function(item){ return getAgentId(item) !== agentId; });
+      agents.unshift(normalizedAgent);
       saveLocalAgents(agents);
     }
 
@@ -485,7 +487,74 @@
       return updated;
     }
 
-    function getSheetFile(model){
+    function normalizeModelValue(value){
+      const raw = String(value || '').trim();
+      const normalized = normalizeKeyName(raw);
+      const aliases = {
+        ordemparanormal: 'ordem-paranormal',
+        ordem: 'ordem-paranormal',
+        op: 'ordem-paranormal',
+        dnd: 'dnd-5e',
+        dnd5e: 'dnd-5e',
+        dd: 'dnd-5e',
+        ded: 'dnd-5e',
+        ded5e: 'dnd-5e',
+        dungeonsdragons: 'dnd-5e',
+        dungeonsanddragons: 'dnd-5e',
+        tormenta: 'tormenta',
+        tormenta20: 'tormenta',
+        t20: 'tormenta',
+        ciberpunk: 'ciberpunk',
+        cyberpunk: 'ciberpunk',
+        callofcthulhu: 'call-of-cthulhu',
+        cthulhu: 'call-of-cthulhu',
+        mundodastrevas: 'mundo-das-trevas',
+        vampirov5: 'vampiro-v5',
+        vampiroamascarav5: 'vampiro-v5',
+        vampiroamascar: 'vampiro-v5',
+        vampirev5: 'vampiro-v5',
+        lobisomemapocalipse: 'lobisomem-apocalipse',
+        magoascensao: 'mago-ascensao',
+        wraith: 'wraith',
+        cacadorrevanche: 'cacador-revanche',
+        demonioqueda: 'demonio-queda'
+      };
+      return aliases[normalized] || raw;
+    }
+
+    function getAgentId(agent){
+      if(!agent) return '';
+      return String(
+        agent.id ||
+        agent.personagemId ||
+        agent.characterId ||
+        agent.agenteId ||
+        agent.docId ||
+        agent.uid ||
+        ''
+      );
+    }
+
+    function getAgentModel(agent){
+      if(!agent) return '';
+      return normalizeModelValue(
+        agent.model ||
+        agent.sheetModel ||
+        agent.modelo ||
+        agent.modeloFicha ||
+        agent.fichaModelo ||
+        agent.tipoFicha ||
+        agent.system ||
+        agent.sistema ||
+        agent.sheet ||
+        ''
+      );
+    }
+
+    function getSheetFile(model, agent){
+      const directFile = agent && (agent.sheetFile || agent.fichaArquivo || agent.arquivoFicha || agent.file || agent.urlFicha);
+      if(directFile && String(directFile).trim().toLowerCase().endsWith('.html')) return String(directFile).trim();
+
       const sheetFiles = {
         'ordem-paranormal': 'ficha_ordem_paranormal.html',
         'dnd': 'ficha_dnd_5e.html',
@@ -501,39 +570,92 @@
         'cacador-revanche': 'ficha_cacador_revanche.html',
         'demonio-queda': 'ficha_demonio_queda.html'
       };
-      return sheetFiles[model] || 'ficha.html';
+
+      const normalizedModel = normalizeModelValue(model);
+      return sheetFiles[normalizedModel] || 'ficha_ordem_paranormal.html';
+    }
+
+    function normalizeAgent(agent){
+      const model = getAgentModel(agent);
+      const id = getAgentId(agent);
+      const type = String(agent?.type || agent?.tipo || agent?.agentType || 'personagem');
+      const baseType = String(agent?.baseType || agent?.categoria || (type.startsWith('npc') ? 'npc' : 'personagem'));
+      const npcRelation = String(agent?.npcRelation || agent?.relacaoNpc || agent?.relation || '');
+      const sheetFile = getSheetFile(model, agent);
+
+      return Object.assign({}, agent || {}, {
+        id: id,
+        model: model,
+        sheetFile: sheetFile,
+        type: type,
+        baseType: baseType,
+        npcRelation: npcRelation
+      });
+    }
+
+    function buildCharacterParams(agent, mode){
+      const normalizedAgent = normalizeAgent(agent);
+      const id = getAgentId(normalizedAgent);
+      const params = new URLSearchParams({
+        personagemId: id,
+        agenteId: id,
+        id: id,
+        modelo: normalizedAgent.model || '',
+        tipo: normalizedAgent.type || '',
+        categoria: normalizedAgent.baseType || (String(normalizedAgent.type || '').startsWith('npc-') ? 'npc' : 'personagem'),
+        relacaoNpc: normalizedAgent.npcRelation || '',
+        origem: 'personagens'
+      });
+
+      if(mode === 'jogar'){
+        params.set('modo', 'jogar');
+        params.set('jogar', '1');
+      }
+
+      return params;
     }
 
     function buildSheetUrl(agent){
-      const file = agent.sheetFile || getSheetFile(agent.model);
-      const params = new URLSearchParams({
-        personagemId: agent.id || '',
-        agenteId: agent.id || '',
-        id: agent.id || '',
-        modelo: agent.model || '',
-        tipo: agent.type || '',
-        categoria: agent.baseType || (String(agent.type || '').startsWith('npc-') ? 'npc' : 'personagem'),
-        relacaoNpc: agent.npcRelation || '',
-        origem: 'personagens'
-      });
-      return file + '?' + params.toString();
+      const normalizedAgent = normalizeAgent(agent);
+      return normalizedAgent.sheetFile + '?' + buildCharacterParams(normalizedAgent, 'editar').toString();
     }
 
     function buildPlayUrl(agent){
-      const file = agent.sheetFile || getSheetFile(agent.model);
-      const params = new URLSearchParams({
-        personagemId: agent.id || '',
-        agenteId: agent.id || '',
-        id: agent.id || '',
-        modelo: agent.model || '',
-        tipo: agent.type || '',
-        categoria: agent.baseType || (String(agent.type || '').startsWith('npc-') ? 'npc' : 'personagem'),
-        relacaoNpc: agent.npcRelation || '',
-        origem: 'personagens',
-        modo: 'jogar',
-        jogar: '1'
-      });
-      return file + '?' + params.toString();
+      const normalizedAgent = normalizeAgent(agent);
+      return normalizedAgent.sheetFile + '?' + buildCharacterParams(normalizedAgent, 'jogar').toString();
+    }
+
+    function findVisibleAgentById(id){
+      const wantedId = String(id || '');
+      const allAgents = visibleAgents.concat(loadLocalAgents()).map(normalizeAgent);
+      return allAgents.find(function(agent){ return getAgentId(agent) === wantedId; }) || null;
+    }
+
+    function rememberCurrentCharacter(agent, mode){
+      const normalizedAgent = normalizeAgent(agent);
+      try{
+        localStorage.setItem('rpgNexusPersonagemSelecionado', JSON.stringify(normalizedAgent));
+        localStorage.setItem('rpgNexusPersonagemAtual', JSON.stringify(normalizedAgent));
+        localStorage.setItem('rpgNexusPersonagemIdAtual', getAgentId(normalizedAgent));
+        localStorage.setItem('rpgNexusFichaModo', mode === 'jogar' ? 'jogar' : 'editar');
+        sessionStorage.setItem('rpgNexusPersonagemSelecionado', JSON.stringify(normalizedAgent));
+        sessionStorage.setItem('rpgNexusFichaModo', mode === 'jogar' ? 'jogar' : 'editar');
+      }catch(error){
+        console.warn('Não foi possível guardar o personagem selecionado antes de abrir a ficha:', error);
+      }
+    }
+
+    function openCharacter(agent, mode, fallbackUrl){
+      const normalizedAgent = normalizeAgent(agent);
+      const targetUrl = mode === 'jogar' ? buildPlayUrl(normalizedAgent) : buildSheetUrl(normalizedAgent);
+
+      if(!getAgentId(normalizedAgent) && fallbackUrl){
+        window.location.assign(fallbackUrl);
+        return;
+      }
+
+      rememberCurrentCharacter(normalizedAgent, mode);
+      window.location.assign(targetUrl);
     }
 
     function resolveDeleteModal(result){
@@ -572,9 +694,9 @@
         agents = visibleAgents.length ? visibleAgents : loadLocalAgents();
       }
 
-      let character = agents.find(function(agent){ return String(agent.id) === String(id); });
+      let character = agents.map(normalizeAgent).find(function(agent){ return getAgentId(agent) === String(id); });
       if(!character){
-        character = visibleAgents.find(function(agent){ return String(agent.id) === String(id); }) || loadLocalAgents().find(function(agent){ return String(agent.id) === String(id); });
+        character = visibleAgents.map(normalizeAgent).find(function(agent){ return getAgentId(agent) === String(id); }) || loadLocalAgents().map(normalizeAgent).find(function(agent){ return getAgentId(agent) === String(id); });
       }
       if(!character){
         alert('Não foi possível encontrar este personagem para excluir. Atualize a página e tente novamente.');
@@ -584,9 +706,9 @@
       const confirmed = await confirmDeleteCharacter(character);
       if(!confirmed) return;
 
-      const remainingLocal = loadLocalAgents().filter(function(agent){ return String(agent.id) !== String(id); });
+      const remainingLocal = loadLocalAgents().map(normalizeAgent).filter(function(agent){ return getAgentId(agent) !== String(id); });
       saveLocalAgents(remainingLocal);
-      visibleAgents = visibleAgents.filter(function(agent){ return String(agent.id) !== String(id); });
+      visibleAgents = visibleAgents.map(normalizeAgent).filter(function(agent){ return getAgentId(agent) !== String(id); });
 
       const db = getDb();
       const user = getAuth()?.currentUser || currentUser;
@@ -616,6 +738,7 @@
       }
 
       agents = await syncNamesFromLocalSheets(agents);
+      agents = agents.map(normalizeAgent);
       visibleAgents = agents;
 
       if(!agents.length){
@@ -624,17 +747,19 @@
       }
 
       agentList.innerHTML = agents.map(function(agent){
-        const sheetUrl = buildSheetUrl(agent);
-        const playUrl = buildPlayUrl(agent);
+        const normalizedAgent = normalizeAgent(agent);
+        const characterId = getAgentId(normalizedAgent);
+        const sheetUrl = buildSheetUrl(normalizedAgent);
+        const playUrl = buildPlayUrl(normalizedAgent);
         return `
-          <article class="agent-card" data-character-id="${escapeHtml(agent.id)}">
-            <h3>${escapeHtml(normalizeCharacterName(agent.name) || 'Personagem sem nome')}</h3>
-            <span>${escapeHtml(agent.modelLabel || agent.model)}</span>
-            <span>${escapeHtml(agent.typeLabel || agent.type)}</span>
+          <article class="agent-card" data-character-id="${escapeHtml(characterId)}">
+            <h3>${escapeHtml(normalizeCharacterName(normalizedAgent.name) || 'Personagem sem nome')}</h3>
+            <span>${escapeHtml(normalizedAgent.modelLabel || normalizedAgent.model)}</span>
+            <span>${escapeHtml(normalizedAgent.typeLabel || normalizedAgent.type)}</span>
             <div class="card-actions">
-              <a class="btn-secondary btn-small" href="${escapeHtml(sheetUrl)}">Abrir ficha</a>
-              <a class="btn-secondary btn-small btn-play" href="${escapeHtml(playUrl)}">Jogar</a>
-              <button class="btn-secondary btn-small btn-danger" type="button" data-delete-character="${escapeHtml(agent.id)}">Excluir</button>
+              <a class="btn-secondary btn-small" href="${escapeHtml(sheetUrl)}" data-open-character="${escapeHtml(characterId)}">Abrir ficha</a>
+              <a class="btn-secondary btn-small btn-play" href="${escapeHtml(playUrl)}" data-play-character="${escapeHtml(characterId)}">Jogar</a>
+              <button class="btn-secondary btn-small btn-danger" type="button" data-delete-character="${escapeHtml(characterId)}">Excluir</button>
             </div>
           </article>
         `;
@@ -660,6 +785,24 @@
     confirmDeleteBtn?.addEventListener('click', function(){ resolveDeleteModal(true); });
 
     agentList.addEventListener('click', async function(event){
+      const openButton = event.target.closest('[data-open-character], [data-play-character]');
+      if(openButton){
+        event.preventDefault();
+        event.stopPropagation();
+
+        const characterId = openButton.getAttribute('data-open-character') || openButton.getAttribute('data-play-character');
+        const mode = openButton.hasAttribute('data-play-character') ? 'jogar' : 'editar';
+        const character = findVisibleAgentById(characterId);
+
+        if(!character){
+          window.location.assign(openButton.getAttribute('href'));
+          return;
+        }
+
+        openCharacter(character, mode, openButton.getAttribute('href'));
+        return;
+      }
+
       const deleteButton = event.target.closest('[data-delete-character]');
       if(!deleteButton) return;
       event.preventDefault();
