@@ -1035,7 +1035,7 @@ tr.origin-skill td{background:rgba(245,199,107,.065)}
 <div class="field col-6"><label for="nomeAgente">Nome do agente</label><input autocomplete="off" data-field="nomeAgente" id="nomeAgente" placeholder="Ex.: Eleonora, Dante, Lia..."/></div>
 <div class="field col-3"><label for="idadeAgente">Idade</label><input data-field="idadeAgente" id="idadeAgente" placeholder="Ex.: 28 anos, desconhecida, jovem adulto..."/></div>
 <div class="field col-3"><label for="jogador">Jogador(a)</label><input data-field="jogador" id="jogador" placeholder="Nome do jogador"/></div>
-<div class="field col-6"><label for="campanha">Campanha</label><input data-field="campanha" id="campanha" placeholder="Nome da campanha"/></div>
+<div class="field col-6"><label for="campanha">Campanha</label><input data-field="campanha" id="campanha" placeholder="Carregando campanhas..."/><input data-field="campanhaId" id="campanhaId" type="hidden"/><span class="help" id="campanhaHelp">Escolha uma campanha existente ou escreva manualmente.</span></div>
 <div class="field col-3"><label for="patente">Patente/cargo</label><input data-field="patente" id="patente" list="patentesList" placeholder="Escolha ou escreva"/><datalist id="patentesList"><option value="Recruta"></option><option value="Operador"></option><option value="Agente Especial"></option><option value="Oficial de Operações"></option><option value="Agente de Elite"></option></datalist><span class="help">Use a lista ou escreva um cargo personalizado.</span></div>
 <div class="field col-3"><label for="deslocamento">Deslocamento</label><input data-field="deslocamento" id="deslocamento" placeholder="Ex.: 9m"/></div>
 <div class="field col-12"><label for="conceito">Conceito do personagem</label><textarea data-field="conceito" id="conceito" placeholder="Quem era essa pessoa antes da Ordem? O que a levou a encarar o paranormal?"></textarea></div>
@@ -1763,8 +1763,11 @@ tr.origin-skill td{background:rgba(245,199,107,.065)}
   async function saveCloud(data){
     try{
       if(!window.firebase || !firebase.auth || !firebase.firestore) return; const user=firebase.auth().currentUser; if(!user) return; const db=firebase.firestore();
-      await db.collection('usuarios').doc(user.uid).collection('fichas').doc(characterId).set({model:'ordem-paranormal', sheetData:data, name:data.fields.nomeAgente||'', updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
-      await db.collection('usuarios').doc(user.uid).collection('personagens').doc(characterId).set({name:data.fields.nomeAgente||'', model:'ordem-paranormal', modelLabel:'Ordem Paranormal', sheetFile:'ficha_ordem_paranormal_corrigida.html', updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+      await db.collection('usuarios').doc(user.uid).collection('fichas').doc(characterId).set({model:'ordem-paranormal', sheetData:data, name:data.fields.nomeAgente||'', campanha:data.fields.campanha||'', campanhaId:data.fields.campanhaId||'', campaignName:data.fields.campanha||'', campaignId:data.fields.campanhaId||'', updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+      await db.collection('usuarios').doc(user.uid).collection('personagens').doc(characterId).set({name:data.fields.nomeAgente||'', model:'ordem-paranormal', modelLabel:'Ordem Paranormal', sheetFile:'ficha_ordem_paranormal_corrigida.html', campanha:data.fields.campanha||'', campanhaId:data.fields.campanhaId||'', campaignName:data.fields.campanha||'', campaignId:data.fields.campanhaId||'', updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+      if(data.fields.campanhaId){
+        await db.collection('characters').doc(characterId).set({ownerId:user.uid, userId:user.uid, name:data.fields.nomeAgente||'', model:'ordem-paranormal', modelLabel:'Ordem Paranormal', sheetFile:'ficha_ordem_paranormal.html', sheetData:data, campanha:data.fields.campanha||'', campanhaId:data.fields.campanhaId||'', campaignName:data.fields.campanha||'', campaignId:data.fields.campanhaId||'', updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+      }
     }catch(e){ console.warn('Não foi possível salvar no Firestore:', e); }
   }
   function loadLocal(){
@@ -2129,6 +2132,240 @@ tr.origin-skill td{background:rgba(245,199,107,.065)}
     if(!btn) return;
     btn.addEventListener('click', finalizeSheet, true);
   }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
+
+
+<style id="op-campaign-dropdown-css">
+/* PATCH 2026-06-10: dropdown de campanhas existentes do jogador */
+.campaign-combo-wrap .combo-menu{
+  max-height:300px;
+}
+.campaign-combo-wrap .campaign-option{
+  display:block;
+  line-height:1.25;
+}
+.campaign-combo-wrap .campaign-option span{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.campaign-combo-wrap .campaign-option small{
+  display:block;
+  margin-top:3px;
+  color:#aeb5c8;
+  font-size:.72rem;
+  font-weight:700;
+}
+.campaign-combo-wrap .campaign-empty{
+  padding:10px;
+  color:#cfd3df;
+  line-height:1.35;
+  font-size:.88rem;
+}
+.campaign-combo-wrap .combo-toggle.loading{
+  opacity:.7;
+  pointer-events:none;
+}
+</style>
+<script id="op-campaign-dropdown-js">
+(function(){
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  function safe(v){ return String(v==null?'':v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function norm(v){ return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase(); }
+  function emit(el,type='input'){ if(el) el.dispatchEvent(new Event(type,{bubbles:true})); }
+
+  let campaigns = [];
+  let input, hidden, help, btn, menu;
+
+  function campaignName(data, fallback){
+    return data.nome || data.name || data.titulo || data.title || data.campanha || data.campaignName || fallback || 'Campanha sem nome';
+  }
+
+  function addCampaign(map, id, name, source){
+    name = String(name || '').trim();
+    if(!name) return;
+    const key = id ? 'id:' + id : 'name:' + norm(name);
+    if(map.has(key)) return;
+    map.set(key, { id: String(id || ''), name, source: source || '' });
+  }
+
+  async function safeGet(query){
+    try{ return await query.get(); }
+    catch(e){ console.warn('Não foi possível carregar uma fonte de campanhas:', e); return null; }
+  }
+
+  async function loadUserCampaigns(user){
+    const db = firebase.firestore();
+    const found = new Map();
+    const uid = user.uid;
+    const email = user.email || '';
+
+    const userSnap = await safeGet(db.collection('usuarios').doc(uid).collection('campanhas'));
+    if(userSnap){
+      userSnap.forEach(doc => {
+        const data = doc.data() || {};
+        addCampaign(found, data.campanhaId || data.campaignId || doc.id, campaignName(data, doc.id), 'usuario');
+      });
+    }
+
+    const rootCollections = ['campanhas','campaigns'];
+    const ownerFields = ['ownerId','ownerUid','userId','uid','createdBy','createdByUid','mestreId','masterId'];
+    const memberFields = ['members','membros','players','jogadores','participantes','memberIds','membrosIds','jogadoresIds','playerIds'];
+
+    for(const collectionName of rootCollections){
+      for(const field of ownerFields){
+        const snap = await safeGet(db.collection(collectionName).where(field,'==',uid));
+        if(snap){
+          snap.forEach(doc => {
+            const data = doc.data() || {};
+            addCampaign(found, doc.id, campaignName(data, doc.id), collectionName + ':' + field);
+          });
+        }
+      }
+      for(const field of memberFields){
+        const snapUid = await safeGet(db.collection(collectionName).where(field,'array-contains',uid));
+        if(snapUid){
+          snapUid.forEach(doc => {
+            const data = doc.data() || {};
+            addCampaign(found, doc.id, campaignName(data, doc.id), collectionName + ':' + field);
+          });
+        }
+        if(email){
+          const snapEmail = await safeGet(db.collection(collectionName).where(field,'array-contains',email));
+          if(snapEmail){
+            snapEmail.forEach(doc => {
+              const data = doc.data() || {};
+              addCampaign(found, doc.id, campaignName(data, doc.id), collectionName + ':' + field);
+            });
+          }
+        }
+      }
+    }
+
+    campaigns = Array.from(found.values()).sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+    render(true);
+    if(help){
+      help.textContent = campaigns.length
+        ? 'Escolha uma campanha existente. O vínculo será salvo junto com a ficha.'
+        : 'Nenhuma campanha encontrada para este jogador. Você ainda pode escrever o nome manualmente.';
+    }
+    if(input) input.placeholder = campaigns.length ? 'Escolha uma campanha' : 'Nome da campanha';
+    if(btn) btn.classList.remove('loading');
+  }
+
+  function render(showAll){
+    if(!menu) return;
+    const q = showAll ? '' : norm(input.value);
+    const list = campaigns.filter(item => !q || norm(item.name).includes(q));
+    if(!campaigns.length){
+      menu.innerHTML = '<div class="campaign-empty">Nenhuma campanha encontrada para este jogador.</div>';
+      return;
+    }
+    const visible = list.length ? list : campaigns;
+    menu.innerHTML = visible.map(item => (
+      '<button class="combo-option campaign-option" type="button" data-campaign-id="'+safe(item.id)+'" data-campaign-name="'+safe(item.name)+'">'+
+        '<span>'+safe(item.name)+'</span>'+
+        (item.id ? '<small>ID: '+safe(item.id)+'</small>' : '')+
+      '</button>'
+    )).join('');
+  }
+
+  function openMenu(showAll){ render(showAll); if(menu) menu.classList.add('active'); }
+  function closeMenu(){ if(menu) menu.classList.remove('active'); }
+
+  function syncHiddenFromTypedName(){
+    if(!input || !hidden) return;
+    const exact = campaigns.find(item => norm(item.name) === norm(input.value));
+    hidden.value = exact ? exact.id : '';
+    emit(hidden,'input');
+    emit(hidden,'change');
+  }
+
+  function buildDropdown(){
+    input = $('campanha');
+    if(!input || input.closest('.campaign-combo-wrap')) return;
+    hidden = $('campanhaId');
+    if(!hidden){
+      hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.id = 'campanhaId';
+      hidden.setAttribute('data-field','campanhaId');
+      input.insertAdjacentElement('afterend', hidden);
+    }
+    help = $('campanhaHelp');
+
+    const wrap = document.createElement('div');
+    wrap.className = 'combo-wrap campaign-combo-wrap';
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(input);
+    input.setAttribute('autocomplete','off');
+
+    btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'combo-toggle loading';
+    btn.textContent = '▾';
+    btn.setAttribute('aria-label','Abrir campanhas');
+
+    menu = document.createElement('div');
+    menu.className = 'combo-menu';
+    menu.innerHTML = '<div class="campaign-empty">Carregando campanhas...</div>';
+
+    wrap.appendChild(btn);
+    wrap.appendChild(menu);
+
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      menu.classList.contains('active') ? closeMenu() : openMenu(true);
+    });
+    input.addEventListener('focus', () => openMenu(false));
+    input.addEventListener('click', () => openMenu(false));
+    input.addEventListener('input', () => { syncHiddenFromTypedName(); openMenu(false); });
+    input.addEventListener('keydown', e => {
+      if(e.key === 'ArrowDown'){ e.preventDefault(); openMenu(true); }
+      if(e.key === 'Escape') closeMenu();
+    });
+    menu.addEventListener('click', e => {
+      const opt = e.target.closest('.campaign-option');
+      if(!opt) return;
+      input.value = opt.dataset.campaignName || '';
+      hidden.value = opt.dataset.campaignId || '';
+      closeMenu();
+      emit(input,'input');
+      emit(input,'change');
+      emit(hidden,'input');
+      emit(hidden,'change');
+      input.focus();
+    });
+    document.addEventListener('click', e => { if(!wrap.contains(e.target)) closeMenu(); });
+  }
+
+  function init(){
+    buildDropdown();
+    if(!window.firebase || !firebase.auth || !firebase.firestore){
+      if(help) help.textContent = 'Firebase não carregou; escreva o nome da campanha manualmente.';
+      if(btn) btn.classList.remove('loading');
+      return;
+    }
+    firebase.auth().onAuthStateChanged(user => {
+      if(!user){
+        campaigns = [];
+        render(true);
+        if(input) input.placeholder = 'Faça login para carregar campanhas';
+        if(help) help.textContent = 'Faça login para ver as campanhas existentes.';
+        if(btn) btn.classList.remove('loading');
+        return;
+      }
+      loadUserCampaigns(user).then(syncHiddenFromTypedName);
+    });
+  }
+
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();

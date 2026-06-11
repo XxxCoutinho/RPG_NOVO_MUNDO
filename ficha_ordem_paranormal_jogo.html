@@ -37,6 +37,8 @@
   .site-nav a.active{color:#161616;background:var(--gold)}
   .login-btn{background:#9b1744!important;color:#fff!important;border-radius:8px!important;padding:12px 16px!important}
   #loginLink.login-btn,.site-nav a.login-btn{display:inline-flex!important;align-items:center;justify-content:center;visibility:visible!important;opacity:1!important;white-space:nowrap}
+  .logout-btn{display:none;background:#171a24!important;color:#fff!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:8px!important;padding:12px 16px!important;font-weight:900!important;white-space:nowrap}
+  .logout-btn:hover{background:#232838!important;color:#fff!important}
   .site-menu-btn{display:none;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(245,199,107,.3);font-size:1.4rem;cursor:pointer;padding:8px 12px;border-radius:10px}
 
   .game-shell{padding:14px 14px 18px;min-height:calc(100vh - 66px);position:relative;z-index:1}
@@ -281,10 +283,17 @@
     <a data-page="ameacas" href="ameacas.html">Ameaças</a>
     <a data-page="homebrew" href="homebrew.html">Homebrew</a>
     <a class="login-btn" data-page="login" href="login.html" id="loginLink">Login</a>
+    <button class="logout-btn" id="logoutBtn" type="button" style="display:none">Sair</button>
   </nav>
 </header>
 <main id="app"></main>
 <div class="toast" id="rollToast"></div>
+<!-- Scripts de autenticação do cabeçalho (mesmo padrão das outras páginas). -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="auth.js"></script>
 <script>
 (function(){
   'use strict';
